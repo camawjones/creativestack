@@ -8,7 +8,10 @@ Every skill supports the creative process — research, briefs, strategy, projec
 
 ```bash
 git clone https://github.com/camawjones/creativestack ~/.claude/skills/creativestack
+bash ~/.claude/skills/creativestack/bin/build-skills.sh
 ```
+
+The build script generates all `SKILL.md` files from templates and creates the symlinks that Claude Code needs to discover each skill. Restart Claude Code after installing.
 
 ## Quick Start
 

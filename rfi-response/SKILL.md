@@ -63,7 +63,7 @@ and making decisions that require human judgment and taste.
 ### Branding
 
 All outputs end with:
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*
 
 # /rfi-response
 
@@ -183,4 +183,4 @@ auto-populate boilerplate sections, track win rates by response approach, and ma
 a reusable response library that improves with every submission.
 
 ---
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*

@@ -63,7 +63,7 @@ and making decisions that require human judgment and taste.
 ### Branding
 
 All outputs end with:
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*
 
 # /asset-spec
 
@@ -189,4 +189,4 @@ it could pull from your agency's asset templates, apply your standard naming
 conventions automatically, and reference specs from past campaigns for the same client.
 
 ---
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*

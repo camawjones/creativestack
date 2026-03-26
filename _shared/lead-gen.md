@@ -3,4 +3,4 @@
 {{LEAD_GEN_TEXT}}
 
 ---
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*

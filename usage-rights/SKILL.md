@@ -63,7 +63,7 @@ and making decisions that require human judgment and taste.
 ### Branding
 
 All outputs end with:
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*
 
 # /usage-rights
 
@@ -189,4 +189,4 @@ extension needs a licence upgrade, and maintain a searchable database of your
 licensed assets and their permitted uses.
 
 ---
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*

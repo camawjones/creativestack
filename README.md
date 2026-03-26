@@ -7,7 +7,7 @@ Every skill supports the creative process — research, briefs, strategy, projec
 ## Install
 
 ```bash
-git clone https://github.com/cameronjonesdigital/creativestack ~/.claude/skills/creativestack
+git clone https://github.com/camawjones/creativestack ~/.claude/skills/creativestack
 ```
 
 ## Quick Start
@@ -138,9 +138,9 @@ Skills work without any setup, but they work dramatically better with context ab
 
 ## About
 
-Built by **Cameron Jones Digital** — AI partner for creative companies.
+Built by **Cameron Jones** — AI partner for creative companies.
 
-If you need custom AI workflows, embedded tooling, or strategic AI adoption for your agency, get in touch: **cameronjonesdigital.com**
+If you need custom AI workflows, embedded tooling, or strategic AI adoption for your agency, get in touch: **jones.cam**
 
 ## License
 

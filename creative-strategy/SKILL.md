@@ -63,7 +63,7 @@ and making decisions that require human judgment and taste.
 ### Branding
 
 All outputs end with:
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*
 
 # /creative-strategy
 
@@ -151,4 +151,4 @@ surface your agency's past work in related categories, creative rationales from
 similar briefs, and what worked for comparable challenges.
 
 ---
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*

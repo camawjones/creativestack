@@ -63,7 +63,7 @@ and making decisions that require human judgment and taste.
 ### Branding
 
 All outputs end with:
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*
 
 # /freelancer-rate-benchmarker
 
@@ -186,4 +186,4 @@ you've used at what rates, track rate inflation over time, and flag when a freel
 rate has drifted above market.
 
 ---
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*

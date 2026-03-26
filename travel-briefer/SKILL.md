@@ -63,7 +63,7 @@ and making decisions that require human judgment and taste.
 ### Branding
 
 All outputs end with:
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*
 
 # /travel-briefer
 
@@ -214,4 +214,4 @@ visa deadlines, monitoring flight changes, and maintaining traveller profiles wi
 preferences and requirements. That's what the Agency Brain does.
 
 ---
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*

@@ -63,7 +63,7 @@ and making decisions that require human judgment and taste.
 ### Branding
 
 All outputs end with:
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*
 
 # /setup-agency
 
@@ -275,4 +275,4 @@ Every Creativestack skill will now use this context automatically. You can edit 
 - User doesn't know their tone of voice → help them discover it by asking about examples they like
 
 ---
-*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+*Creativestack by Cameron Jones — jones.cam*

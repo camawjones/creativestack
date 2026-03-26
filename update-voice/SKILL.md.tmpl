@@ -1,0 +1,98 @@
+---
+name: update-voice
+description: Update your agency's tone of voice guidelines in the Agency Context Vault.
+---
+
+{{PREAMBLE}}
+
+# /update-voice
+
+> Update how your agency sounds so every skill matches your voice.
+
+## Vault Files
+- `tone-of-voice.md` (WRITES)
+
+## What This Skill Does
+
+Updates the `tone-of-voice.md` file in your Agency Context Vault. Use this when your
+brand voice evolves, when you want to refine how Creativestack writes on your behalf,
+or when you have brand guidelines to import.
+
+## Inputs
+
+The user provides one of:
+- Pasted brand guidelines or tone of voice document
+- A description of how they want to sound
+- Answers to guided questions
+
+## Conversation Flow
+
+### Step 1: Check vault exists
+
+```bash
+if [ -f "$HOME/.creativestack/tone-of-voice.md" ]; then
+  echo "EXISTING_VOICE"
+  cat "$HOME/.creativestack/tone-of-voice.md"
+else
+  echo "NO_VOICE"
+fi
+```
+
+If existing voice found, show a summary: "Your current tone of voice is set to:
+{personality}, {formality level}. Want to refine it, or replace it entirely?"
+
+If no vault exists: "No Agency Context Vault found. Run /setup-agency first to create
+your vault, or I can just create the tone-of-voice file on its own."
+
+### Step 2: Gather voice input
+
+If the user pastes a document (brand guidelines, tone of voice doc, website copy):
+- Extract the key voice patterns: personality traits, formality, vocabulary preferences,
+  examples of good/bad writing
+- Summarize back to confirm: "Based on this, your voice is: {summary}. Sound right?"
+
+If the user wants to describe it:
+1. "How would you describe your agency's personality in 3-4 words?"
+2. "Formal, casual, or somewhere in between?"
+3. "Words you love? Words you'd never use?"
+4. "Paste something that sounds like you — a caption, a bio, a project description."
+
+### Step 3: Write the file
+
+Write to `~/.creativestack/tone-of-voice.md`:
+
+```markdown
+---
+formality: {casual/casual-professional/professional/formal}
+personality: [{trait1}, {trait2}, {trait3}]
+---
+
+## We sound like
+- {concrete description}
+- {concrete description}
+
+## We don't sound like
+- {anti-pattern}
+- {anti-pattern}
+
+## Vocabulary
+- We say: {words}
+- We don't say: {words}
+
+## Examples
+Good: "{example that matches the voice}"
+Bad: "{same content in a voice that doesn't match}"
+```
+
+### Step 4: Confirm
+
+"Updated your tone of voice. Every Creativestack skill that generates copy will now
+match this voice — status updates, proposals, case studies, job descriptions, and more."
+
+## Edge Cases
+- No vault directory exists → create `~/.creativestack/` and write the file
+- User pastes a 20-page brand book → extract the tone/voice sections only, summarize the rest
+- User says "I don't know" → help them figure it out from examples of writing they like
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

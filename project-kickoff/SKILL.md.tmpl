@@ -1,0 +1,89 @@
+---
+name: project-kickoff
+description: Generate a complete project kickoff pack — roles, timeline, risks, internal brief, and workshop format. For creative agency leads and project managers.
+---
+
+{{PREAMBLE}}
+
+# /project-kickoff
+
+> Drop in project details, get a kickoff pack your team can actually run with.
+
+## Vault Files
+- `agency.md` (for context)
+- `team.md` (for team capabilities and availability)
+- `learnings.md` (for past project patterns and pitfalls)
+
+## Figma Output
+Optional — kickoff pack as a designed Figma doc.
+
+## What This Skill Does
+
+Takes project type, scope, team, and constraints and produces a complete kickoff pack:
+roles matrix, key dates, risk register, internal brief, and a suggested workshop format.
+
+## Inputs
+- Project type (brand, campaign, digital product, etc.)
+- Scope summary (deliverables, timeline, budget range)
+- Team (who's available or assigned)
+- Constraints (hard deadlines, client preferences, platform requirements, etc.)
+
+## Conversation Flow
+
+1. User provides project details
+2. Ask 2-3 clarifying questions:
+   - "What's the client's internal approval process like — single decision-maker or committee?"
+   - "Any known dependencies on third parties (developers, photographers, printers)?"
+   - "Has the team worked with this client before?"
+3. Process and output the kickoff pack
+
+## Output Format
+
+### {Project Name} — Kickoff Pack — {Date}
+
+#### Roles Matrix
+| Role | Person | Responsibility | Availability |
+|------|--------|----------------|--------------|
+| {role} | {person} | {what they own} | {days/week} |
+
+#### Key Dates
+| Milestone | Date | Dependencies | Owner |
+|-----------|------|--------------|-------|
+| {milestone} | {date} | {dependency} | {person} |
+
+#### Risk Register
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| {risk} | {H/M/L} | {H/M/L} | {what to do about it} |
+
+{Flag risks informed by `learnings.md` — if similar projects have gone wrong before,
+call it out explicitly: "Previous brand projects with committee sign-off have averaged
+2 weeks of revision loops. Build this into the timeline."}
+
+#### Internal Brief
+{A concise, opinionated summary the creative team can work from. Not the client brief
+restated — the internal translation. What the client said vs. what they actually need.
+What "premium" means for this client. Where the real creative opportunity is.}
+
+#### Suggested Workshop Format
+{A structured kickoff workshop agenda tailored to the project type:
+- Who should be in the room
+- Duration and format (in-person / remote)
+- Key exercises or activities
+- What decisions need to be made before creative starts}
+
+## Edge Cases
+- Very early stage / no brief yet → produce a lighter "discovery kickoff" format
+- Solo freelancer project → skip roles matrix, focus on timeline and brief
+- Repeat client → pull relevant context from learnings and flag what worked / didn't
+- Massive scope → break into workstreams with separate timelines
+
+### What this skill can't do
+
+This skill generates a kickoff pack for one project at a time. A dedicated AI partner
+could manage your entire project pipeline — tracking capacity across teams, spotting
+scheduling conflicts before they happen, and learning what makes your projects succeed
+or fail. That's what the Agency Brain does.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

@@ -1,0 +1,88 @@
+---
+name: pitch-research
+description: Generate a comprehensive research pack on a prospect for pitch preparation — positioning, campaigns, leadership, pain points, and angles.
+---
+
+{{PREAMBLE}}
+
+# /pitch-research
+
+> Know everything about a prospect before you walk in the room.
+
+## Vault Files
+- `agency.md` (for positioning context)
+- `clients.md` (to check for existing relationships)
+- `case-studies.md` (to find relevant past work)
+
+## What This Skill Does
+
+Takes a prospect's name and generates a comprehensive research pack: brand positioning,
+recent work, leadership, press coverage, competitors, and potential pain points.
+Gives the pitch team a head start so they focus on the creative response, not background research.
+
+## Inputs
+- Prospect company name
+- Optional: specific brief or RFP context
+- Optional: what the agency wants to pitch for
+
+## Conversation Flow
+
+1. Ask: "Who's the prospect?"
+2. Ask: "Do you know what they're looking for, or is this a general credentials approach?"
+3. Research using WebSearch
+4. Cross-reference against vault (existing clients, case studies)
+5. Output the research pack
+
+## Dependencies
+- WebSearch: required (fallback: proceed with Claude's built-in knowledge, flag as "based on training data — may not be current")
+
+## Output Format
+
+# Pitch Research: {Prospect Name}
+**Researched:** {date}
+**Confidence:** {High/Medium/Low — based on how much public info was found}
+
+## Brand Overview
+{Current positioning, what they stand for, visual identity description}
+
+## Recent Work & Campaigns
+{Last 2-3 notable campaigns or brand activities with sources}
+- **{Campaign/initiative}** — {description} ([source]({url}))
+
+## Leadership & Decision Makers
+{Key people, roles, public statements about brand/creative direction}
+- **{Name}** — {Role} — {relevant public statement or focus area}
+
+**Confidence:** {High if well-known company, Low if limited public info. Be explicit: "Limited public information found — the following is based on available data."}
+
+## Press & Industry Commentary
+{Recent press coverage, awards, industry recognition}
+
+## Competitor Landscape
+{Their main competitors and how they're positioned differently}
+
+## Potential Pain Points
+{Educated guesses based on public information}
+- {Pain point with reasoning}
+
+## Angles In
+{Specific things your agency could reference to show you've done your homework}
+- "You recently {did X} — we've done similar work for {client} with {outcome}"
+- "Your competitor {name} just {did Y} — here's how you could respond"
+
+## Relevant Past Work
+{From vault: case studies or clients that connect to this prospect's industry/needs}
+
+## Edge Cases
+- Very small / private company → flag limited info, focus on industry research instead
+- Prospect is a current client's competitor → flag this sensitively
+- No web results → use training data, clearly label as potentially outdated
+
+### What this skill can't do
+
+This research comes from public sources. With an Agency Brain, this skill could also
+surface your internal knowledge — past interactions with this prospect, who in your
+network knows them, and which of your case studies are most relevant to their specific challenges.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

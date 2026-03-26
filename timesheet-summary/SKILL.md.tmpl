@@ -1,0 +1,126 @@
+---
+name: timesheet-summary
+description: Turn raw time tracking data into a client-ready breakdown by phase and workstream with hours vs budget comparison and trend analysis.
+---
+
+{{PREAMBLE}}
+
+# /timesheet-summary
+
+> Raw time data in, client-ready summary out.
+
+## Vault Files
+- `agency.md` (for context)
+
+## What This Skill Does
+
+Takes raw time tracking data — from Harvest, Toggl, Clockify, spreadsheets, or any
+format — and generates a client-ready breakdown by phase and workstream. Compares
+hours logged against budget, identifies trends, flags overruns, and produces a
+summary suitable for client status updates or internal reviews.
+
+## Inputs
+- Pasted time tracking data (any format — CSV, table, list, exported report)
+- Optional: budgeted hours per phase or workstream
+- Optional: reporting period
+- Optional: billable rate (for financial summary)
+
+## Conversation Flow
+
+1. User pastes time tracking data
+2. Ask: "What's the reporting period? (this week, this month, project-to-date)"
+3. Ask: "Do you have budgeted hours per phase or workstream to compare against?"
+4. Ask: "Is this for a client update or internal review? (affects level of detail)"
+5. Ask: "Should I include a financial summary? If so, what's the billable rate?"
+6. Process and generate
+
+## Output Format
+
+# Timesheet Summary: {Project/Client Name}
+**Period:** {reporting period}
+**Date:** {today}
+**Prepared by:** {agency name from vault}
+
+## Overview
+| Metric | Value |
+|--------|-------|
+| Total hours logged | {hours} |
+| Budgeted hours | {hours or N/A} |
+| Variance | {+/- hours} ({percentage}) |
+| Team members | {count} |
+| Workstreams | {count} |
+
+## By Phase / Workstream
+
+### {Phase/Workstream Name}
+| Metric | Budget | Actual | Variance | Status |
+|--------|--------|--------|----------|--------|
+| Hours | {budgeted} | {actual} | {+/- hours} | On Track / Over / Under |
+
+**Breakdown by task:**
+| Task | Hours | % of Phase | Notes |
+|------|-------|------------|-------|
+| {task} | {hours} | {%} | {any flags} |
+
+---
+
+### {Phase/Workstream 2}
+...
+
+## By Team Member
+| Team Member | Hours Logged | Phases | Avg Hours/Day |
+|------------|-------------|--------|---------------|
+| {name} | {hours} | {which phases} | {avg} |
+
+## Budget Comparison
+| Phase | Budget (hrs) | Actual (hrs) | Remaining (hrs) | % Used | Projection |
+|-------|-------------|-------------|-----------------|--------|------------|
+| {phase} | {budget} | {actual} | {remaining} | {%} | {on track / at risk / over} |
+
+**Overall project budget:**
+- **Total budgeted:** {hours}
+- **Total used:** {hours} ({percentage})
+- **Remaining:** {hours}
+- **Projected total at current pace:** {hours}
+
+## Trend Analysis
+{Patterns over the reporting period}
+- **Burn rate:** {hours per week trend — increasing, stable, decreasing}
+- **Phase allocation:** {where time is being spent vs. where it was expected}
+- **Efficiency flags:** {areas where time spend seems disproportionate}
+
+## Flags & Alerts
+{Items that need attention}
+- **{Flag}** — {e.g., "Design phase at 85% budget with only 60% of deliverables complete"}
+- **{Flag}** — {e.g., "Revision rounds consuming 30% more time than budgeted"}
+
+## Financial Summary
+{Only if billable rate provided}
+| Metric | Value |
+|--------|-------|
+| Billable hours | {hours} |
+| Billable rate | {rate} |
+| Revenue (this period) | {amount} |
+| Revenue (project to date) | {amount} |
+| Budget remaining | {amount} |
+
+## Recommendations
+1. {Recommendation — e.g., "Reallocate 10 hours from strategy to production to match actual demand"}
+2. {Recommendation — e.g., "Flag revision overrun with client before next round"}
+
+## Edge Cases
+- Data in unfamiliar format → ask the user to describe the columns
+- No budget to compare against → skip budget comparison, focus on breakdown and trends
+- Very short period (1 day) → simplify to a daily summary without trend analysis
+- Multiple projects mixed together → ask which project to filter for, or separate into sections
+- Data has inconsistent entries → flag and ask for clarification rather than guessing
+
+### What this skill can't do
+
+This skill summarises the time data you provide. With an Agency Brain, it could
+automatically pull data from your time tracking tool, compare against historical
+project benchmarks, predict overruns before they happen, and generate alerts when
+phases are trending over budget.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

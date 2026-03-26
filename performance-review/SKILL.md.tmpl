@@ -1,0 +1,119 @@
+---
+name: performance-review
+description: Turn scattered notes, project contributions, and peer feedback into a balanced performance review with specific examples, strengths, growth areas, and conversation prompts.
+---
+
+{{PREAMBLE}}
+
+# /performance-review
+
+> Notes and contributions in, thoughtful review document out — with conversation starters, not just verdicts.
+
+## Vault Files
+- `agency.md` (for agency context and values)
+- `team.md` (for team structure and role expectations)
+
+## What This Skill Does
+
+Takes raw inputs — manager notes, project contributions, peer feedback, self-assessment —
+and produces a balanced, specific performance review document. Avoids vague praise
+("great team player") in favour of concrete examples. Identifies genuine strengths and
+growth areas without corporate filler. Includes conversation prompts so the review
+meeting is productive, not awkward.
+
+## Inputs
+- Person's name and role
+- Notes on their work (any format — bullet points, stream of consciousness, pasted messages)
+- Optional: peer feedback or 360 input
+- Optional: self-assessment from the individual
+- Optional: specific projects they contributed to
+- Optional: previous review or goals to compare against
+
+## Conversation Flow
+
+1. User provides the person's name, role, and whatever notes they have
+2. Ask: "What period does this review cover?"
+3. Ask: "What are 2-3 specific projects or moments that stand out — positive or challenging?"
+4. Ask: "Is there anything you want to address but aren't sure how to frame? (performance concerns, role changes, compensation)"
+5. Ask: "What's the goal for this review — development conversation, formal assessment, or both?"
+6. Process and generate
+
+## Output Format
+
+# Performance Review: {Name}
+**Role:** {role}
+**Period:** {review period}
+**Date:** {today}
+**Reviewer:** {manager name if provided}
+
+## Summary
+{2-3 sentence overview — honest, balanced, specific. Not a report card — a portrait
+of how this person has shown up during the review period.}
+
+## Strengths
+{Each strength backed by a specific example — not "good communicator" but "led the
+client presentation for {project} and turned a difficult feedback session into a
+productive working relationship."}
+
+### {Strength 1}
+{Specific example and impact}
+
+### {Strength 2}
+{Specific example and impact}
+
+### {Strength 3}
+{Specific example and impact}
+
+## Growth Areas
+{Framed constructively with specific observations, not character judgements. Each area
+includes a suggested development action.}
+
+### {Growth Area 1}
+- **What I've observed:** {specific situation}
+- **Why it matters:** {impact on work, team, or career}
+- **Suggested development:** {concrete action — not "improve communication"}
+
+### {Growth Area 2}
+- **What I've observed:** {specific situation}
+- **Why it matters:** {impact}
+- **Suggested development:** {concrete action}
+
+## Project Contributions
+| Project | Role | Contribution | Impact |
+|---------|------|-------------|--------|
+| {project} | {their role on it} | {what they did} | {outcome} |
+
+## Goals for Next Period
+{Suggested goals based on strengths to build on and growth areas to address.
+Specific, measurable where possible, realistic.}
+
+1. {Goal — with success criteria}
+2. {Goal — with success criteria}
+3. {Goal — with success criteria}
+
+## Conversation Prompts
+{Questions for the reviewer to ask in the meeting — designed to make it a
+two-way conversation, not a monologue.}
+
+- "How do you feel about the balance of your work right now — the mix of projects, responsibilities, creative vs operational?"
+- "{Specific prompt related to a growth area — e.g., 'What would help you feel more confident leading client presentations?'}"
+- "What's one thing I could do differently as your manager to support you better?"
+- "Where do you want to be in 12 months — same role deeper, new responsibilities, something different?"
+
+## Edge Cases
+- Very little input from the manager → ask for at least 2-3 specific moments, don't pad with generalities
+- Only positive feedback provided → gently probe for growth areas: "Everyone has them — what would make this person even better?"
+- Performance concern that needs formal documentation → flag that this may need HR input and adjust tone accordingly
+- Person is being managed out → decline to produce a review and suggest professional HR guidance
+- Self-assessment conflicts with manager view → present both perspectives and suggest discussion points
+- First review for a new starter → adjust expectations and focus on onboarding experience and early signals
+
+### What this skill can't do
+
+This skill produces one review at a time from the inputs you provide. A dedicated AI
+partner could track contributions across projects in real time, aggregate peer feedback
+automatically, compare against role-level frameworks, and draft reviews with evidence
+already attached. That's what the Agency Brain does.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

@@ -1,0 +1,10 @@
+# User data (vault)
+.creativestack/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

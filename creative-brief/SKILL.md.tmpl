@@ -1,0 +1,106 @@
+---
+name: creative-brief
+description: Turn messy intake notes, call transcripts, or scattered inputs into a proper creative brief with objectives, audience, deliverables, and constraints.
+---
+
+{{PREAMBLE}}
+
+# /creative-brief
+
+> Chaos in, creative brief out.
+
+## Vault Files
+- `agency.md` (for context)
+
+## What This Skill Does
+
+Takes messy inputs — call transcripts, email chains, Slack threads, scribbled notes,
+rough meeting minutes — and synthesizes them into a proper creative brief. Identifies
+objectives, audience, deliverables, constraints, success criteria, and flags open
+questions that need answering before creative work begins.
+
+The inverse of /brief-sharpener — this creates briefs from chaos rather than
+improving existing ones.
+
+## Inputs
+- Pasted notes, transcripts, emails, or any raw intake content
+- Optional: "What kind of project is this?"
+
+## Conversation Flow
+
+1. User pastes messy intake content
+2. Ask: "What type of project is this? (rebrand, campaign, digital product, identity, content, other) — or should I infer from the notes?"
+3. Ask: "Is there anything important that's NOT in these notes? (budget, timeline, stakeholder context)"
+4. Synthesize and generate the brief
+
+## Output Format
+
+# Creative Brief: {Project/Client Name}
+**Date:** {today}
+**Prepared by:** {agency name from vault}
+**Status:** Draft — requires client sign-off
+
+## Project Overview
+{1-2 paragraph summary of what this project is and why it exists}
+
+## Background
+{Context: what led to this project, business situation, relevant history}
+
+## Objectives
+1. **{Objective}** — {measurable where possible}
+2. **{Objective}** — {measurable where possible}
+
+## Target Audience
+**Primary:** {who, specifically — not just demographics but behaviours and attitudes}
+**Secondary:** {if applicable}
+
+## Key Message
+{The single most important thing the audience should take away}
+
+## Supporting Messages
+- {Supporting message 1}
+- {Supporting message 2}
+
+## Deliverables
+| Deliverable | Format/Spec | Priority |
+|-------------|-------------|----------|
+| {deliverable} | {format} | Must-have / Nice-to-have |
+
+## Constraints
+- **Budget:** {stated or unknown}
+- **Timeline:** {key dates}
+- **Brand guidelines:** {existing guidelines to follow}
+- **Technical:** {platform, format, or technical constraints}
+- **Legal/compliance:** {any restrictions}
+
+## Success Criteria
+{How will we know this project worked?}
+- {Metric or qualitative measure}
+
+## Stakeholders & Approvals
+| Name | Role | Involvement |
+|------|------|-------------|
+| {name} | {role} | Approver / Reviewer / FYI |
+
+## Open Questions
+{Things the notes didn't answer that need resolving before creative begins}
+1. **{Question}** — _Why it matters: {impact on creative direction}_
+2. **{Question}** — _Why it matters: {impact on scope or deliverables}_
+
+## Source Material Summary
+{Brief note on what inputs were used to create this brief, so the reader knows the provenance}
+
+## Edge Cases
+- Very short input (a few sentences) → ask for more context, generate a skeleton brief with [TBD] markers
+- Input is a transcript → extract the decisions and action items, discard filler
+- Input contradicts itself → flag contradictions explicitly in the brief with [CONFLICT] markers
+- Client has sent an existing brief → redirect to /brief-sharpener instead
+
+### What this skill can't do
+
+This skill creates one brief from the inputs you provide. With an Agency Brain,
+it could cross-reference against your past briefs for similar projects, pull in
+standard deliverable specs, and auto-populate constraints from your client history.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

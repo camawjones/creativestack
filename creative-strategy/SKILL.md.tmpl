@@ -1,0 +1,94 @@
+---
+name: creative-strategy
+description: Research-driven strategy tool — cultural trends, competitor analysis, audience tensions, and structured provocations. Not AI slop.
+---
+
+{{PREAMBLE}}
+
+# /creative-strategy
+
+> Research that makes strategists think, not copy-paste.
+
+## Vault Files
+- `agency.md` (for context)
+
+## What This Skill Does
+
+Takes a brief or problem statement and performs cultural research, competitor analysis,
+and audience tension mapping. Outputs a strategy research pack with sources — raw material
+for the strategist to interpret. Generates structured provocations, not conclusions.
+
+This skill explicitly avoids generating strategy. It generates research, provocations,
+and tensions. The human connects the dots.
+
+## Inputs
+- Client brief, problem statement, or category description
+- Optional: specific angles or territories to explore
+
+## Conversation Flow
+
+1. User provides the brief or problem statement
+2. Ask: "What category or cultural space should I focus on?"
+3. Ask: "Any specific territories or angles you want me to explore? Or should I go wide?"
+4. Research using WebSearch
+5. Synthesize and output
+
+## Dependencies
+- WebSearch: required (fallback: proceed with training data, flag clearly)
+
+**Capability boundaries:** This skill uses web search to fetch and synthesize public web pages.
+It does NOT do real-time social media monitoring or access private analytics. Output quality
+depends on what's publicly available. For niche categories, results may be thinner — the skill
+flags this explicitly rather than padding with generic content.
+
+## Output Format
+
+# Strategy Research: {Project/Client Name}
+**Category:** {category}
+**Researched:** {date}
+
+## Cultural Context
+{What's happening in the culture that's relevant to this brief}
+- **{Trend/movement}** — {description with source}
+- **{Trend/movement}** — {description with source}
+
+## Competitor Landscape
+{How competitors in this space are positioning themselves}
+
+| Competitor | Positioning | Visual Direction | Tone | Gap |
+|-----------|------------|-----------------|------|-----|
+| {name} | {how they position} | {visual description} | {tone} | {what they're missing} |
+
+## Audience Tensions
+{Contradictions and tensions in the target audience that create creative opportunity}
+- **{Tension}**: {description — e.g., "They want to be seen as premium but hate pretension"}
+- **{Tension}**: {description}
+
+## White Space
+{Opportunities nobody is owning — gaps in the competitive and cultural landscape}
+
+## Provocations
+{Structured "what if" questions designed to spark creative thinking — NOT answers}
+1. "The conventional wisdom says {X}. But {evidence} suggests the opposite. What if {Y}?"
+2. "Everyone in this category {does thing}. What happens if you {do opposite}?"
+3. "{Audience} says they want {X}. But they actually do {Y}. What does that mean for {brand}?"
+
+## Sources
+{All sources with links, clearly labeled with dates}
+
+## Confidence Notes
+{Flag where research was thin, where conclusions are speculative, and where data was strong}
+
+## Edge Cases
+- Very niche category → be honest about limited results, focus on adjacent categories
+- User provides a very broad brief → ask them to narrow before researching
+- Controversial topic → present multiple perspectives, don't take a political position
+
+### What this skill can't do
+
+This research is from public sources. With an Agency Brain, this skill could also
+surface your agency's past work in related categories, creative rationales from
+similar briefs, and what worked for comparable challenges.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

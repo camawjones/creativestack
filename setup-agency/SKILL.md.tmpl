@@ -1,0 +1,218 @@
+---
+name: setup-agency
+description: Set up your Agency Context Vault — company info, team, tone of voice, clients, and tools. Run once, update anytime.
+---
+
+{{PREAMBLE}}
+
+# /setup-agency
+
+> Set up your agency's context so every Creativestack skill knows who you are.
+
+## What This Skill Does
+
+Interactive onboarding that creates your Agency Context Vault at `~/.creativestack/`.
+This is a one-time setup (5-10 minutes) that makes every other skill contextually aware
+of your agency — your team, your tone, your clients, your tools.
+
+You can re-run this anytime to update specific sections.
+
+## Conversation Flow
+
+### Step 1: Check for existing vault
+
+```bash
+if [ -d "$HOME/.creativestack" ]; then
+  echo "EXISTING_VAULT"
+  ls "$HOME/.creativestack"/*.md 2>/dev/null
+else
+  echo "NO_VAULT"
+fi
+```
+
+If an existing vault is found, ask: "You already have an Agency Context Vault set up.
+Want to update specific sections, or start fresh?"
+
+If starting fresh or no vault exists, proceed through all steps below.
+If updating, ask which section to update and skip to that step.
+
+### Step 2: Agency basics
+
+Ask the user (one question at a time, conversational):
+
+1. "What's your agency or company called?"
+2. "Where are you based?"
+3. "Roughly how many people?"
+4. "How would you describe what you do in one sentence? (e.g., 'We're a branding agency that works with sports and entertainment brands')"
+5. "What are your main specialisms? (e.g., brand identity, creative campaigns, digital product, motion design)"
+
+Write to `~/.creativestack/agency.md`:
+
+```bash
+mkdir -p "$HOME/.creativestack"
+```
+
+Use the Write tool to create `~/.creativestack/agency.md` with this structure:
+
+```markdown
+---
+name: {agency name}
+location: {location}
+size: {number}
+type: {one-line description}
+---
+
+## Specialisms
+- {specialism 1}
+- {specialism 2}
+- ...
+
+## Positioning
+{their one-sentence description}
+```
+
+### Step 3: Tone of voice
+
+Ask:
+1. "How would you describe your agency's personality? (e.g., confident, playful, intellectual, warm)"
+2. "Are you more formal or casual in how you communicate?"
+3. "Any words or phrases you love using? Any you hate?"
+4. "Can you paste an example of writing that sounds like your agency — a bio, an Instagram caption, a project description, anything?"
+
+Write to `~/.creativestack/tone-of-voice.md`:
+
+```markdown
+---
+formality: {casual/casual-professional/professional/formal}
+personality: [{trait1}, {trait2}, {trait3}]
+---
+
+## We sound like
+- {description based on their answers}
+
+## We don't sound like
+- {anti-patterns based on their answers}
+
+## Vocabulary
+- We say: {preferred words}
+- We don't say: {avoided words}
+
+## Examples
+{paste their example, or synthesize one from their answers}
+```
+
+### Step 4: Team
+
+Ask:
+1. "Who are the key people? Just names and roles is fine — e.g., 'Sarah - Creative Director, Mike - MD, Jade - Senior Designer'"
+2. "Anyone else you want to include? PMs, strategists, producers?"
+
+Write to `~/.creativestack/team.md`:
+
+```markdown
+## Leadership
+- **{Name}** — {Role}
+
+## Creative
+- **{Name}** — {Role} ({specialisms if mentioned})
+
+## Strategy
+- **{Name}** — {Role}
+
+## Production
+- **{Name}** — {Role}
+```
+
+Group people by department based on their roles. If the user gives a flat list, organize it sensibly.
+
+### Step 5: Clients
+
+Ask:
+1. "Who are your current clients? Just names is fine."
+2. "Any key contacts at those clients worth noting? (optional — you can add these later)"
+
+Write to `~/.creativestack/clients.md`:
+
+```markdown
+## Active Clients
+- **{Client 1}**
+- **{Client 2}**
+- ...
+
+## Key Contacts
+- {Contact name} at {Client} — {role/notes if provided}
+```
+
+### Step 6: Tools
+
+Ask:
+1. "What tools does your agency use day-to-day? (design tools, project management, communication, etc.)"
+
+Write to `~/.creativestack/tools.md`:
+
+```markdown
+## Design
+- {tool 1}
+- {tool 2}
+
+## Project Management
+- {tool}
+
+## Communication
+- {tool}
+
+## Other
+- {tool}
+```
+
+### Step 7: Remaining vault files
+
+Create empty starter files for sections that get populated by other skills:
+
+Write `~/.creativestack/case-studies.md`:
+```markdown
+## Case Studies
+
+_No case studies added yet. Use /case-study to create them, or add manually._
+```
+
+Write `~/.creativestack/methodology.md`:
+```markdown
+## Methodology
+
+_No methodology documented yet. Use /methodology-documenter to capture how your agency runs its processes._
+```
+
+Write `~/.creativestack/learnings.md`:
+```markdown
+## Project Learnings
+
+_No learnings captured yet. Use /post-mortem after completing projects to build this up over time._
+```
+
+### Step 8: Confirmation
+
+After all files are written, summarize what was created:
+
+"Your Agency Context Vault is set up at `~/.creativestack/`. Here's what's in it:
+
+- **agency.md** — {agency name}, {location}, {size} people
+- **tone-of-voice.md** — {personality summary}
+- **team.md** — {number} team members
+- **clients.md** — {number} clients
+- **tools.md** — {tool count} tools
+- **case-studies.md** — empty (populate with /case-study)
+- **methodology.md** — empty (populate with /methodology-documenter)
+- **learnings.md** — empty (populate with /post-mortem)
+
+Every Creativestack skill will now use this context automatically. You can edit these files directly in any text editor, or re-run /setup-agency to update sections."
+
+## Edge Cases
+
+- User gives very brief answers → work with what you have, don't push for more
+- User wants to skip a section → create the file with a placeholder note
+- User pastes a large document for tone of voice → extract the key patterns, don't store the whole doc
+- User doesn't know their tone of voice → help them discover it by asking about examples they like
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

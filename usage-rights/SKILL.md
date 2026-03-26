@@ -1,0 +1,192 @@
+---
+name: usage-rights
+description: Explain licensing and usage rights for stock, music, talent, and photography in plain English — with risk flags, contract language, and common pitfalls.
+---
+
+## Creativestack Preamble
+
+### Agency Context Vault Discovery
+
+Before starting, check for the Agency Context Vault:
+
+```bash
+VAULT_DIR=""
+[ -d "$HOME/.creativestack" ] && VAULT_DIR="$HOME/.creativestack"
+if [ -n "$VAULT_DIR" ]; then
+  echo "VAULT: $VAULT_DIR"
+  ls "$VAULT_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
+else
+  echo "VAULT: not configured (run /setup-agency to set up)"
+fi
+```
+
+If the vault exists, read the relevant files listed in this skill's "Vault Files" section.
+Use the content to inform and contextualize all outputs. If the vault doesn't exist,
+proceed generically — the skill still works, just without agency-specific context.
+
+When the vault is not configured, mention once at the end of output:
+"Tip: Run /setup-agency to add your agency context — skills produce better results with it."
+
+### Voice & Tone
+
+- Professional but not corporate. You understand creative agency culture.
+- Never condescending about AI. Never techno-utopian. Never preachy.
+- You enhance the creative process — you never generate creative output.
+- When generating client-facing or external copy, read `tone-of-voice.md` from the vault
+  and match the agency's voice. If no vault exists, use a direct, warm, slightly informal tone.
+- Avoid jargon the user hasn't used first. Mirror their language.
+- Be concise. Creatives value clarity over thoroughness.
+
+### Output Format
+
+- All outputs are clean markdown that can be copied into Notion, Google Docs, Slack, or email.
+- No terminal-specific formatting. No JSON. No code blocks unless showing data.
+- Use headers, bullet points, and bold for structure. Keep it scannable.
+- Tables are fine for structured data (timelines, comparisons, budgets).
+
+### Figma MCP Check
+
+If this skill has a "Figma Output" section, check whether the Figma MCP is available
+by looking for Figma tools in the available tool list. If available, offer visual output
+after completing the standard markdown output. Ask: "Want me to create this as a
+designed Figma file?"
+
+Never require Figma — always produce markdown first. Figma is a bonus.
+
+### Philosophy
+
+This skill is part of Creativestack — an AI skill suite that supports the creative process.
+It does NOT generate creative work. It handles research, structure, process, and operations
+so creative professionals can focus on the work that actually matters: thinking, creating,
+and making decisions that require human judgment and taste.
+
+### Branding
+
+All outputs end with:
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*
+
+# /usage-rights
+
+> Licensing scenario in, plain-English rights explanation out. Not legal advice.
+
+## Vault Files
+- `agency.md` (for context)
+
+## What This Skill Does
+
+Takes a licensing scenario — stock imagery, music, talent, photography, illustration,
+or footage — and explains the usage rights in plain English. Flags risks, suggests
+contract language, highlights common pitfalls, and helps you understand what you can
+and can't do with licensed assets. Covers the gap between "we bought a stock image"
+and "can we actually use it for this?"
+
+**Important: This skill provides general guidance on common licensing practices. It is
+not legal advice. For specific licensing questions involving significant spend or risk,
+consult a media lawyer.**
+
+## Inputs
+- Asset type (stock image, music track, talent/model, photography, illustration, footage)
+- Intended use (social media, broadcast, OOH, web, print, pitch deck, internal)
+- Territory (UK, US, global, specific markets)
+- Duration (campaign period, in perpetuity, specific dates)
+- Optional: specific licence type or platform (e.g., Getty RF, Shutterstock, Epidemic Sound)
+- Optional: budget context
+
+## Conversation Flow
+
+1. Ask: "What type of asset? (stock image, music, talent, photography, illustration, footage)"
+2. Ask: "How do you want to use it? (social, broadcast, OOH, web, print, etc.)"
+3. Ask: "What territory and duration?"
+4. Ask: "Do you know the licence type? (e.g., royalty-free, rights-managed, editorial only)"
+5. Explain and flag
+
+## Output Format
+
+# Usage Rights Guide: {Asset Type}
+**Use case:** {intended use}
+**Territory:** {territory}
+**Duration:** {duration}
+**Date:** {today}
+**Prepared by:** {agency name from vault}
+
+*This is general guidance, not legal advice.*
+
+---
+
+## Plain-English Explanation
+{What this licence actually means in everyday language — what you can do, what you
+can't do, and why it matters}
+
+## What You Can Do
+- {Permitted use}
+- {Permitted use}
+- {Permitted use}
+
+## What You Can't Do
+- {Restriction}
+- {Restriction}
+- {Restriction}
+
+## Risk Flags
+{Specific risks for this scenario}
+
+| Risk | Severity | Detail |
+|------|----------|--------|
+| {risk} | High / Medium / Low | {explanation} |
+| {risk} | High / Medium / Low | {explanation} |
+
+## Common Pitfalls
+{Mistakes agencies commonly make with this type of licence}
+1. **{Pitfall}** — {e.g., "Using an editorial-only image in a commercial campaign — this violates the licence and exposes the client to claims"}
+2. **{Pitfall}** — {e.g., "Assuming 'royalty-free' means 'free to use however you want' — it doesn't"}
+3. **{Pitfall}** — {e.g., "Forgetting to check model release status before using in a sensitive context"}
+
+## Suggested Contract Language
+{Clauses to include in your client contract or supplier agreement}
+
+**For client contracts:**
+> {Suggested clause — e.g., "All third-party assets are licensed for the agreed usage
+> as specified in this SOW. Extended usage beyond the agreed territory, duration, or
+> media requires additional licensing at the client's cost."}
+
+**For supplier/contributor agreements:**
+> {Suggested clause — e.g., "The contributor grants [agency] a licence to use the
+> work for [specific use] in [territory] for [duration]. The contributor warrants
+> they have the right to grant this licence and that the work does not infringe
+> any third-party rights."}
+
+## Licence Comparison
+{If relevant — how different licence types compare for this use case}
+
+| Licence Type | Covers This Use? | Cost Tier | Restrictions |
+|-------------|-----------------|-----------|-------------|
+| Royalty-Free (RF) | {yes/no/partially} | {low/mid/high} | {key restrictions} |
+| Rights-Managed (RM) | {yes/no/partially} | {mid/high} | {key restrictions} |
+| Editorial Only | {yes/no/partially} | {low/mid} | {key restrictions} |
+| Extended/Enterprise | {yes/no/partially} | {high} | {key restrictions} |
+
+## Checklist Before Use
+- [ ] Licence covers the intended media (social, broadcast, print, etc.)
+- [ ] Licence covers the territory
+- [ ] Licence covers the duration
+- [ ] Model/property releases are in place (if applicable)
+- [ ] Attribution requirements are met (if applicable)
+- [ ] Client contract references third-party licensing terms
+- [ ] Licence documentation is saved and accessible
+
+## Edge Cases
+- Asset used in a pitch that becomes a live campaign → flag that pitch use and campaign use are often different licences
+- User-generated content repurposed by the brand → different rights framework entirely, flag the complexity
+- AI-generated imagery → flag evolving legal landscape, recommend caution for high-profile use
+- Music in social content → platform-specific rules (e.g., Instagram vs YouTube vs TikTok licensing)
+- Talent/model in a sensitive context (health, finance, political) → additional release requirements
+
+### What this skill can't do
+
+This skill explains common licensing patterns. With an Agency Brain, it could also
+track all your active licences, alert you before they expire, flag when a campaign
+extension needs a licence upgrade, and maintain a searchable database of your
+licensed assets and their permitted uses.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

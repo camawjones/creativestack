@@ -1,0 +1,116 @@
+---
+name: invoice-chaser
+description: Generate escalating follow-up emails for overdue invoices — from friendly nudge to pre-legal notice, matched to your tone of voice.
+---
+
+{{PREAMBLE}}
+
+# /invoice-chaser
+
+> Overdue invoice in, escalating chase sequence out.
+
+## Vault Files
+- `agency.md` (for agency details)
+- `tone-of-voice.md` (for communication style)
+
+## What This Skill Does
+
+Takes overdue invoice details and generates a sequence of follow-up emails that escalate
+appropriately over time. Starts friendly, gets firmer, ends formal. Each email is
+matched to your agency's tone of voice so it sounds like you, not a template. Covers
+the full arc from gentle reminder to pre-legal notice.
+
+## Inputs
+- Client name and contact name
+- Invoice number and amount
+- Original due date (or how many days overdue)
+- Optional: any previous communication about this invoice
+- Optional: relationship context (long-standing client, new client, difficult history)
+- Optional: payment terms from contract
+
+## Conversation Flow
+
+1. Ask: "What's the client name, contact name, invoice number, and amount?"
+2. Ask: "When was it due? (or how many days overdue is it?)"
+3. Ask: "Have you already chased this, or is this the first follow-up?"
+4. Ask: "Any relationship context I should know? (e.g., long-standing client, first project, known slow payer)"
+5. Generate the full escalation sequence
+
+## Output Format
+
+# Invoice Chase Sequence: {Client Name}
+**Invoice:** {number}
+**Amount:** {amount}
+**Due date:** {date}
+**Days overdue:** {days}
+**Date:** {today}
+**Prepared by:** {agency name from vault}
+
+---
+
+## Email 1 — Friendly Reminder (7 days overdue)
+**Subject:** Quick reminder — Invoice {number}
+
+{Warm, casual tone. Assumes it's an oversight. Mentions the invoice, amount, and due
+date. Attaches the invoice again for convenience. No pressure — just a nudge.}
+
+---
+
+## Email 2 — Firm Follow-Up (14 days overdue)
+**Subject:** Following up — Invoice {number} now overdue
+
+{Still professional and respectful, but clearly states the invoice is overdue. References
+the previous reminder. Asks for a specific update — when can you expect payment?
+Includes payment details again.}
+
+---
+
+## Email 3 — Formal Notice (30 days overdue)
+**Subject:** Overdue payment — Invoice {number}
+
+{Formal tone. States this is the third communication. References the payment terms
+from the contract. Mentions that continued non-payment may affect the working
+relationship and future project scheduling. Requests payment within a specific
+timeframe (e.g., 7 business days). Offers to discuss if there's an issue.}
+
+---
+
+## Email 4 — Pre-Legal / Final Notice (60+ days overdue)
+**Subject:** Final notice — Invoice {number} — {amount}
+
+{Very formal. States this is a final notice before the matter is escalated. References
+all previous communications and dates. States the total amount including any late
+payment fees if applicable. Gives a final deadline (e.g., 7 days). States next steps
+if not resolved (debt recovery, legal action, credit agencies). Still leaves the door
+open for the client to make contact and resolve.}
+
+---
+
+## Guidance Notes
+- **Before sending Email 3:** Consider a phone call — sometimes a conversation resolves things faster than email
+- **Before sending Email 4:** Consult with your legal advisor or accountant about next steps specific to your jurisdiction
+- **Late payment interest:** {Note on statutory late payment interest if applicable — e.g., UK Late Payment of Commercial Debts Act}
+- **Record keeping:** Save all correspondence — dates and content matter if this escalates
+
+## Customisation Notes
+{Notes on what to adjust based on the specific relationship}
+- {e.g., "For a long-standing client, you might skip Email 1 and start with a phone call"}
+- {e.g., "For a new client, stick to the full sequence — it sets expectations"}
+
+## Edge Cases
+- Client has already acknowledged the debt → skip to the appropriate level, reference their acknowledgement
+- Partial payment received → adjust the amount and tone accordingly
+- Client is disputing the invoice → pivot from chase to dispute resolution language
+- Very large amount → consider shorter intervals between escalations
+- Client in a different jurisdiction → flag that enforcement may differ, recommend local legal advice
+- Personal relationship with the contact → note that separating the personal from professional is important, suggest different signatory
+
+### What this skill can't do
+
+This skill generates chase emails based on what you tell it. With an Agency Brain, it
+could automatically track all overdue invoices, send reminders on schedule, escalate
+based on your rules, flag clients with payment patterns, and integrate with your
+accounting software.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

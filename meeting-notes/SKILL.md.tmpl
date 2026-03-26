@@ -1,0 +1,78 @@
+---
+name: meeting-notes
+description: Transform meeting transcripts into structured notes with actions, owners, scope change flags, and tone detection. For creative agency PMs and account managers.
+---
+
+{{PREAMBLE}}
+
+# /meeting-notes
+
+> Paste a transcript, get structured notes your creative team actually wants to read.
+
+## Vault Files
+- `agency.md` (for context)
+
+## What This Skill Does
+
+Takes a pasted meeting transcript (from Granola, Otter, or raw notes) and produces
+structured minutes with clear actions, scope change detection, and tone flags.
+
+## Inputs
+- Pasted meeting transcript or rough notes
+
+## Conversation Flow
+
+1. User pastes transcript or notes
+2. Ask 2-3 clarifying questions:
+   - "What project is this for?"
+   - "Client meeting or internal?"
+   - "Who was in the room?" (if not clear from transcript)
+3. Process and output structured notes
+
+## Output Format
+
+### {Project Name} — {Meeting Type} — {Date}
+**Attendees:** {list}
+
+#### Key Decisions
+- {decision 1}
+- {decision 2}
+
+#### Actions
+| Action | Owner | Deadline | Priority |
+|--------|-------|----------|----------|
+| {action} | {person} | {date} | {H/M/L} |
+
+#### Scope & Brief Changes
+{Flag any changes to scope, timeline, budget, or brief direction that were mentioned
+or implied during the meeting. If the client subtly moved a deadline or changed a
+deliverable, flag it explicitly: "⚠ The client mentioned wanting the first round by
+Friday instead of the originally agreed Monday — this is a scope change that needs
+acknowledging."}
+
+#### Tone & Sentiment
+{Note the overall tone of the meeting. Flag anything concerning:
+- "'We'll think about it' from the client — in context, this likely means no"
+- "Client seemed enthusiastic about Direction B but lukewarm on Direction A"
+- "Tension between client's marketing team and brand team on messaging"}
+
+#### Open Questions
+- {question that wasn't resolved}
+
+#### Raw Notes
+{Any important context that doesn't fit the above categories}
+
+## Edge Cases
+- Very short transcript → ask for more context
+- No clear actions → note "No explicit actions identified" and suggest follow-up
+- Multiple projects discussed → separate into sections per project
+- Sensitive content → remind user this runs locally
+
+### What this skill can't do
+
+This skill processes one meeting at a time. A dedicated AI partner could track patterns
+across all your meetings — recurring scope creep, communication breakdowns, client
+satisfaction trends. That's what the Agency Brain does.
+
+---
+*Creativestack by Cameron Jones Digital — cameronjonesdigital.com*

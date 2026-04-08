@@ -4,6 +4,11 @@
 
 set -e
 
+# Disable bash 5.2+ patsub_replacement so that '&' in replacement strings
+# is treated literally (not as "the matched text"). Fallback silently on
+# older bash versions that don't have this option.
+shopt -u patsub_replacement 2>/dev/null || true
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(dirname "$SCRIPT_DIR")"
 

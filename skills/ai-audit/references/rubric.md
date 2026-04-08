@@ -33,7 +33,7 @@ holding it in their head.
 - Client relationship calls (who to take on, who to decline)
 - Decisions about team structure and roles
 
-**Maps to skills:** `/creativestack:sow-generator`, `/creativestack:project-profitability`, `/creativestack:timesheet-summary`, `/creativestack:resource-conflict`, `/creativestack:proposal-generator`
+**Maps to skills:** `/sow-generator`, `/project-profitability`, `/timesheet-summary`, `/resource-conflict`, `/proposal-generator`
 
 ---
 
@@ -59,7 +59,7 @@ doing the same thinking twice because prior work wasn't documented.
 - Taste-level judgments
 - The critique/review conversation itself (AI captures, humans decide)
 
-**Maps to skills:** `/creativestack:brief-sharpener`, `/creativestack:creative-brief`, `/creativestack:feedback-consolidator`, `/creativestack:creative-strategy`, `/creativestack:design-research`
+**Maps to skills:** `/brief-sharpener`, `/creative-brief`, `/feedback-consolidator`, `/creative-strategy`, `/design-research`
 
 ---
 
@@ -85,7 +85,7 @@ write-up step. Feedback rounds don't lose context between sessions.
 - Relationship judgment on what to share vs. hold back
 - Tone calibration for sensitive situations
 
-**Maps to skills:** `/creativestack:status-update`, `/creativestack:meeting-notes`, `/creativestack:proposal-generator`, `/creativestack:rfi-response`, `/creativestack:feedback-consolidator`
+**Maps to skills:** `/status-update`, `/meeting-notes`, `/proposal-generator`, `/rfi-response`, `/feedback-consolidator`
 
 **Note for in-house teams:** This category becomes "Stakeholder
 Communication" — replace "client" with "stakeholder" throughout.
@@ -115,7 +115,7 @@ fed back into briefs, pitches, and proposals automatically.
   curate)
 - Personal craft rituals
 
-**Maps to skills:** `/creativestack:case-study`, `/creativestack:post-mortem`, `/creativestack:update-voice`, `/creativestack:setup`, `/creativestack:brand-guidelines`
+**Maps to skills:** `/case-study`, `/post-mortem`, `/update-voice`, `/setup-cs`, `/brand-guidelines`
 
 ---
 
@@ -139,7 +139,7 @@ about taking on work are informed by data, not vibes.
 - Client selection judgment
 - Pricing as a creative decision, not a spreadsheet output
 
-**Maps to skills:** `/creativestack:project-profitability`, `/creativestack:timesheet-summary`, `/creativestack:resource-conflict`, `/creativestack:pitch-research`
+**Maps to skills:** `/project-profitability`, `/timesheet-summary`, `/resource-conflict`, `/pitch-research`
 
 **Note for in-house teams:** This category shifts to "Operational
 Intelligence" — pipeline becomes "backlog of stakeholder requests",
@@ -325,7 +325,7 @@ answers or the brain has no context), the scoring is directional
 only. Flag with:
 
 > **Confidence:** Low — based on brief answers without brain
-> context. Treat scores as directional. Running `/creativestack:setup`
+> context. Treat scores as directional. Running `/setup-cs`
 > first would sharpen the next audit significantly.
 
 Never score confidently off thin evidence.

@@ -293,7 +293,7 @@ it ain't broke, don't fix it."
    seat at the 30/60/90 checkpoints. Empowered skeptics become
    quality owners.
 3. **Pick wins they care about.** If the skeptic's biggest gripe
-   is "the briefs are always terrible", start with `/creativestack:brief-sharpener`.
+   is "the briefs are always terrible", start with `/brief-sharpener`.
    Addressing their specific pain builds consent faster than arguing.
 4. **Let them kill any win that isn't working.** If phase 1 has
    a win the skeptic flags as noise, cut it. Credibility earned

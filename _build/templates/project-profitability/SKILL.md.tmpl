@@ -35,7 +35,7 @@ after that takes 60 seconds and gets sharper as the history grows.
 - `project-history.md` — append-only log of every analysed project (this skill creates and maintains it)
 - `retainer-history.md` — monthly data points per retainer for trajectory analysis (this skill creates and maintains it)
 - `team.md` — fallback source for person-level day rates if not in rate-card
-- `freelance-bench.md` — trusted freelance roster with day rates and lead times (used in scenario modelling and cost-out comparisons; from `/creativestack:resource-conflict` Setup bench)
+- `freelance-bench.md` — trusted freelance roster with day rates and lead times (used in scenario modelling and cost-out comparisons; from `/resource-conflict` Setup bench)
 - `profile.md` — agency name, currency, default target margin
 - `learnings.md` — prose lessons (this skill appends to a § Profitability section, never overwrites)
 
@@ -79,9 +79,9 @@ Before asking the user anything, scan the conversation for upstream skill output
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:timesheet-summary` | Logged hours, burn rate, revision tax, scope creep | Pre-fills hours data — skip the question |
-| `/creativestack:timeline-generator` | Phase structure, planned durations | Maps phases to budget allocation |
-| `/creativestack:sow-generator` | Fee, payment milestones, revision limits | Pre-fills fee and contractual terms |
+| `/timesheet-summary` | Logged hours, burn rate, revision tax, scope creep | Pre-fills hours data — skip the question |
+| `/timeline-generator` | Phase structure, planned durations | Maps phases to budget allocation |
+| `/sow-generator` | Fee, payment milestones, revision limits | Pre-fills fee and contractual terms |
 
 When upstream data is available:
 "I have the timesheet data from earlier — {X hours} across {Y team members},
@@ -333,8 +333,8 @@ For retainer:
 
 Pick the most relevant 1-2:
 
-- **Project mode, low margin or structural pricing issue** → "Run `/creativestack:post-mortem` to capture what drove the margin loss, then reference these scenarios in your next `/creativestack:proposal-generator` to price differently."
-- **Retainer mode, declining or at-risk trajectory** → "Run `/creativestack:status-update` to prepare the next QBR conversation."
+- **Project mode, low margin or structural pricing issue** → "Run `/post-mortem` to capture what drove the margin loss, then reference these scenarios in your next `/proposal-generator` to price differently."
+- **Retainer mode, declining or at-risk trajectory** → "Run `/status-update` to prepare the next QBR conversation."
 
 ## Project State Participation
 
@@ -343,7 +343,7 @@ above), update the state file:
 
 - **Budget & Pace** — update the `Margin: {healthy | thinning | at-risk}` line and the
   `Updated: YYYY-MM-DD` line. Don't overwrite hours/burn rate fields owned by
-  `/creativestack:timesheet-summary` unless they're empty.
+  `/timesheet-summary` unless they're empty.
 - **Recent Activity** — append `YYYY-MM-DD — project-profitability — margin {%}, {verdict}`
 - **Frontmatter** — update `last_updated`
 - Update `_index.md`

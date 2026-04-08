@@ -234,7 +234,7 @@ are light checks — they flag concerns, they don't block the brief.
 
 If `rate-card.md` doesn't exist, skip the check and note:
 
-> "Fee sanity check skipped — no rate card. Run `/creativestack:project-profitability` Setup rates to enable."
+> "Fee sanity check skipped — no rate card. Run `/project-profitability` Setup rates to enable."
 
 ### Team sanity check
 
@@ -257,12 +257,12 @@ If `rate-card.md` doesn't exist, skip the check and note:
 
 **Assessment:** {All roles available and free / Roles available but stretched / Missing roles — freelance needed / Missing roles — scope concern}
 
-{If missing roles: "Recommend running /creativestack:resource-conflict Setup bench to plan freelance cover."}
+{If missing roles: "Recommend running /resource-conflict Setup bench to plan freelance cover."}
 ```
 
 If `team.md` doesn't have extended fields, skip and note:
 
-> "Team sanity check skipped — team.md is minimal. Run `/creativestack:resource-conflict` Setup team to enable."
+> "Team sanity check skipped — team.md is minimal. Run `/resource-conflict` Setup team to enable."
 
 ### Timeline sanity check
 
@@ -285,7 +285,7 @@ If `team.md` doesn't have extended fields, skip and note:
 
 **Assessment:** {Realistic / Aggressive — flag risks / Generous — opportunity for ambition / Unknown — no launch date stated}
 
-{If aggressive: "Recommend running /creativestack:timeline-generator to stress-test the schedule. Key risks: {specific phases that will feel the crunch}."}
+{If aggressive: "Recommend running /timeline-generator to stress-test the schedule. Key risks: {specific phases that will feel the crunch}."}
 ```
 
 If no timeline is stated, flag as an Open Question and skip the check.
@@ -366,20 +366,20 @@ downstream moves. The rules:
 
 | Score | Blockers | Suggested next step |
 |---|---|---|
-| 8.0+ | None | `/creativestack:timeline-generator` — build the timeline from deliverables |
-| 6.5-7.9 | None | Address the weakest dimension via `/creativestack:brief-sharpener` |
-| 5.0-6.4 | None | `/creativestack:brief-sharpener` is mandatory before the team starts |
+| 8.0+ | None | `/timeline-generator` — build the timeline from deliverables |
+| 6.5-7.9 | None | Address the weakest dimension via `/brief-sharpener` |
+| 5.0-6.4 | None | `/brief-sharpener` is mandatory before the team starts |
 | Any | Yes (Red) | Resolve the Blocker — usually a conversation with the client, not another skill run |
 
 ### Content-based suggestions
 
 Beyond the score, surface content-specific suggestions:
 
-- **Brief needs SOW** → `/creativestack:sow-generator`
-- **Brief needs proposal** → `/creativestack:proposal-generator`
-- **Brief is a pitch brief** → `/creativestack:pitch-research` Refresh mode to update the dossier
-- **Brief needs team planning** → `/creativestack:resource-conflict`
-- **Brief needs profitability modelling** → `/creativestack:project-profitability` Scenario mode
+- **Brief needs SOW** → `/sow-generator`
+- **Brief needs proposal** → `/proposal-generator`
+- **Brief is a pitch brief** → `/pitch-research` Refresh mode to update the dossier
+- **Brief needs team planning** → `/resource-conflict`
+- **Brief needs profitability modelling** → `/project-profitability` Scenario mode
 
 Suggest **1-2 chains** at most. Pick the most urgent.
 

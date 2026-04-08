@@ -115,7 +115,7 @@ Organised by category. Each pattern has **what it looks like**,
 ### "Let us know what you need"
 - **Looks like:** Minimal brief with offer to provide more if asked
 - **Why it matters:** The client is offloading the briefing work to the agency — fine if you're charging for it, a problem if you're not
-- **How to surface:** Redirect to `/creativestack:creative-brief` From scratch mode as a paid workshop.
+- **How to surface:** Redirect to `/creative-brief` From scratch mode as a paid workshop.
 
 ### Previous agency mention
 - **Looks like:** "We worked with {agency} on this before" / "The last team didn't quite get it"
@@ -139,7 +139,7 @@ Organised by category. Each pattern has **what it looks like**,
 ### The brief is an RFP
 - **Looks like:** "Please respond with your approach, team, case studies, and pricing by {date}"
 - **Why it matters:** This is a pitch document, not a brief. The sharpener is the wrong tool.
-- **How to surface:** Redirect to `/creativestack:rfi-response` or `/creativestack:proposal-generator`
+- **How to surface:** Redirect to `/rfi-response` or `/proposal-generator`
 
 ### The brief is an email thread
 - **Looks like:** Forwarded emails, "here's what we've discussed so far"
@@ -149,7 +149,7 @@ Organised by category. Each pattern has **what it looks like**,
 ### The brief is 1-2 sentences
 - **Looks like:** "We need a new website. Budget ~£50k. Let us know if you can help."
 - **Why it matters:** Not a brief. Not enough to score confidently.
-- **How to surface:** Don't score. Route to `/creativestack:creative-brief` From scratch mode or suggest a 30-minute discovery call.
+- **How to surface:** Don't score. Route to `/creative-brief` From scratch mode or suggest a 30-minute discovery call.
 
 ---
 

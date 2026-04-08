@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:timesheet-summary
+# /timesheet-summary
 
 > Raw time data in, creative project health story out.
 
@@ -359,8 +359,8 @@ Turns raw time tracking data into a creative project health report. Surfaces the
 metrics that actually decide whether a studio/agency project is healthy: craft vs
 admin ratio, focus fragmentation, seniority leaks, revision tax, sustainability,
 and client-side idle time. Output fits client updates, internal PM reviews, or a
-frank Slack to the studio lead. Chains into `/creativestack:status-update`,
-`/creativestack:project-profitability`, `/creativestack:post-mortem`, `/creativestack:resource-conflict` — data carries forward.
+frank Slack to the studio lead. Chains into `/status-update`,
+`/project-profitability`, `/post-mortem`, `/resource-conflict` — data carries forward.
 
 ## Upstream Skill Synthesis
 
@@ -368,10 +368,10 @@ Check whether any of these ran earlier this session and carry the data forward:
 
 | Skill | What to pull | Use |
 |---|---|---|
-| `/creativestack:timeline-generator` | Planned phases, budgeted hours | Planned vs Actual — skip budget question |
-| `/creativestack:project-kickoff` | Team, phases, archetype | Pre-fills context |
-| `/creativestack:creative-brief` | Archetype, scope | Tunes benchmarks, enables scope creep |
-| `/creativestack:resource-conflict` | Utilisation context | Enriches Sustainability section |
+| `/timeline-generator` | Planned phases, budgeted hours | Planned vs Actual — skip budget question |
+| `/project-kickoff` | Team, phases, archetype | Pre-fills context |
+| `/creative-brief` | Archetype, scope | Tunes benchmarks, enables scope creep |
+| `/resource-conflict` | Utilisation context | Enriches Sustainability section |
 
 Tell the user once when upstream data is detected, then don't re-ask those questions.
 
@@ -454,7 +454,7 @@ of deliverables remaining. OR: "On pace to complete within budget with [X hours]
 ## Planned vs Actual — Phase Comparison
 
 {If timeline-generator was run or the user provided budgeted hours per phase, generate
-this. Otherwise skip and note: "Run `/creativestack:timeline-generator` first for automatic
+this. Otherwise skip and note: "Run `/timeline-generator` first for automatic
 planned-vs-actual tracking."}
 
 | Phase | Planned | Actual | Variance | % Used | Status |
@@ -503,7 +503,7 @@ tasks as 'design:', 'meeting:', 'admin:'.}
 rate that's {amount} in rework. Revisions stack after Round 2 — stakeholder likely
 not in the room until late."}
 
-**Trend:** {Compare to `learnings.md` if available; otherwise recommend `/creativestack:post-mortem`.}
+**Trend:** {Compare to `learnings.md` if available; otherwise recommend `/post-mortem`.}
 
 **Client behaviour signal:** {If revisions cluster after specific review dates, flag:
 "60% of revision hours land in the 48 hours after the Tuesday client review —
@@ -593,7 +593,7 @@ Top tasks: {task 1 — hrs}, {task 2 — hrs}. Flags: {e.g., "3x estimate", "unb
 
 **Total unscoped:** {hrs} ({%})
 
-{Skip with note if no scope baseline — recommend `/creativestack:creative-brief`.}
+{Skip with note if no scope baseline — recommend `/creative-brief`.}
 
 ## By Team Member
 | Member | Hours | Phases | Avg/Day | Utilisation |
@@ -670,11 +670,11 @@ Top tasks: {task 1 — hrs}, {task 2 — hrs}. Flags: {e.g., "3x estimate", "unb
 
 Pick 1-2, not all:
 
-- Margin concern → `/creativestack:project-profitability` (data carries forward)
-- Project wrapping → `/creativestack:post-mortem` (revision tax, craft ratio feed in)
-- Communicate upward → `/creativestack:status-update` (vibe, burn, flags carry forward)
-- Burnout signals → `/creativestack:resource-conflict`
-- Revisions look client-driven → `/creativestack:feedback-consolidator` before next review
+- Margin concern → `/project-profitability` (data carries forward)
+- Project wrapping → `/post-mortem` (revision tax, craft ratio feed in)
+- Communicate upward → `/status-update` (vibe, burn, flags carry forward)
+- Burnout signals → `/resource-conflict`
+- Revisions look client-driven → `/feedback-consolidator` before next review
 
 ## Project State Participation
 
@@ -688,7 +688,7 @@ above), update the state file:
 - Update `_index.md`
 
 If the burn rate or scope creep is severe enough that the status should change, don't
-update `status` in frontmatter directly — that's `/creativestack:status-update`'s job.
+update `status` in frontmatter directly — that's `/status-update`'s job.
 Instead, surface it as a recommendation to the user: "Burn rate is accelerating sharply
 — next status update should probably move this to At Risk."
 
@@ -699,7 +699,7 @@ Instead, surface it as a recommendation to the user: "Burn rate is accelerating 
 - **Mixed projects** → offer deep-dive or roll-up, don't silently merge.
 - **No timestamps** → skip Focus Time + after-hours. Keep concentration/weekly load.
 - **No role map** → skip Seniority Mix, note the gap.
-- **No scope** → skip Scope Creep, recommend `/creativestack:creative-brief`.
+- **No scope** → skip Scope Creep, recommend `/creative-brief`.
 - **Revision not tagged** → note, recommend tagging, estimate from task names.
 - **Solo/freelancer** → skip Seniority + Team Efficiency, soften Concentration. Keep Craft Ratio + Sustainability (solos burn out faster).
 

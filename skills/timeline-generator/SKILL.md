@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:timeline-generator
+# /timeline-generator
 
 > Tell me about your project, get a timeline your PM can actually use.
 
@@ -351,10 +351,10 @@ once at the end that project state is available.
 - `profile.md` (for context)
 - `methodology.md` (to reference how you run projects)
 - `learnings.md` (to apply past project insights)
-- `learnings.md § Capacity` (planned-vs-actual deltas and recurring slip patterns; from `/creativestack:resource-conflict` Calibrate mode)
+- `learnings.md § Capacity` (planned-vs-actual deltas and recurring slip patterns; from `/resource-conflict` Calibrate mode)
 - `team.md` (for team capabilities and availability)
-- `freelance-bench.md` (trusted freelance roster with day rates and lead times — used to plan freelance backstops in slip scenarios; from `/creativestack:resource-conflict` Setup bench)
-- `projects/{slug}-brief.md` (the locked creative brief — pull deliverables, scope, and constraints directly instead of asking again; from `/creativestack:creative-brief`)
+- `freelance-bench.md` (trusted freelance roster with day rates and lead times — used to plan freelance backstops in slip scenarios; from `/resource-conflict` Setup bench)
+- `projects/{slug}-brief.md` (the locked creative brief — pull deliverables, scope, and constraints directly instead of asking again; from `/creative-brief`)
 - `projects/{slug}.md` (project state — current phase, stakeholders, recent activity)
 - `visual-style.md` (the agency's house visual style — applied to any Figma output)
 
@@ -444,7 +444,7 @@ these defaults. Only fall back to these templates when no methodology is defined
 
 4. "How big is the team on this? Any specific roles assigned?"
    If `team.md` exists in the brain, reference it: "I can see your team roster — who's on this one?"
-   If recent `/creativestack:resource-conflict` output exists in the session, cross-reference it: "Per the last resource-conflict run, {person} is at {N}% utilisation — flag any conflicts before locking the timeline."
+   If recent `/resource-conflict` output exists in the session, cross-reference it: "Per the last resource-conflict run, {person} is at {N}% utilisation — flag any conflicts before locking the timeline."
 
 5. "When does it need to be done? Any fixed dates (launch, event, board meeting)?" *(skip if brief Constraints section has launch date)*
 
@@ -661,21 +661,21 @@ Milestone-focused. Confident but honest. Uses tone from `tone-of-voice.md` if av
 After generating the timeline, include this section:
 
 "This timeline is a living document. To keep it useful:
-- Run `/creativestack:status-update` each week to track progress against these milestones
-- Run `/creativestack:timesheet-summary` to compare actual hours against budgeted hours per phase
-- If a scope change comes in, run `/creativestack:timeline-generator` again with the updated scope
-- When the project closes, run `/creativestack:post-mortem` to compare planned vs. actual — the
+- Run `/status-update` each week to track progress against these milestones
+- Run `/timesheet-summary` to compare actual hours against budgeted hours per phase
+- If a scope change comes in, run `/timeline-generator` again with the updated scope
+- When the project closes, run `/post-mortem` to compare planned vs. actual — the
   learnings feed back into future timelines via your brain"
 
 ## Skill Chains
 
 After generating the timeline, suggest the most relevant next step based on context:
 
-- If user hasn't written a proposal yet → "Run `/creativestack:proposal-generator` to wrap this timeline into a client proposal."
-- If user needs to formalise scope → "Run `/creativestack:sow-generator` to turn this timeline into a Statement of Work."
-- If user is about to kick off → "Run `/creativestack:project-kickoff` to build a kickoff pack around this timeline."
-- If user mentioned team capacity concerns → "Run `/creativestack:resource-conflict` to check team availability against this timeline."
-- If the timeline came from a meeting or brief → "Run `/creativestack:creative-brief` first to nail down scope, then re-run this with the brief's deliverables."
+- If user hasn't written a proposal yet → "Run `/proposal-generator` to wrap this timeline into a client proposal."
+- If user needs to formalise scope → "Run `/sow-generator` to turn this timeline into a Statement of Work."
+- If user is about to kick off → "Run `/project-kickoff` to build a kickoff pack around this timeline."
+- If user mentioned team capacity concerns → "Run `/resource-conflict` to check team availability against this timeline."
+- If the timeline came from a meeting or brief → "Run `/creative-brief` first to nail down scope, then re-run this with the brief's deliverables."
 
 Only suggest 1-2 chains — pick the most relevant, don't list them all.
 
@@ -715,7 +715,7 @@ with `mcp__claude_ai_Figma__` or `mcp__plugin_figma_figma__`).
      principles, and the universal anti-AI-slop checklist. Apply these rules to every
      visual element you generate. If this file does not exist, fall back to the
      defaults: Pairing A (Fraunces / Inter Tight / JetBrains Mono) and Palette 1
-     (Paper & Ink), and tell the user at the end: "Run `/creativestack:setup` to
+     (Paper & Ink), and tell the user at the end: "Run `/setup-cs` to
      configure your house visual style."
 
   2. **`references/figma-editorial-style.md`** (in this skill directory) — the
@@ -803,8 +803,8 @@ shifting now.
 - Very short project (1-2 weeks) → simplify, skip phase structure and parallel tracks, single sequential list
 - Very long project (6+ months) → break into macro phases with detail on the first 2-3, add quarterly realignment checkpoints
 - Multiple workstreams → create parallel tracks with dependency links (this is the default for most projects)
-- User has already run `/creativestack:creative-brief` → reference the brief's deliverables directly, don't re-ask scope questions
-- User provides a timeline from a previous `/creativestack:timeline-generator` run → treat it as an update, highlight what changed
+- User has already run `/creative-brief` → reference the brief's deliverables directly, don't re-ask scope questions
+- User provides a timeline from a previous `/timeline-generator` run → treat it as an update, highlight what changed
 - Fixed deadline with too much scope → flag it honestly: "This scope doesn't fit this deadline. Here's what fits, and here's what would need to be cut or phased."
 
 ### What this skill can't do

@@ -1,6 +1,6 @@
 ---
 name: competitor-audit
-description: Brain-first competitive intelligence for creative agencies. Two modes — Audit (full category landscape with persistent save) and Shift (diff against previously-saved audit to surface what's changed since). Runs a hard conflict-of-interest check against clients.md before any research. Scores competitors on 5 rubrics (visual identity, digital maturity, narrative strength, cultural capital, share of voice direction) with cited evidence. Identifies category codes and code-break opportunities for rebrand/positioning work. Maps 10 competitor vulnerability archetypes to specific creative exploitation patterns. Persists audits to ~/.creativestack/competitor-audits/{category}.md so intelligence compounds across projects. Integrates /creativestack:source-scrape for visual and brand evidence.
+description: Brain-first competitive intelligence for creative agencies. Two modes — Audit (full category landscape with persistent save) and Shift (diff against previously-saved audit to surface what's changed since). Runs a hard conflict-of-interest check against clients.md before any research. Scores competitors on 5 rubrics (visual identity, digital maturity, narrative strength, cultural capital, share of voice direction) with cited evidence. Identifies category codes and code-break opportunities for rebrand/positioning work. Maps 10 competitor vulnerability archetypes to specific creative exploitation patterns. Persists audits to ~/.creativestack/competitor-audits/{category}.md so intelligence compounds across projects. Integrates /source-scrape for visual and brand evidence.
 ---
 
 ## CreativeStack Preamble
@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:competitor-audit
+# /competitor-audit
 
 > Category intelligence that compounds. Conflict-checked, brain-backed, code-break ready.
 
@@ -177,7 +177,7 @@ Most competitor audits are one-shot research exercises. This one acts as a
    previous projects in this category, and previous audits all feed in.
 3. **Five scoring rubrics** — Visual Identity, Digital Maturity, Narrative
    Strength, Cultural Capital, Share of Voice Direction. Each scored with
-   cited evidence from `/creativestack:source-scrape`.
+   cited evidence from `/source-scrape`.
 4. **Category codes analysis** — visual/linguistic conventions in the
    category, who follows them, who breaks them, and where the code-break
    opportunities are. Critical for rebrand and positioning work.
@@ -318,8 +318,8 @@ Scan the conversation for output from earlier skills:
 
 | Skill run earlier | What to pull in | Where it appears |
 |---|---|---|
-| `/creativestack:source-scrape` | Annotated screenshots, scored sources, visual evidence | Primary evidence in Visual Identity and Messaging |
-| `/creativestack:trend-report` | Trend velocity, counter-trends, category shifts | Trend Adoption and Category Codes sections |
+| `/source-scrape` | Annotated screenshots, scored sources, visual evidence | Primary evidence in Visual Identity and Messaging |
+| `/trend-report` | Trend velocity, counter-trends, category shifts | Trend Adoption and Category Codes sections |
 
 ### Step 5: Audit purpose and focus
 
@@ -462,11 +462,11 @@ output. The diff is the headline — what's changed since the last audit.
 
 Offer **at most one** brain enrichment. Pick the most valuable:
 
-- **Shift mode surfaced a major change (new top competitor, agency shift, significant score movement)** → "This category has shifted meaningfully since the last audit. Want me to draft a client heads-up for any active projects in this space? I can use `/creativestack:status-update` to flag the shifts."
+- **Shift mode surfaced a major change (new top competitor, agency shift, significant score movement)** → "This category has shifted meaningfully since the last audit. Want me to draft a client heads-up for any active projects in this space? I can use `/status-update` to flag the shifts."
 - **Clients.md doesn't track past clients** → "The conflict check only found active clients in your clients.md. If you want past-client checks too, add a 'Past clients' section to the file — future audits will check it automatically."
-- **No past pitch data for this category** → "When you next pitch or lose a pitch in this category, run `/creativestack:pitch-research` Log outcome mode. After 2-3 outcomes, future audits will apply past pitch learnings automatically."
-- **Audit was thin due to source coverage gaps** → "Source coverage for {specific area} was thin. If this category is strategic, consider adding dedicated sources to `sources.md` via `/creativestack:source-scrape` Manage sources mode."
-- **Code-break opportunity looks strong for a client project** → "Code-break opportunity #1 maps directly to the {project} brief. Want me to feed it into `/creativestack:creative-brief` for that project?"
+- **No past pitch data for this category** → "When you next pitch or lose a pitch in this category, run `/pitch-research` Log outcome mode. After 2-3 outcomes, future audits will apply past pitch learnings automatically."
+- **Audit was thin due to source coverage gaps** → "Source coverage for {specific area} was thin. If this category is strategic, consider adding dedicated sources to `sources.md` via `/source-scrape` Manage sources mode."
+- **Code-break opportunity looks strong for a client project** → "Code-break opportunity #1 maps directly to the {project} brief. Want me to feed it into `/creative-brief` for that project?"
 
 One offer. Don't pile on.
 
@@ -558,11 +558,11 @@ For full detail on each section's content, see the schema and rubric reference f
 Pick the most relevant 1-2:
 
 **Upstream:**
-- **No trend-report** → "Run `/creativestack:trend-report` first to add trend adoption scoring."
+- **No trend-report** → "Run `/trend-report` first to add trend adoption scoring."
 
 **Downstream:**
-- **Clear competitive gaps + rebrand context** → "Run `/creativestack:creative-brief` — Category Context and Tension auto-populate from this audit."
-- **Pitch prep context** → "Run `/creativestack:pitch-research` on the specific prospect to layer pitch-specific intelligence on top."
+- **Clear competitive gaps + rebrand context** → "Run `/creative-brief` — Category Context and Tension auto-populate from this audit."
+- **Pitch prep context** → "Run `/pitch-research` on the specific prospect to layer pitch-specific intelligence on top."
 
 ## Edge Cases
 - **Very niche category** → be transparent about limited data, audit adjacent categories

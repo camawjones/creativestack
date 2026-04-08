@@ -53,7 +53,7 @@ If `tone-of-voice.md` doesn't exist, use a neutral agency-professional tone:
 direct, warm, no corporate jargon, contractions OK. Note in the output:
 
 > "Tone guide not configured — drafted in neutral agency-professional tone.
-> Run /creativestack:update-voice to configure your voice for future drafts."
+> Run /update-voice to configure your voice for future drafts."
 
 ---
 

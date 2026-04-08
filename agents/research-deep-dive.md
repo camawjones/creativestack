@@ -29,19 +29,19 @@ source-scrape → trend-report → design-research
 source-scrape → competitor-audit → trend-report
 
 ### 2. Scrape sources
-Run `/creativestack:source-scrape` in the appropriate mode (brands, category,
+Run `/source-scrape` in the appropriate mode (brands, category,
 or trend) based on the research scope.
 
 ### 3. Run the primary analysis
 Based on the chosen chain:
-- Run `/creativestack:competitor-audit` for competitive analysis
-- Run `/creativestack:trend-report` for trend analysis
+- Run `/competitor-audit` for competitive analysis
+- Run `/trend-report` for trend analysis
 - Or both, if the user wants comprehensive coverage
 
 ### 4. Synthesise into strategy or research output
 Based on the chosen chain:
-- Run `/creativestack:creative-strategy` to produce strategic recommendations
-- Run `/creativestack:design-research` to produce design-focused insights
+- Run `/creative-strategy` to produce strategic recommendations
+- Run `/design-research` to produce design-focused insights
 - Or ask the user which output format they prefer
 
 ## Behaviour

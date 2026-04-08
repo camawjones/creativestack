@@ -17,16 +17,6 @@ PREAMBLE=$(cat "$SCRIPT_DIR/shared/preamble.md")
 PROJECT_STATE=$(cat "$SCRIPT_DIR/shared/project-state.md")
 VISUAL_STYLE_DEFAULT=$(cat "$SCRIPT_DIR/shared/visual-style-default.md")
 
-# All known skill names for namespace rewriting
-SKILLS=(
-  ai-audit asset-spec brand-guidelines brief-sharpener case-study
-  competitor-audit copy-deck creative-brief creative-strategy design-research
-  feedback-consolidator job-description meeting-notes pitch-research post-mortem
-  project-kickoff project-profitability proposal-generator resource-conflict
-  rfi-response setup social-calendar source-scrape sow-generator
-  status-update timeline-generator timesheet-summary trend-report update-voice
-)
-
 count=0
 errors=0
 
@@ -43,19 +33,8 @@ for tmpl in "$SCRIPT_DIR"/templates/*/SKILL.md.tmpl; do
   # Replace {{PROJECT_STATE}} placeholder (only present in project-aware skills)
   content="${content//\{\{PROJECT_STATE\}\}/$PROJECT_STATE}"
 
-  # Replace {{VISUAL_STYLE_DEFAULT}} placeholder (used by setup skill to seed brain)
+  # Replace {{VISUAL_STYLE_DEFAULT}} placeholder (used by setup-cs skill to seed brain)
   content="${content//\{\{VISUAL_STYLE_DEFAULT\}\}/$VISUAL_STYLE_DEFAULT}"
-
-  # Namespace rewriting: replace bare /skill-name references with /creativestack:skill-name
-  # Handles backtick-wrapped references like `/skill-name`
-  for skill in "${SKILLS[@]}"; do
-    # Replace `/skill-name...` with `/creativestack:skill-name...` inside backticks
-    # Handles: `/skill-name`, `/skill-name {arg}`, `/skill-name` at end of backtick
-    content=$(echo "$content" | sed "s|\`/${skill} |\`/creativestack:${skill} |g")
-    content=$(echo "$content" | sed "s|\`/${skill}\`|\`/creativestack:${skill}\`|g")
-    # Replace bare /skill-name at word boundaries (in prose, not already namespaced)
-    content=$(echo "$content" | sed "s| /${skill}| /creativestack:${skill}|g")
-  done
 
   # Write generated SKILL.md to skills/ directory
   mkdir -p "$ROOT/skills/$dir"

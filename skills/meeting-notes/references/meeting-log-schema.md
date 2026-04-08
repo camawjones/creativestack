@@ -124,7 +124,7 @@ Read the file in these scenarios:
 
 The slug is the same as the project state file slug. Both files share the
 project directory and slug. If the project doesn't have a state file yet,
-the user should be routed to `/creativestack:project-kickoff` first.
+the user should be routed to `/project-kickoff` first.
 
 If the project state file exists but the meetings file doesn't, create the
 meetings file on first run.
@@ -133,7 +133,7 @@ meetings file on first run.
 
 ## 2. learnings.md § Client Patterns
 
-Appended to the existing `learnings.md` (created by `/creativestack:setup`)
+Appended to the existing `learnings.md` (created by `/setup-cs`)
 under a `## Client Patterns` heading. Never overwrite existing entries.
 
 ```markdown

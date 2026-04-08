@@ -119,18 +119,18 @@ Scan the current conversation for output from other Creativestack skills. Auto-p
 
 | Skill run earlier | What to pull in |
 |---|---|
-| `/creativestack:timeline-generator` | Phase structure, durations, milestones |
-| `/creativestack:proposal-generator` | Scope, deliverables, pricing model, investment |
-| `/creativestack:resource-conflict` | Team availability → delay clauses |
-| `/creativestack:creative-brief` | Objectives, deliverables, success metrics |
+| `/timeline-generator` | Phase structure, durations, milestones |
+| `/proposal-generator` | Scope, deliverables, pricing model, investment |
+| `/resource-conflict` | Team availability → delay clauses |
+| `/creative-brief` | Objectives, deliverables, success metrics |
 
-Tell the user what you're pulling in: "I can see you ran `/creativestack:proposal-generator` earlier — pulling in the scope, deliverables, and pricing. You don't need to repeat them."
+Tell the user what you're pulling in: "I can see you ran `/proposal-generator` earlier — pulling in the scope, deliverables, and pricing. You don't need to repeat them."
 
 #### 4b. Project parameters
 
 Only ask for what isn't already covered:
 
-1. "What's the project and who's the client?" (skip if from `/creativestack:creative-brief`)
+1. "What's the project and who's the client?" (skip if from `/creative-brief`)
 2. "Key deliverables?" (skip if from proposal)
 3. [SELECT] "SOW type?" (skip if obvious)
    - Project (fixed scope, fixed fee)
@@ -138,7 +138,7 @@ Only ask for what isn't already covered:
    - Discovery (time-boxed exploration)
    - Phased (with go/no-go gates)
 4. "Budget / fee?" (skip if from proposal)
-5. "Timeline / hard deadlines?" (skip if from `/creativestack:timeline-generator`)
+5. "Timeline / hard deadlines?" (skip if from `/timeline-generator`)
 6. "Anything different from your saved defaults for this one?" — payment terms, revisions, custom clauses, anything bespoke
 
 If the project type is Retainer / Discovery / Phased, **read `references/templates.md`** for that variation's adjustments. For Project type with a complete saved style, you don't need the references file.
@@ -267,13 +267,13 @@ Please have all contracts reviewed by a qualified legal professional.*
 ### Upstream (what feeds sow-generator)
 
 If saved style exists but no upstream skills were run, suggest 1-2 only when they'd help:
-- No proposal → "Run `/creativestack:proposal-generator` first to lock in scope and pricing — the SOW will pull from it directly."
-- No timeline → "Run `/creativestack:timeline-generator` for milestone dates."
+- No proposal → "Run `/proposal-generator` first to lock in scope and pricing — the SOW will pull from it directly."
+- No timeline → "Run `/timeline-generator` for milestone dates."
 
 ### Downstream
 
-- SOW signed → "Run `/creativestack:project-kickoff` to build a kickoff pack from this SOW."
-- After 3+ SOWs generated → "Run `/creativestack:post-mortem` after the project to feed revision/scope actuals back into your defaults."
+- SOW signed → "Run `/project-kickoff` to build a kickoff pack from this SOW."
+- After 3+ SOWs generated → "Run `/post-mortem` after the project to feed revision/scope actuals back into your defaults."
 
 Only suggest 1-2 chains. Pick the most relevant.
 

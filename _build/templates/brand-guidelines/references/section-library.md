@@ -61,7 +61,7 @@ Each section has three depths. Pick based on the user's overall depth selection
 **Include for:** Brand book *(always)*, Visual identity guidelines *(usually)*,
 Design system *(rarely)*, Editorial *(usually)*, Sub-brand *(always)*
 **Standard contents:** vision, mission, purpose, values, positioning statement.
-Pull from the project state Brief if available, or from `/creativestack:creative-strategy`
+Pull from the project state Brief if available, or from `/creative-strategy`
 output if it ran earlier.
 
 **Standard treatment:**
@@ -254,7 +254,7 @@ Editorial *(usually)*
 **Deep treatment additions:**
 - Voice flex across contexts (apology vs celebration, support vs marketing)
 - Voice in motion (how voice flexes in animation, video, sonic identity)
-- Pull from `/creativestack:update-voice` output if available
+- Pull from `/update-voice` output if available
 
 #### 13. Writing rules
 **Include for:** Editorial *(always)*, Brand book *(usually)*

@@ -76,12 +76,12 @@ for this category. If so, reuse it (the session cache will handle this automatic
 on the second call). If not, kick off a `/source-scrape` call **in parallel** with
 the agent streams to gather curated industry-press evidence:
 
-> "I'll call `/creativestack:source-scrape` with query='{category} trends {timeframe}',
+> "I'll call `/source-scrape` with query='{category} trends {timeframe}',
 > mode='trends', output='data', time_window='{matches the user's selection}'."
 
 And a second parallel call for hard evidence (stats, named quotes, attributable claims):
 
-> "I'll call `/creativestack:source-scrape` with query='{category} {trend topic} statistics
+> "I'll call `/source-scrape` with query='{category} {trend topic} statistics
 > reports', mode='evidence', output='data'."
 
 The `data` output format gives you stable fields (`headline`, `freshness`, `source`,

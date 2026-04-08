@@ -16,9 +16,9 @@ description: Generate a structured social content calendar — outline-first by 
 - `tone-of-voice.md` (for brand voice consistency — agency voice, used as a fallback)
 - `clients.md` (for client context if this is for a client)
 - `visual-style.md` (apply this house style to any tile mockups or calendar visuals rendered in Figma)
-- `projects/{slug}-brief.md` (the brand's tone & personality + single-minded thought — primary voice source for brand-specific calendars; from `/creativestack:creative-brief`)
-- `projects/{slug}-copy-deck-v*.md` (versioned copy decks — pull approved headlines, hooks, and body language to adapt for social rather than reinventing from scratch; from `/creativestack:copy-deck`)
-- `learnings.md § Feedback` (per-client vocabulary — ensures social copy uses the terms the client has established as theirs; from `/creativestack:feedback-consolidator`)
+- `projects/{slug}-brief.md` (the brand's tone & personality + single-minded thought — primary voice source for brand-specific calendars; from `/creative-brief`)
+- `projects/{slug}-copy-deck-v*.md` (versioned copy decks — pull approved headlines, hooks, and body language to adapt for social rather than reinventing from scratch; from `/copy-deck`)
+- `learnings.md § Feedback` (per-client vocabulary — ensures social copy uses the terms the client has established as theirs; from `/feedback-consolidator`)
 
 ## What This Skill Does
 
@@ -96,10 +96,10 @@ I write this post".
 - `learnings.md § Feedback` (this client) — apply per-client vocabulary. If Marcus uses "bold" to mean "brand-confident", the calendar's posts should use that meaning consistently.
 
 **Pull from upstream skills if run this session:**
-- `/creativestack:trend-report` — emerging themes to ride
-- `/creativestack:design-research` — cultural references to weave in
-- `/creativestack:copy-deck` — approved messaging to adapt (also lives in the persistent files above)
-- `/creativestack:creative-strategy` — strategic territories
+- `/trend-report` — emerging themes to ride
+- `/design-research` — cultural references to weave in
+- `/copy-deck` — approved messaging to adapt (also lives in the persistent files above)
+- `/creative-strategy` — strategic territories
 
 **Generate fresh ideation prompts:**
 - Cultural moments and awareness days that fall in the period (be selective — don't
@@ -287,15 +287,15 @@ Date,Day,Platform,Pillar,Format,Optimal Time,Status,Hook,Draft Copy,Notes
 ### Upstream (what feeds social-calendar)
 
 If these weren't run but would have helped, suggest 1-2 next time:
-- No tone-of-voice → "Run `/creativestack:update-voice` to capture brand voice properly — calendars sound more on-brand with it."
-- No trend context → "Run `/creativestack:trend-report` before next month's calendar to surface cultural moments worth riding."
+- No tone-of-voice → "Run `/update-voice` to capture brand voice properly — calendars sound more on-brand with it."
+- No trend context → "Run `/trend-report` before next month's calendar to surface cultural moments worth riding."
 - No recent performance data → "Once a social analysis skill exists, chain it in before generating to weight what's actually worked."
 
 ### Downstream (what social-calendar triggers)
 
 After generating, suggest 1-2:
-- If priority posts need visual production → "Run `/creativestack:asset-spec` to generate production specs for the visual assets."
-- If draft copy needs to be expanded into a full messaging document → "Run `/creativestack:copy-deck`."
+- If priority posts need visual production → "Run `/asset-spec` to generate production specs for the visual assets."
+- If draft copy needs to be expanded into a full messaging document → "Run `/copy-deck`."
 
 Pick the most relevant — don't list them all.
 
@@ -312,7 +312,7 @@ Pick the most relevant — don't list them all.
 ### What this skill can't do
 
 This skill generates planning structure and draft copy. It doesn't analyse past social
-performance — that's a separate concern, ideally a dedicated `/creativestack:social-analysis`
+performance — that's a separate concern, ideally a dedicated `/social-analysis`
 skill (not yet built) that would chain in upstream of this one to weight pillars,
 formats, and posting times based on what's actually performed for this client. Until
 that exists, override the platform defaults with whatever the client's analytics tell

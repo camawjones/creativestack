@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:feedback-consolidator
+# /feedback-consolidator
 
 > Turn scattered feedback into action. Detect the archetype. Draft the reply. Learn this client's language over time.
 
@@ -377,7 +377,7 @@ skill acts as a feedback intelligence brain:
 ## Brain Files
 - `learnings.md § Feedback` — **the feedback DNA**: per-client vocabulary, archetype history, stakeholder memory (this skill creates and maintains it)
 - `methodology.md` — for framing the Creative Team Brief in the agency's methodology language
-- `rate-card.md` — to price revision rounds in £ (requires `/creativestack:project-profitability` Setup rates first)
+- `rate-card.md` — to price revision rounds in £ (requires `/project-profitability` Setup rates first)
 - `tone-of-voice.md` — for Respond mode drafts
 - `projects/{slug}.md` — project state, brief content, revision cap from SOW
 - `projects/{slug}-meetings.md` — past meetings on this project for cross-reference and archetype detection
@@ -422,10 +422,10 @@ Scan the conversation for output from earlier skills:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:creative-brief` | Objectives, deliverables, constraints, key message | Contradiction detection against the brief |
-| `/creativestack:meeting-notes` | Decisions, actions, client patterns already captured | Cross-reference decisions; avoid re-surfacing things already addressed |
-| `/creativestack:sow-generator` | Revision cap, payment milestones | Revision cap check |
-| `/creativestack:project-profitability` | Rate card, current margin status | Price the round in £ |
+| `/creative-brief` | Objectives, deliverables, constraints, key message | Contradiction detection against the brief |
+| `/meeting-notes` | Decisions, actions, client patterns already captured | Cross-reference decisions; avoid re-surfacing things already addressed |
+| `/sow-generator` | Revision cap, payment milestones | Revision cap check |
+| `/project-profitability` | Rate card, current margin status | Price the round in £ |
 
 ### Step 3: MCP context enrichment
 
@@ -510,7 +510,7 @@ Offer **at most one** brain enrichment. Pick the most valuable:
 - **New vocabulary term detected (2+ instances)** → "I noticed Marcus used 'bold' to mean 'brand-confident' again. This is 2 instances — want me to save it as a Nike vocab entry? Future translations will use his meaning automatically."
 - **Archetype repeated for this client** → "This is Nike's 3rd Committee archetype. Want me to refine the playbook based on what worked this time?"
 - **Stakeholder pattern emerging (3+ rounds)** → "Priya's feedback style is consistent across 3 rounds — want me to save a Stakeholder Memory entry?"
-- **No rate-card and cost priceable** → "I couldn't price this round — no rate card. Want to set one up via /creativestack:project-profitability? Future rounds will be priced automatically."
+- **No rate-card and cost priceable** → "I couldn't price this round — no rate card. Want to set one up via /project-profitability? Future rounds will be priced automatically."
 - **Revision cap exceeded** → "This round puts you at {N} rounds vs {M} in the SOW. Want me to flag this as a risk in the project state?"
 
 One offer. Don't pile on.
@@ -615,11 +615,11 @@ For Translate:
 Pick the most relevant 1-2:
 
 **Upstream:**
-- **No brief or rate card** → "Run `/creativestack:creative-brief` for contradiction detection and `/creativestack:project-profitability` Setup rates for round cost pricing."
+- **No brief or rate card** → "Run `/creative-brief` for contradiction detection and `/project-profitability` Setup rates for round cost pricing."
 
 **Downstream:**
-- **Swerve / contradictions detected OR revision cap exceeded** → "Run `/creativestack:meeting-notes` Pre-meeting mode and flag in `/creativestack:status-update` — this round needs a live conversation, not more async, and leadership should know."
-- **Scope creep detected** → "Run `/creativestack:project-profitability` to model the impact on margin."
+- **Swerve / contradictions detected OR revision cap exceeded** → "Run `/meeting-notes` Pre-meeting mode and flag in `/status-update` — this round needs a live conversation, not more async, and leadership should know."
+- **Scope creep detected** → "Run `/project-profitability` to model the impact on margin."
 
 ## Edge Cases
 - **Feedback is already specific** → organise rather than translate; skip the translation section

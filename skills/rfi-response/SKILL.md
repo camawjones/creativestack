@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:rfi-response
+# /rfi-response
 
 > Paste the RFI, get a drafted response with gaps flagged.
 
@@ -197,14 +197,14 @@ skills run earlier. If any are present, auto-populate the relevant data:
 
 | Skill run earlier | What to pull in | Where it appears |
 |---|---|---|
-| `/creativestack:pitch-research` | Organisation context, stakeholders, strategic priorities, recent news | Understanding section, tailored positioning, win themes |
-| `/creativestack:case-study` | Formatted case studies with outcomes and metrics | Case study sections, evidence for claims |
-| `/creativestack:competitor-audit` | Competitive positioning, differentiators, white space | Why-us sections, win themes |
-| `/creativestack:creative-strategy` | Strategic approach, audience insights | Methodology and approach sections |
-| `/creativestack:brief-sharpener` | Sharpened version of the opportunity, ranked questions | Understanding, gap list |
+| `/pitch-research` | Organisation context, stakeholders, strategic priorities, recent news | Understanding section, tailored positioning, win themes |
+| `/case-study` | Formatted case studies with outcomes and metrics | Case study sections, evidence for claims |
+| `/competitor-audit` | Competitive positioning, differentiators, white space | Why-us sections, win themes |
+| `/creative-strategy` | Strategic approach, audience insights | Methodology and approach sections |
+| `/brief-sharpener` | Sharpened version of the opportunity, ranked questions | Understanding, gap list |
 
 When upstream data is available, tell the user explicitly:
-"I can see you ran `/creativestack:pitch-research` earlier — I'll use the organisation
+"I can see you ran `/pitch-research` earlier — I'll use the organisation
 context and stakeholder insights to tailor the response and seed the win themes. You
 don't need to repeat that."
 
@@ -219,7 +219,7 @@ Read the brain files listed at the top of this skill. Report what was found:
 
 If `case-studies.md` is empty or sparse, flag it now (not at the end): "Your brain has
 no case studies yet. The response will be much weaker without them. You can keep going
-and I'll flag every section that needs proof, or pause and run `/creativestack:case-study`
+and I'll flag every section that needs proof, or pause and run `/case-study`
 on 2-3 of your strongest projects first."
 
 ### Step 3: User pastes the RFI
@@ -265,7 +265,7 @@ Then ask:
 Before drafting any section, identify **2-3 win themes** — short, repeatable phrases
 that capture why the user is the right fit for *this specific* opportunity. Pull from:
 - `profile.md` positioning
-- Upstream `/creativestack:pitch-research` or `/creativestack:competitor-audit` output
+- Upstream `/pitch-research` or `/competitor-audit` output
 - The RFI's stated priorities or evaluation criteria
 
 Show the win themes to the user and ask: "These are the win themes I'll thread through
@@ -423,24 +423,24 @@ the opportunity. Cites specific case studies, team members, or methodology as re
 
 If upstream skills weren't run but would have strengthened the response, suggest 1-2:
 
-- If no pitch research → "Run `/creativestack:pitch-research` next time to gather context on the issuing organisation before drafting — it sharpens the win themes considerably."
-- If case studies are sparse → "Run `/creativestack:case-study` on your 2-3 strongest relevant projects before finalising — the response is much stronger with proof."
-- If no competitor view → "Run `/creativestack:competitor-audit` to sharpen the differentiators in the why-us sections."
-- If the brief itself is messy → "Run `/creativestack:brief-sharpener` first to clarify what the opportunity is really asking for."
+- If no pitch research → "Run `/pitch-research` next time to gather context on the issuing organisation before drafting — it sharpens the win themes considerably."
+- If case studies are sparse → "Run `/case-study` on your 2-3 strongest relevant projects before finalising — the response is much stronger with proof."
+- If no competitor view → "Run `/competitor-audit` to sharpen the differentiators in the why-us sections."
+- If the brief itself is messy → "Run `/brief-sharpener` first to clarify what the opportunity is really asking for."
 
 ### Downstream (what rfi-response triggers)
 
 Based on the response, suggest the most relevant next action:
 
-- If shortlisted → "Run `/creativestack:creative-strategy` to build the strategic spine for the pitch stage."
-- If shortlisted and the pitch is imminent → "Run `/creativestack:proposal-generator` to convert this into a formal proposal."
-- After submission (win or lose) → "Run `/creativestack:post-mortem` once you hear back to capture what worked — it'll feed `learnings.md` and improve the next response."
+- If shortlisted → "Run `/creative-strategy` to build the strategic spine for the pitch stage."
+- If shortlisted and the pitch is imminent → "Run `/proposal-generator` to convert this into a formal proposal."
+- After submission (win or lose) → "Run `/post-mortem` once you hear back to capture what worked — it'll feed `learnings.md` and improve the next response."
 
 Only suggest 1-2 chains — pick the most relevant for where the user is in the cycle.
 
 ## Edge Cases
 - **Very long RFI (20+ sections)** → prioritise scored/weighted sections in full, skeleton responses for the rest, clearly marked.
-- **Brain has no relevant case studies** → flag clearly at Step 2 (not at the end), suggest pausing to run `/creativestack:case-study` on 2-3 projects first.
+- **Brain has no relevant case studies** → flag clearly at Step 2 (not at the end), suggest pausing to run `/case-study` on 2-3 projects first.
 - **RFI requires specific certifications or accreditations** (ISO 27001, Cyber Essentials, etc.) → flag if not found in brain. Don't fabricate.
 - **Consortium or partnership bid** → ask which partner is leading, adjust pronouns for "we" vs "our partner" throughout.
 - **RFI asks for pricing or day rates** → flag that pricing needs commercial input. Don't guess. Suggest a placeholder block with "[Commercial team to confirm]".

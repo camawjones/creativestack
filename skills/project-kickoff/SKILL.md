@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:project-kickoff
+# /project-kickoff
 
 > Drop in project details, get a kickoff pack your team can actually run with.
 
@@ -361,8 +361,8 @@ RACI matrix, key dates, risk register, internal brief, workshop agenda with faci
 notes, and a Slack announcement for the team.
 
 Acts as a **synthesis hub** — automatically pulls data from any Creativestack skills
-run earlier in the session (`/creativestack:timeline-generator`, `/creativestack:sow-generator`, `/creativestack:resource-conflict`,
-`/creativestack:creative-brief`) so the kickoff pack reflects decisions already made.
+run earlier in the session (`/timeline-generator`, `/sow-generator`, `/resource-conflict`,
+`/creative-brief`) so the kickoff pack reflects decisions already made.
 
 ## Inputs
 - Project type (brand, campaign, digital product, etc.)
@@ -379,13 +379,13 @@ skills. If any were run earlier in this session, auto-populate the relevant data
 
 | Skill run earlier | What to pull in | Where it appears |
 |---|---|---|
-| `/creativestack:timeline-generator` | Phase structure, milestones, durations, critical path, review windows | Key Dates, Workshop agenda |
-| `/creativestack:sow-generator` | Scope, deliverables, revision policy, client responsibilities, payment milestones | Internal Brief, RACI, Risk Register |
-| `/creativestack:resource-conflict` | Team availability, overbooked people, single points of failure | RACI, Risk Register |
-| `/creativestack:creative-brief` | Objectives, audience, deliverables, tone, success metrics | Internal Brief |
+| `/timeline-generator` | Phase structure, milestones, durations, critical path, review windows | Key Dates, Workshop agenda |
+| `/sow-generator` | Scope, deliverables, revision policy, client responsibilities, payment milestones | Internal Brief, RACI, Risk Register |
+| `/resource-conflict` | Team availability, overbooked people, single points of failure | RACI, Risk Register |
+| `/creative-brief` | Objectives, audience, deliverables, tone, success metrics | Internal Brief |
 
 When upstream data is available, tell the user what you're pulling in:
-"I can see you ran `/creativestack:sow-generator` and `/creativestack:timeline-generator` earlier — I'll pull in the
+"I can see you ran `/sow-generator` and `/timeline-generator` earlier — I'll pull in the
 scope, milestones, and revision policy. You don't need to repeat them."
 
 Only ask about information that isn't already available from upstream skills.
@@ -451,13 +451,13 @@ Populate from the kickoff pack:
 - **Brief:** one-paragraph summary of what we're building and why (from internal brief)
 - **Stakeholders:** client lead, internal lead, team (from RACI / `team.md`)
 - **Risks:** seed from the Risk Register (each row becomes a Risks entry)
-- **Timeline:** next milestone and slip scenarios (from `/creativestack:timeline-generator` if run, else from Key Dates)
+- **Timeline:** next milestone and slip scenarios (from `/timeline-generator` if run, else from Key Dates)
 - **Recent Activity:** append `YYYY-MM-DD — project-kickoff — created project state`
 - All other sections start empty
 
 Then add or update the row in `_index.md`.
 
-Tell the user one line at the end: "Created project state at `~/.creativestack/projects/{slug}.md`. Future skills (`/creativestack:status-update`, `/creativestack:meeting-notes`, etc.) will read and update this file automatically."
+Tell the user one line at the end: "Created project state at `~/.creativestack/projects/{slug}.md`. Future skills (`/status-update`, `/meeting-notes`, etc.) will read and update this file automatically."
 
 ## Output Format
 
@@ -477,7 +477,7 @@ known. Be honest — a kickoff with too little info should be flagged, not paper
 {If 3 or below, add a blunt note:}
 > **Heads up:** This kickoff is running with thin info. Specifically: {what's missing —
 > e.g., "no confirmed budget, no client decision-maker named, deliverables loosely defined"}.
-> Consider running `/creativestack:brief-sharpener` before the workshop, or building
+> Consider running `/brief-sharpener` before the workshop, or building
 > a discovery phase into Week 1.
 
 ---
@@ -503,14 +503,14 @@ C = Consulted, I = Informed.}
 - Use `team.md` to assign names to roles where possible.}
 
 **Single points of failure:** {Flag any activity where only one person is R or A and
-there's no backup. If `/creativestack:resource-conflict` flagged availability risks, note them here.}
+there's no backup. If `/resource-conflict` flagged availability risks, note them here.}
 
 #### Key Dates
 | Milestone | Date | Dependencies | Owner |
 |-----------|------|--------------|-------|
 | {milestone} | {date} | {dependency} | {person} |
 
-{If `/creativestack:timeline-generator` ran earlier, pull milestones directly. Highlight which dates
+{If `/timeline-generator` ran earlier, pull milestones directly. Highlight which dates
 are on the critical path.}
 
 #### Risk Register
@@ -543,7 +543,7 @@ restated — the internal translation.}
 **What "good" looks like for this client:** {calibrate expectations}
 **Watch out for:** {traps, assumptions, things that have gone wrong before}
 
-{If `/creativestack:creative-brief` ran earlier, reference its objectives, audience, and deliverables
+{If `/creative-brief` ran earlier, reference its objectives, audience, and deliverables
 directly. Add the internal translation layer on top.}
 
 #### Definition of Done
@@ -616,7 +616,7 @@ client check-in scheduled."}
 |------|----------|------|-----------------------|
 | 0:00 | Welcome & project overview | PM | Set the context. Keep to 5 mins. |
 | 0:10 | Client context & objectives | Account lead | What the client said vs. what they need. Use the internal brief. |
-| 0:25 | Competitive & cultural landscape | Strategist | Share any `/creativestack:pitch-research` output. Keep visual — show, don't tell. |
+| 0:25 | Competitive & cultural landscape | Strategist | Share any `/pitch-research` output. Keep visual — show, don't tell. |
 | 0:40 | Creative territories discussion | CD | Open floor. No bad ideas yet. Capture everything. |
 | 1:00 | Break | — | 10 mins |
 | 1:10 | Deliverables & timeline walk-through | PM | Reference the timeline. Flag critical path dates. |
@@ -750,23 +750,23 @@ Apply `visual-style.md` for any cover art or icon choices if relevant.
 After generating the kickoff pack, if upstream skills were NOT run but would have been
 useful, suggest 1-2:
 
-- If no timeline → "Run `/creativestack:timeline-generator` to build a detailed project timeline — the kickoff pack will reference milestones directly."
-- If no SOW → "Run `/creativestack:sow-generator` to formalise scope and terms before kicking off — the team needs to know what's committed."
-- If kickoff readiness was 3 or below → "Run `/creativestack:brief-sharpener` before the workshop — there's too much unknown for the team to land cleanly."
+- If no timeline → "Run `/timeline-generator` to build a detailed project timeline — the kickoff pack will reference milestones directly."
+- If no SOW → "Run `/sow-generator` to formalise scope and terms before kicking off — the team needs to know what's committed."
+- If kickoff readiness was 3 or below → "Run `/brief-sharpener` before the workshop — there's too much unknown for the team to land cleanly."
 
 ### Downstream (what project-kickoff triggers)
 
 Based on the kickoff content, suggest the most relevant next action:
 
-- **Immediately after** the kickoff workshop → "Run `/creativestack:meeting-notes` on the kickoff session to capture decisions, actions, and any scope clarifications. They'll be written back to the project state file automatically."
-- **If RACI flagged single points of failure** → "Run `/creativestack:resource-conflict` — there are people on this project with no backup, and it's worth checking against the wider roster before week 1."
-- **End of week 1** → "Run `/creativestack:status-update` at the end of week 1 to confirm the team is on track and surface any drift early."
-- **After the first review round** → "Run `/creativestack:feedback-consolidator` to turn client feedback into action items and update the project state."
+- **Immediately after** the kickoff workshop → "Run `/meeting-notes` on the kickoff session to capture decisions, actions, and any scope clarifications. They'll be written back to the project state file automatically."
+- **If RACI flagged single points of failure** → "Run `/resource-conflict` — there are people on this project with no backup, and it's worth checking against the wider roster before week 1."
+- **End of week 1** → "Run `/status-update` at the end of week 1 to confirm the team is on track and surface any drift early."
+- **After the first review round** → "Run `/feedback-consolidator` to turn client feedback into action items and update the project state."
 
 Only suggest 1-2 chains at a time — pick the most relevant for where the user is.
 
 ## Edge Cases
-- Very early stage / no brief yet → produce a lighter "discovery kickoff" format, mark Kickoff Readiness 1-2/5, suggest `/creativestack:brief-sharpener`.
+- Very early stage / no brief yet → produce a lighter "discovery kickoff" format, mark Kickoff Readiness 1-2/5, suggest `/brief-sharpener`.
 - Solo freelancer project → skip RACI (or collapse to a 2-column "me / client" version), focus on timeline, brief, definition of done, and risks.
 - Repeat client → pull relevant context from `learnings.md` and flag what worked / didn't. Mention specific past projects by name.
 - Massive scope → break into workstreams with separate RACI rows per workstream and a workstream-level First Week Plan each.
@@ -782,8 +782,8 @@ yet track whether the kickoff *worked* — i.e., whether the team actually hit t
 deliverable on time, whether the comms cadence held, whether the risks materialised. A
 deeper version would compare this kickoff against past kickoffs in `learnings.md`, score
 the predicted likelihood of success based on prior patterns, and report back after week 1
-on which assumptions held. For now, run `/creativestack:status-update` at the end of week
-1 to close the loop manually, and `/creativestack:post-mortem` at project end to feed the
+on which assumptions held. For now, run `/status-update` at the end of week
+1 to close the loop manually, and `/post-mortem` at project end to feed the
 learnings back into the brain.
 
 ---

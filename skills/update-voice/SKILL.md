@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:update-voice
+# /update-voice
 
 > Define how you sound so every skill writes in your voice.
 
@@ -226,7 +226,7 @@ If existing voice found, summarize: "Your current voice is set to {personality},
 - View spectrum — see where the voice sits on key dimensions
 - Add tone variations — define how voice shifts by context
 
-If no brain exists: "No Brain found. Run /creativestack:setup first to create your brain, or
+If no brain exists: "No Brain found. Run /setup first to create your brain, or
 I can create the tone-of-voice file on its own."
 
 ### Step 2a: Define or refine voice
@@ -416,18 +416,18 @@ and will now match your updated voice:"
 
 | Skill | How it uses tone-of-voice.md |
 |-------|------------------------------|
-| `/creativestack:brand-guidelines` | Tone of Voice section alignment |
-| `/creativestack:case-study` | Narrative voice for case studies |
-| `/creativestack:copy-deck` | Tone consistency checks |
-| `/creativestack:creative-brief` | Brief language and framing |
-| `/creativestack:feedback-consolidator` | Diplomatic phrasing of consolidated feedback |
-| `/creativestack:job-description` | Employer brand voice |
-| `/creativestack:meeting-notes` | Voice for client-facing summaries |
-| `/creativestack:proposal-generator` | Proposal tone and language |
-| `/creativestack:rfi-response` | Response drafting voice |
-| `/creativestack:social-calendar` | Social post drafting voice |
-| `/creativestack:status-update` | Client-facing version matches your voice |
-| `/creativestack:timeline-generator` | Voice for client-facing timeline narration |
+| `/brand-guidelines` | Tone of Voice section alignment |
+| `/case-study` | Narrative voice for case studies |
+| `/copy-deck` | Tone consistency checks |
+| `/creative-brief` | Brief language and framing |
+| `/feedback-consolidator` | Diplomatic phrasing of consolidated feedback |
+| `/job-description` | Employer brand voice |
+| `/meeting-notes` | Voice for client-facing summaries |
+| `/proposal-generator` | Proposal tone and language |
+| `/rfi-response` | Response drafting voice |
+| `/social-calendar` | Social post drafting voice |
+| `/status-update` | Client-facing version matches your voice |
+| `/timeline-generator` | Voice for client-facing timeline narration |
 
 "Any of these run in future sessions will automatically pick up the updated voice."
 
@@ -435,10 +435,10 @@ and will now match your updated voice:"
 
 Suggest 1-2 of the most relevant next steps:
 
-- If voice changed significantly → "Run `/creativestack:copy-deck` on a current project to check existing copy against the new voice."
-- If consistency check showed drift → "Run `/creativestack:brand-guidelines` to update the full brand system — voice is just one part."
-- If first-time setup → "Run `/creativestack:setup` to complete the rest of your brain."
-- If voice contradicts the positioning in `profile.md` → flag the misalignment and suggest re-running `/creativestack:setup` to update positioning.
+- If voice changed significantly → "Run `/copy-deck` on a current project to check existing copy against the new voice."
+- If consistency check showed drift → "Run `/brand-guidelines` to update the full brand system — voice is just one part."
+- If first-time setup → "Run `/setup` to complete the rest of your brain."
+- If voice contradicts the positioning in `profile.md` → flag the misalignment and suggest re-running `/setup` to update positioning.
 
 ## Edge Cases
 

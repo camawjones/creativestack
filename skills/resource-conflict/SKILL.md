@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:resource-conflict
+# /resource-conflict
 
 > Spot the overbooked designer before the deadline does. Get sharper every run.
 
@@ -226,7 +226,7 @@ the skill can extract.
 - Calibrate — capture what actually happened on a recent project
 
 **Routing:**
-- If user picks Analyse but `team.md` is missing entirely → run `/creativestack:setup` first, then return
+- If user picks Analyse but `team.md` is missing entirely → run `/setup-cs` first, then return
 - If user picks Analyse and `team.md` is minimal (no extended fields) → proceed but warn: "Your team brain is minimal — I can find rough conflicts but can't recommend substitutions. Want to run **Setup team** first? Takes 5 minutes."
 - If user picks Analyse and `team.md` is rich → proceed straight to Step 2
 
@@ -246,7 +246,7 @@ Check whether `~/.creativestack/projects/_index.md` exists. If it does:
    - Timeline → next milestone date and slip scenarios
    - Status + trend (At Risk projects often need disproportionate attention)
    - Budget & Pace → burn rate (a useful proxy for actual hours per project if
-     `/creativestack:timesheet-summary` has been run)
+     `/timesheet-summary` has been run)
 3. Tell the user what you found: "I can see {N} active projects in your project
    state: {project A} (phase, status), {project B} (phase, status). I'll factor
    allocation and timeline pressure across all of them."
@@ -260,8 +260,8 @@ Scan the current conversation for skills run this session:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:timesheet-summary` | Actual hours per team member, burn rate | Compare planned allocation vs. actual — reveals true utilisation |
-| `/creativestack:timeline-generator` | Upcoming milestones, phase transitions, crunch periods | Predict future pressure points |
+| `/timesheet-summary` | Actual hours per team member, burn rate | Compare planned allocation vs. actual — reveals true utilisation |
+| `/timeline-generator` | Upcoming milestones, phase transitions, crunch periods | Predict future pressure points |
 
 ### Step 4: MCP context enrichment
 
@@ -386,17 +386,17 @@ Read `references/team-brain-schema.md` § "Calibrate mode". Walk through 5 quest
 Pick the most relevant 1-2:
 
 **Upstream:**
-- **No actual hours data** → "Run `/creativestack:timesheet-summary` first to compare allocations against reality."
+- **No actual hours data** → "Run `/timesheet-summary` first to compare allocations against reality."
 
 **Downstream:**
-- **Capacity issues affect timelines** → "Run `/creativestack:timeline-generator` to model the impact on project deadlines."
-- **Consistently over-utilised** → "Flag this in your next `/creativestack:status-update` for leadership visibility."
+- **Capacity issues affect timelines** → "Run `/timeline-generator` to model the impact on project deadlines."
+- **Consistently over-utilised** → "Flag this in your next `/status-update` for leadership visibility."
 
 ## Edge Cases
-- **No `team.md`** → Route to `/creativestack:setup` first
+- **No `team.md`** → Route to `/setup-cs` first
 - **Very small team (under 5)** → Everyone is a single point of failure. Focus on prioritisation. Skip the "Available" table.
 - **Pitch work not yet won** → Default to Scenario mode for "win" and "lose" cases
-- **Project state file is stale (>14 days)** → Use it but note the staleness, suggest a `/creativestack:status-update` to refresh
+- **Project state file is stale (>14 days)** → Use it but note the staleness, suggest a `/status-update` to refresh
 - **Many concurrent projects** → Normal. Only flag when allocations actually clash.
 - **`learnings.md` has contradictory entries** → Trust the most recent. Note the contradiction in confidence.
 

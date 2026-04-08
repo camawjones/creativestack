@@ -41,7 +41,7 @@ skill acts as a feedback intelligence brain:
 ## Brain Files
 - `learnings.md § Feedback` — **the feedback DNA**: per-client vocabulary, archetype history, stakeholder memory (this skill creates and maintains it)
 - `methodology.md` — for framing the Creative Team Brief in the agency's methodology language
-- `rate-card.md` — to price revision rounds in £ (requires `/creativestack:project-profitability` Setup rates first)
+- `rate-card.md` — to price revision rounds in £ (requires `/project-profitability` Setup rates first)
 - `tone-of-voice.md` — for Respond mode drafts
 - `projects/{slug}.md` — project state, brief content, revision cap from SOW
 - `projects/{slug}-meetings.md` — past meetings on this project for cross-reference and archetype detection
@@ -86,10 +86,10 @@ Scan the conversation for output from earlier skills:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:creative-brief` | Objectives, deliverables, constraints, key message | Contradiction detection against the brief |
-| `/creativestack:meeting-notes` | Decisions, actions, client patterns already captured | Cross-reference decisions; avoid re-surfacing things already addressed |
-| `/creativestack:sow-generator` | Revision cap, payment milestones | Revision cap check |
-| `/creativestack:project-profitability` | Rate card, current margin status | Price the round in £ |
+| `/creative-brief` | Objectives, deliverables, constraints, key message | Contradiction detection against the brief |
+| `/meeting-notes` | Decisions, actions, client patterns already captured | Cross-reference decisions; avoid re-surfacing things already addressed |
+| `/sow-generator` | Revision cap, payment milestones | Revision cap check |
+| `/project-profitability` | Rate card, current margin status | Price the round in £ |
 
 ### Step 3: MCP context enrichment
 
@@ -174,7 +174,7 @@ Offer **at most one** brain enrichment. Pick the most valuable:
 - **New vocabulary term detected (2+ instances)** → "I noticed Marcus used 'bold' to mean 'brand-confident' again. This is 2 instances — want me to save it as a Nike vocab entry? Future translations will use his meaning automatically."
 - **Archetype repeated for this client** → "This is Nike's 3rd Committee archetype. Want me to refine the playbook based on what worked this time?"
 - **Stakeholder pattern emerging (3+ rounds)** → "Priya's feedback style is consistent across 3 rounds — want me to save a Stakeholder Memory entry?"
-- **No rate-card and cost priceable** → "I couldn't price this round — no rate card. Want to set one up via /creativestack:project-profitability? Future rounds will be priced automatically."
+- **No rate-card and cost priceable** → "I couldn't price this round — no rate card. Want to set one up via /project-profitability? Future rounds will be priced automatically."
 - **Revision cap exceeded** → "This round puts you at {N} rounds vs {M} in the SOW. Want me to flag this as a risk in the project state?"
 
 One offer. Don't pile on.
@@ -279,11 +279,11 @@ For Translate:
 Pick the most relevant 1-2:
 
 **Upstream:**
-- **No brief or rate card** → "Run `/creativestack:creative-brief` for contradiction detection and `/creativestack:project-profitability` Setup rates for round cost pricing."
+- **No brief or rate card** → "Run `/creative-brief` for contradiction detection and `/project-profitability` Setup rates for round cost pricing."
 
 **Downstream:**
-- **Swerve / contradictions detected OR revision cap exceeded** → "Run `/creativestack:meeting-notes` Pre-meeting mode and flag in `/creativestack:status-update` — this round needs a live conversation, not more async, and leadership should know."
-- **Scope creep detected** → "Run `/creativestack:project-profitability` to model the impact on margin."
+- **Swerve / contradictions detected OR revision cap exceeded** → "Run `/meeting-notes` Pre-meeting mode and flag in `/status-update` — this round needs a live conversation, not more async, and leadership should know."
+- **Scope creep detected** → "Run `/project-profitability` to model the impact on margin."
 
 ## Edge Cases
 - **Feedback is already specific** → organise rather than translate; skip the translation section

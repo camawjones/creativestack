@@ -297,7 +297,7 @@ If the project has no brief or the brief has no single-minded thought, the
 skill can't run the ladder check. In that case:
 
 > "No single-minded thought in the brief — ladder check skipped. Consider
-> running `/creativestack:creative-brief` to establish an SMT before
+> running `/creative-brief` to establish an SMT before
 > generating copy, or the deck will be structured around deliverables
 > rather than a thought."
 

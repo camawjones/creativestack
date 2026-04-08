@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:sow-generator
+# /sow-generator
 
 > Your SOW, in your format. Learns once, reuses forever. Not legal advice.
 
@@ -275,18 +275,18 @@ Scan the current conversation for output from other Creativestack skills. Auto-p
 
 | Skill run earlier | What to pull in |
 |---|---|
-| `/creativestack:timeline-generator` | Phase structure, durations, milestones |
-| `/creativestack:proposal-generator` | Scope, deliverables, pricing model, investment |
-| `/creativestack:resource-conflict` | Team availability → delay clauses |
-| `/creativestack:creative-brief` | Objectives, deliverables, success metrics |
+| `/timeline-generator` | Phase structure, durations, milestones |
+| `/proposal-generator` | Scope, deliverables, pricing model, investment |
+| `/resource-conflict` | Team availability → delay clauses |
+| `/creative-brief` | Objectives, deliverables, success metrics |
 
-Tell the user what you're pulling in: "I can see you ran `/creativestack:proposal-generator` earlier — pulling in the scope, deliverables, and pricing. You don't need to repeat them."
+Tell the user what you're pulling in: "I can see you ran `/proposal-generator` earlier — pulling in the scope, deliverables, and pricing. You don't need to repeat them."
 
 #### 4b. Project parameters
 
 Only ask for what isn't already covered:
 
-1. "What's the project and who's the client?" (skip if from `/creativestack:creative-brief`)
+1. "What's the project and who's the client?" (skip if from `/creative-brief`)
 2. "Key deliverables?" (skip if from proposal)
 3. [SELECT] "SOW type?" (skip if obvious)
    - Project (fixed scope, fixed fee)
@@ -294,7 +294,7 @@ Only ask for what isn't already covered:
    - Discovery (time-boxed exploration)
    - Phased (with go/no-go gates)
 4. "Budget / fee?" (skip if from proposal)
-5. "Timeline / hard deadlines?" (skip if from `/creativestack:timeline-generator`)
+5. "Timeline / hard deadlines?" (skip if from `/timeline-generator`)
 6. "Anything different from your saved defaults for this one?" — payment terms, revisions, custom clauses, anything bespoke
 
 If the project type is Retainer / Discovery / Phased, **read `references/templates.md`** for that variation's adjustments. For Project type with a complete saved style, you don't need the references file.
@@ -423,13 +423,13 @@ Please have all contracts reviewed by a qualified legal professional.*
 ### Upstream (what feeds sow-generator)
 
 If saved style exists but no upstream skills were run, suggest 1-2 only when they'd help:
-- No proposal → "Run `/creativestack:proposal-generator` first to lock in scope and pricing — the SOW will pull from it directly."
-- No timeline → "Run `/creativestack:timeline-generator` for milestone dates."
+- No proposal → "Run `/proposal-generator` first to lock in scope and pricing — the SOW will pull from it directly."
+- No timeline → "Run `/timeline-generator` for milestone dates."
 
 ### Downstream
 
-- SOW signed → "Run `/creativestack:project-kickoff` to build a kickoff pack from this SOW."
-- After 3+ SOWs generated → "Run `/creativestack:post-mortem` after the project to feed revision/scope actuals back into your defaults."
+- SOW signed → "Run `/project-kickoff` to build a kickoff pack from this SOW."
+- After 3+ SOWs generated → "Run `/post-mortem` after the project to feed revision/scope actuals back into your defaults."
 
 Only suggest 1-2 chains. Pick the most relevant.
 

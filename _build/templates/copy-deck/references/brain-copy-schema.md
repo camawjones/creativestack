@@ -168,7 +168,7 @@ first source that exists wins.
    > "⚠️ No brand voice source found — no brief, no previous deck, no
    > client voice notes. Using the agency's default tone-of-voice.md as a
    > fallback. The deck will be on the agency's voice but may not be
-   > distinctive to this client. Consider running /creativestack:creative-brief
+   > distinctive to this client. Consider running /creative-brief
    > first to establish the brand voice."
 
 ### Voice source tracking
@@ -249,24 +249,24 @@ the deck's state and content.
 
 | Overall score | Red flags | Suggested next step |
 |---|---|---|
-| 4.5+ | 0 | Ship it. Run `/creativestack:asset-spec` for production specs if the deck is for specific assets. |
+| 4.5+ | 0 | Ship it. Run `/asset-spec` for production specs if the deck is for specific assets. |
 | 4.0-4.4 | 0-1 | Ship with minor edits. Worth one more self-review pass before client. |
 | 3.5-3.9 | 0-2 | Rewrite the flagged atoms. Consider a CD review before client sends. |
-| <3.5 or 3+ red flags | Any | Not ready. Rewrite the weakest atoms — or rebrief. Consider `/creativestack:creative-brief` review if the brief's SMT or audience is unclear. |
+| <3.5 or 3+ red flags | Any | Not ready. Rewrite the weakest atoms — or rebrief. Consider `/creative-brief` review if the brief's SMT or audience is unclear. |
 
 ### Content-based suggestions
 
-- **Copy for social** → `/creativestack:social-calendar` to plan when and where to post
-- **Copy references deliverables** → `/creativestack:asset-spec` to generate production specs
-- **Client vocabulary drift** → `/creativestack:feedback-consolidator` Respond mode to draft client clarification
-- **Brand voice seems unclear** → `/creativestack:update-voice` to refine the tone-of-voice for this client
-- **Brief-level issues surfaced** → `/creativestack:brief-sharpener` on the underlying brief
+- **Copy for social** → `/social-calendar` to plan when and where to post
+- **Copy references deliverables** → `/asset-spec` to generate production specs
+- **Client vocabulary drift** → `/feedback-consolidator` Respond mode to draft client clarification
+- **Brand voice seems unclear** → `/update-voice` to refine the tone-of-voice for this client
+- **Brief-level issues surfaced** → `/brief-sharpener` on the underlying brief
 
 Suggest 1-2 chains at most.
 
 ### What to explicitly not suggest
 
-- Don't suggest `/creativestack:creative-brief` if the brief already exists
+- Don't suggest `/creative-brief` if the brief already exists
 - Don't suggest variants that the user didn't ask for
 - Don't suggest re-running copy-deck unless the current run is incomplete
 
@@ -295,7 +295,7 @@ After 3+ minor versions (v1.3+) without sign-off, the skill should surface:
 
 > "⚠️ **Copy deck churn detected.** This deck is on v1.4 without sign-off.
 > This usually indicates brief-level ambiguity rather than copy-level
-> issues. Worth running /creativestack:brief-sharpener on the underlying
+> issues. Worth running /brief-sharpener on the underlying
 > brief, or a client conversation about what's blocking sign-off."
 
 Copy deck churn is a symptom of brief problems, not a copy problem.

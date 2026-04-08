@@ -115,13 +115,13 @@ Populate from the kickoff pack:
 - **Brief:** one-paragraph summary of what we're building and why (from internal brief)
 - **Stakeholders:** client lead, internal lead, team (from RACI / `team.md`)
 - **Risks:** seed from the Risk Register (each row becomes a Risks entry)
-- **Timeline:** next milestone and slip scenarios (from `/creativestack:timeline-generator` if run, else from Key Dates)
+- **Timeline:** next milestone and slip scenarios (from `/timeline-generator` if run, else from Key Dates)
 - **Recent Activity:** append `YYYY-MM-DD — project-kickoff — created project state`
 - All other sections start empty
 
 Then add or update the row in `_index.md`.
 
-Tell the user one line at the end: "Created project state at `~/.creativestack/projects/{slug}.md`. Future skills (`/creativestack:status-update`, `/creativestack:meeting-notes`, etc.) will read and update this file automatically."
+Tell the user one line at the end: "Created project state at `~/.creativestack/projects/{slug}.md`. Future skills (`/status-update`, `/meeting-notes`, etc.) will read and update this file automatically."
 
 ## Output Format
 
@@ -141,7 +141,7 @@ known. Be honest — a kickoff with too little info should be flagged, not paper
 {If 3 or below, add a blunt note:}
 > **Heads up:** This kickoff is running with thin info. Specifically: {what's missing —
 > e.g., "no confirmed budget, no client decision-maker named, deliverables loosely defined"}.
-> Consider running `/creativestack:brief-sharpener` before the workshop, or building
+> Consider running `/brief-sharpener` before the workshop, or building
 > a discovery phase into Week 1.
 
 ---
@@ -414,23 +414,23 @@ Apply `visual-style.md` for any cover art or icon choices if relevant.
 After generating the kickoff pack, if upstream skills were NOT run but would have been
 useful, suggest 1-2:
 
-- If no timeline → "Run `/creativestack:timeline-generator` to build a detailed project timeline — the kickoff pack will reference milestones directly."
-- If no SOW → "Run `/creativestack:sow-generator` to formalise scope and terms before kicking off — the team needs to know what's committed."
-- If kickoff readiness was 3 or below → "Run `/creativestack:brief-sharpener` before the workshop — there's too much unknown for the team to land cleanly."
+- If no timeline → "Run `/timeline-generator` to build a detailed project timeline — the kickoff pack will reference milestones directly."
+- If no SOW → "Run `/sow-generator` to formalise scope and terms before kicking off — the team needs to know what's committed."
+- If kickoff readiness was 3 or below → "Run `/brief-sharpener` before the workshop — there's too much unknown for the team to land cleanly."
 
 ### Downstream (what project-kickoff triggers)
 
 Based on the kickoff content, suggest the most relevant next action:
 
-- **Immediately after** the kickoff workshop → "Run `/creativestack:meeting-notes` on the kickoff session to capture decisions, actions, and any scope clarifications. They'll be written back to the project state file automatically."
-- **If RACI flagged single points of failure** → "Run `/creativestack:resource-conflict` — there are people on this project with no backup, and it's worth checking against the wider roster before week 1."
-- **End of week 1** → "Run `/creativestack:status-update` at the end of week 1 to confirm the team is on track and surface any drift early."
-- **After the first review round** → "Run `/creativestack:feedback-consolidator` to turn client feedback into action items and update the project state."
+- **Immediately after** the kickoff workshop → "Run `/meeting-notes` on the kickoff session to capture decisions, actions, and any scope clarifications. They'll be written back to the project state file automatically."
+- **If RACI flagged single points of failure** → "Run `/resource-conflict` — there are people on this project with no backup, and it's worth checking against the wider roster before week 1."
+- **End of week 1** → "Run `/status-update` at the end of week 1 to confirm the team is on track and surface any drift early."
+- **After the first review round** → "Run `/feedback-consolidator` to turn client feedback into action items and update the project state."
 
 Only suggest 1-2 chains at a time — pick the most relevant for where the user is.
 
 ## Edge Cases
-- Very early stage / no brief yet → produce a lighter "discovery kickoff" format, mark Kickoff Readiness 1-2/5, suggest `/creativestack:brief-sharpener`.
+- Very early stage / no brief yet → produce a lighter "discovery kickoff" format, mark Kickoff Readiness 1-2/5, suggest `/brief-sharpener`.
 - Solo freelancer project → skip RACI (or collapse to a 2-column "me / client" version), focus on timeline, brief, definition of done, and risks.
 - Repeat client → pull relevant context from `learnings.md` and flag what worked / didn't. Mention specific past projects by name.
 - Massive scope → break into workstreams with separate RACI rows per workstream and a workstream-level First Week Plan each.
@@ -446,8 +446,8 @@ yet track whether the kickoff *worked* — i.e., whether the team actually hit t
 deliverable on time, whether the comms cadence held, whether the risks materialised. A
 deeper version would compare this kickoff against past kickoffs in `learnings.md`, score
 the predicted likelihood of success based on prior patterns, and report back after week 1
-on which assumptions held. For now, run `/creativestack:status-update` at the end of week
-1 to close the loop manually, and `/creativestack:post-mortem` at project end to feed the
+on which assumptions held. For now, run `/status-update` at the end of week
+1 to close the loop manually, and `/post-mortem` at project end to feed the
 learnings back into the brain.
 
 ---

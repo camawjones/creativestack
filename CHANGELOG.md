@@ -6,6 +6,11 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [Unreleased]
 
+### Changed
+- Converted from Claude Code plugin to flat skill stack. Skills now invoked as `/skill-name` instead of `/creativestack:skill-name`. The `setup` skill was renamed to `setup-cs` to avoid collision with other stacks.
+- Removed `.claude-plugin/` manifest and `hooks/` directory (plugin-only).
+- `scripts/check-brain.sh` self-locates instead of relying on `$CLAUDE_PLUGIN_ROOT`; install manually as a SessionStart hook via `~/.claude/settings.json` if desired.
+
 ### Added
 - `CONTRIBUTING.md` with build process, skill template guidance, and PR checklist
 - `CODE_OF_CONDUCT.md` based on Contributor Covenant 2.1
@@ -19,5 +24,3 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - 4 workflow agents: pitch-prep, project-setup, delivery-review, research-deep-dive
 - Build system for generating `skills/*/SKILL.md` from `_build/templates/*.tmpl`
 - Shared preamble with Brain discovery at `~/.creativestack/`
-- SessionStart hook for brain check
-- Plugin manifest under `.claude-plugin/plugin.json`

@@ -1,0 +1,458 @@
+---
+name: post-mortem
+description: Run a structured project retrospective — what worked, what didn't, root causes, mid-flight pivots, client relationship trajectory, definition-of-done check, and trend comparison against past projects. Writes categorised learnings to learnings.md, client notes to clients.md, and process changes to methodology.md. Closes the project state file and chains into case-study. Use when the user wants to run a retrospective, post-mortem, project review, project wrap-up, lessons learned session, or any kind of "what went wrong / what went right" analysis at the end of a project.
+---
+
+{{PREAMBLE}}
+
+{{PROJECT_STATE}}
+
+# /post-mortem
+
+> Honest retrospective in, institutional memory out — so you stop making the same mistakes twice.
+
+## Brain Files
+- `profile.md` (for context)
+- `clients.md` (for client relationship history with this client)
+- `learnings.md` (for past project patterns — also used for trend comparison)
+- `methodology.md` (current playbook — used to detect when this retro suggests a process change)
+- `projects/{slug}.md` (project state — full status, decision, risk, engagement history)
+- `projects/{slug}-brief.md` (the locked brief — for the definition-of-done check; from `/creativestack:creative-brief`)
+- `projects/{slug}-meetings.md` (meeting log with sentiment scores per meeting — the source for the engagement trajectory and "what was hard" moments; from `/creativestack:meeting-notes`)
+- `projects/{slug}-copy-deck-v*.md` (versioned copy decks — for the scope-vs-deliverable comparison; from `/creativestack:copy-deck`)
+- **WRITES TO:** `learnings.md` (appends categorised learnings with anti-pattern tags for future search)
+- **WRITES TO:** `clients.md` (appends client working relationship notes)
+- **WRITES TO:** `methodology.md` (only when the retro surfaces a real process change worth canonising)
+
+## What This Skill Does
+
+Takes project timelines, team reflections, outcomes, and raw feedback and produces a
+structured retrospective. Separates what worked from what didn't without blame. Extracts
+learnings by category. Produces actionable recommendations. Then writes the key takeaways
+to your brain so they inform future projects automatically.
+
+## Inputs
+- Project name and client
+- Project timeline (key dates, milestones, what happened when)
+- Team reflections (any format — notes, chat messages, verbal feedback transcribed)
+- Outcomes (did it deliver? metrics, client reaction, team sentiment)
+- Optional: original brief or scope for comparison
+- Optional: budget vs actual
+
+## Conversation Flow
+
+### Step 1: Upstream Skill Check
+
+Before asking anything, scan the current conversation for output from other CreativeStack
+skills run earlier. If any are present, auto-populate the relevant data:
+
+| Skill run earlier | What to pull in | How it's used |
+|---|---|---|
+| `/creativestack:timeline-generator` | Planned phase durations, milestones, slip scenarios | Populates Scope vs Reality — planned dates and durations |
+| `/creativestack:timesheet-summary` | Actual hours, revision tax, burn rate, team efficiency, scope creep | Populates Scope vs Reality — actuals; feeds What Didn't Work with data |
+| `/creativestack:project-profitability` | Margin, phase profitability, over-servicing, scenario analysis | Populates commercial assessment; identifies where money was made/lost |
+| `/creativestack:project-kickoff` | Original definition of done, risks identified at start, kickoff readiness score | Drives the Definition of Done check and the "did predicted risks materialise" analysis |
+
+When upstream data is available, tell the user:
+"I can see you ran `/creativestack:timesheet-summary` and `/creativestack:project-profitability`
+earlier — I'll pull in the hours, revision tax, and margin data. The retro will include
+hard numbers, not just feelings."
+
+Only ask about information that isn't already available from upstream skills.
+
+### Step 2: Project State Read (full file extraction)
+
+Read **all** project state files for this project — the retro is the natural consumer of everything the project's other skills produced:
+
+1. **`projects/{slug}.md`** — main project state. Pull:
+   - **Status History** — full trajectory of how the project moved through On Track / At Risk / Off Track. Name the inflection points.
+   - **Resolved Decisions + Open Decisions** — what got decided, what never got decided
+   - **Risks** — which materialised, which were caught, which were missed
+   - **Engagement Health** — relationship trajectory over time, not just end state
+   - **Budget & Pace** — final margin vs planned, burn rate over time
+   - **Recent Activity** — full timeline of skills run on this project
+
+2. **`projects/{slug}-brief.md`** (if it exists) — the locked brief. Pull the original Tension, Real Objective, Single-Minded Thought, Success Criteria, and Deliverables list. **This is the spine of the Definition-of-Done check** — did the work deliver against what the brief committed to?
+
+3. **`projects/{slug}-meetings.md`** (if it exists) — the meeting log with sentiment scores per meeting. **This is the source for the Engagement Trajectory section.** Plot the sentiment dimensions (engagement, trust, alignment) over time. A dip in week 4 followed by a recovery in week 6 IS the "what was hard" story — surface it explicitly with the date and the meeting context.
+
+4. **`projects/{slug}-copy-deck-v*.md`** (if any exist) — versioned copy decks. Compare:
+   - The brief's deliverables list vs the final shipped copy deck
+   - Version churn (v1.0 → v1.1 → v1.2 → ...) — high version count without sign-off signals brief-level ambiguity, not copy-level issues. Flag this in What Didn't Work.
+   - Atom-level scoring trends across versions — were the same atoms red-flagged repeatedly?
+
+If the state file exists, tell the user: "I've loaded the full project state for
+{project name}. I can see {N} status changes, {N} resolved decisions, {N} risks
+on the register, the brief from {date}, {N} meetings logged, and {N} copy deck versions.
+I'll use these as the spine of the retro — you don't need to re-tell the timeline."
+
+If no state files exist, the retro still works — just with less auto-populated data.
+
+### Step 3: Brain Check + Trend Comparison
+
+Read `learnings.md`, `clients.md`, and `methodology.md`. Surface:
+
+- **Past projects with this client** — search `clients.md` and `learnings.md` for the client name. Surface relationship history and any prior retro learnings.
+- **Past projects of the same type** — search `learnings.md` for the same project type. Look for patterns: is the same issue showing up again?
+- **Trend signal** — if a pattern appears in 3+ past retros, flag it explicitly: "This is the third brand project in 6 months where scope creep at the design system phase has been flagged. This isn't a one-off — it's becoming an anti-pattern."
+
+Tell the user what you found before asking questions: "I found 2 past retros with this
+client and 4 past brand projects in your learnings. There's a recurring pattern around
+{X} I'll bring into this retro."
+
+### Step 4: Project info capture (only what's still missing)
+
+Ask only for information not already covered by Steps 1-3. If everything is loaded,
+skip straight to Step 5. Otherwise capture project name, client, timeline, team, outcomes.
+
+Also ask once at this stage:
+
+[SELECT] "How should I run this retro?"
+- **Standard** — direct attribution, on-the-record, names and quotes welcome
+- **Anonymous mode** — strip team member names from the output and the brain writes; useful when feedback might be politically charged or when surfacing burnout
+
+### Step 5: The honest questions
+
+Ask these one at a time, conversationally — don't batch them, the answers feed each other:
+
+1. "What's the one thing that went best on this project?"
+2. "What's the one thing you'd do differently if you could start again?"
+3. "Were there any moments where the project nearly went off the rails? What saved it — or didn't?"
+4. "Were there any mid-flight pivots — moments where the team changed direction, scope, or approach? What triggered them?"
+5. "How did the client relationship feel throughout — and did the *trajectory* change? Started strong and faded, started rocky and improved, steady all the way?"
+6. "Did we hit our internal definition of done? If `/creativestack:project-kickoff` ran, I have it loaded — otherwise, what did 'success' look like for the team going in?"
+
+### Step 6: Team Sentiment
+
+[SELECT questions — ask as a batch via `AskUserQuestion`:]
+
+1. "Team energy on this project?" [SELECT: High — people were buzzing, Good — steady engagement, Low — it was a grind, Burned out — people are fried]
+2. "Creative pride in the output?" [SELECT: Very proud — portfolio piece, Satisfied — solid work, Mixed — some good parts, Disappointed — below our standard]
+3. "Would the team repeat this type of project?" [SELECT: Absolutely, Yes with changes, Reluctantly, No]
+4. "Client relationship overall?" [SELECT: Strong partnership, Professional and smooth, Functional but draining, Difficult]
+5. "Would you work with this client again?" [SELECT: Yes — actively want more, Yes — if the brief is right, Maybe — depends on scope and terms, No — not a good fit]
+
+### Step 7: Generate
+
+Generate the retrospective. Apply 5 Whys / root cause analysis to every entry in
+"What Didn't Work" — don't stop at "what happened, what was the impact." Push through
+to "why did it happen at the system level, what's the fix that prevents it next time."
+
+## Output Format
+
+# Post-Mortem: {Project Name}
+**Client:** {client}
+**Period:** {start date} — {end date}
+**Team:** {team members}
+**Date of review:** {today}
+
+## Project Summary
+{Brief overview — what was the project, what was delivered, how did it land.
+Honest, not promotional. If the project state file was loaded, reference the
+status trajectory: "Started On Track, moved to At Risk on {date} over {issue},
+recovered by {date}, shipped on {date}."}
+
+## Definition of Done — Did We Hit It?
+
+{Pull the original definition of done from `/creativestack:project-kickoff` output or
+the project state file. Score each criterion. If no kickoff ran, ask the user to
+reconstruct what "success" was meant to look like.}
+
+| Criterion (set at kickoff) | Hit? | Notes |
+|---|---|---|
+| {client-side success criterion 1} | Yes / Partial / No | {what actually happened} |
+| {client-side success criterion 2} | Yes / Partial / No | {notes} |
+| {our-side success criterion} | Yes / Partial / No | {notes} |
+
+**Verdict:** {one-line judgement — e.g., "Hit 3/4 client criteria, missed our internal goal of case-study-worthy work"}
+
+## What Worked Well
+{Things to repeat. Specific — not "good teamwork" but what specifically about the
+teamwork was good and why.}
+
+### Process
+- {What worked in how the project was managed}
+- {What worked}
+
+### Creative
+- {What worked in the creative output and approach}
+- {What worked}
+
+### Client Relationship
+- {What worked in how the client was managed}
+- {What worked}
+
+### Commercial
+- {What worked financially — came in on budget, good margin phase, etc.}
+- {Only include if profitability data is available}
+
+## What Didn't Work
+{Honest, blame-free. Focus on systems and process, not individuals. Every entry must
+push past description to root cause and system fix — don't stop at "what happened, what
+was the impact." Apply 5 Whys: keep asking why until you reach a system-level cause.}
+
+**Format for every entry:**
+- **{Issue}**
+  - **What happened:** {description}
+  - **Impact:** {what it caused — time, money, quality, relationship}
+  - **Root cause:** {the underlying system/process/incentive that allowed it — not "Sarah forgot", but "no handoff checklist between strategy and design phases"}
+  - **System fix:** {the change to process, template, ritual, or tooling that prevents recurrence}
+
+### Process
+- **{Issue}** — what happened, impact, root cause, system fix (use the format above)
+
+### Creative
+- **{Issue}** — what happened, impact, root cause, system fix
+
+### Client Relationship
+- **{Issue}** — what happened, impact, root cause, system fix
+
+### Commercial
+- **{Issue}** — what happened, impact, root cause, system fix
+- {Only include if profitability data is available}
+
+## Mid-Flight Pivots
+
+{Moments where the team changed direction, scope, or approach mid-project. Useful for
+next time — these are usually the highest-cost moments and they're easy to forget.}
+
+| When | What changed | Why | Cost (time/money/morale) | Was it the right call? |
+|------|-------------|-----|--------------------------|------------------------|
+| {week or date} | {what shifted} | {trigger — client, internal, external} | {estimate} | {Yes / No / Mixed} |
+
+## Client Relationship Trajectory
+
+{Not flat sentiment — the *shape* of the relationship over time. Reference Engagement
+Health from the project state file if available.}
+
+**Trajectory:** {one of: Strong throughout / Started strong, faded / Started rocky, improved / Steady but draining / Volatile / Broke down at {point}}
+
+**Inflection points:**
+- **{week or event}** — {what shifted in the relationship and why}
+- **{week or event}** — {what shifted}
+
+**Single biggest factor in how the relationship landed:** {one sentence}
+
+## Learnings by Category
+
+{Structured for brain storage and cross-project pattern matching.}
+
+### Process Learnings
+1. **{Learning}** — {how to apply it going forward}
+
+### Creative Learnings
+1. **{Learning}** — {how to apply it going forward}
+
+### Client Learnings
+1. **{Learning}** — {how to apply it going forward}
+
+### Commercial Learnings
+1. **{Learning}** — {how to apply it going forward}
+
+### Team Learnings
+1. **{Learning}** — {how to apply it going forward}
+
+## Scope vs Reality
+| Aspect | Original Scope | What Actually Happened | Variance |
+|--------|---------------|----------------------|----------|
+| Timeline | {planned} | {actual} | {+/- weeks} |
+| Budget (hours) | {planned} | {actual} | {+/- hours} |
+| Budget (fee vs cost) | {planned margin} | {actual margin} | {+/- points} |
+| Deliverables | {planned count} | {actual count} | {added/removed} |
+| Revisions | {planned rounds} | {actual rounds} | {+/- rounds} |
+| Revision Tax | — | {%} | {vs 15% benchmark} |
+
+{If upstream data from `/timesheet-summary` and `/timeline-generator` is available,
+populate automatically. Otherwise use what the user provides.}
+
+## Team Sentiment Summary
+
+| Dimension | Rating | Notes |
+|-----------|--------|-------|
+| Energy | {High / Good / Low / Burned out} | {context} |
+| Creative pride | {Very proud / Satisfied / Mixed / Disappointed} | {context} |
+| Would repeat | {Absolutely / Yes with changes / Reluctantly / No} | {context} |
+| Client relationship | {Strong / Smooth / Draining / Difficult} | {context} |
+
+## Would You Work With This Client Again?
+**Answer:** {Yes actively / Yes if right brief / Maybe depends / No}
+**Rationale:** {context from the conversation — what drives this assessment}
+
+## Trend Comparison
+
+{If `learnings.md` has 3+ relevant past entries, compare this retro against them.
+Pull the comparison from Step 3. If fewer than 3, skip this section and note: "Not
+enough past retros yet for trend analysis — this is retro #{N}."}
+
+**Recurring patterns across past projects:**
+- **{Pattern}** — appeared in {N} past retros ({list of project names}). This makes it {N+1} times. **Anti-pattern: yes / emerging / no.**
+- **{Pattern}** — {N} past appearances. {anti-pattern verdict}
+
+**This retro vs. past retros for {client name}:** {one-line — improving / stable / deteriorating, with reason}
+
+**This retro vs. past retros for {project type}:** {one-line — improving / stable / deteriorating}
+
+## Recommendations
+
+{For you, not the client. What to change in your process, team structure, pricing,
+or approach. Each recommendation must be specific, owned, scheduled, and have a
+destination — not "improve handoffs" but "add a strategy→design handoff checklist
+to methodology.md by end of next week, owned by Sarah."}
+
+| # | Recommendation | Owner | By when | Lands in (file/ritual/template) |
+|---|----------------|-------|---------|--------------------------------|
+| 1 | {specific change} | {person} | {date} | {e.g., "methodology.md / SOW template / weekly stand-up"} |
+| 2 | {change} | {person} | {date} | {destination} |
+| 3 | {change} | {person} | {date} | {destination} |
+
+{Mark any recommendation that translates into a `methodology.md` change with a ★ —
+those will be written back to the brain.}
+
+---
+
+## Brain Updates
+
+Show the user exactly what will be appended to each file before writing. Wait for
+explicit confirmation, then write. If anonymous mode was selected in Step 4, strip
+all team member names from the brain writes (replace with role).
+
+**The following will be appended to `~/.creativestack/learnings.md`:**
+
+```
+## {Project Name} ({date})
+**Client:** {client} | **Type:** {type} | **Outcome:** {one-line}
+**Tags:** {comma-separated tags — e.g., scope-creep, committee-signoff, brand-identity, distributed-team}
+**Anti-patterns flagged:** {list any anti-patterns this retro confirmed, or "none new"}
+**Revision tax:** {%} | **Margin:** {%} (if available) | **Definition of done:** {N/N criteria hit}
+
+### Process
+- {Key process learning + system fix}
+### Creative
+- {Key creative learning}
+### Client
+- {Key client learning + relationship trajectory}
+### Commercial
+- {Key commercial learning}
+### Team
+- {Key team learning}
+```
+
+**The following will be appended to `~/.creativestack/clients.md`:**
+
+```
+### {Client Name} — {Project Name} ({date})
+- Work with again: {Yes actively / Yes if right brief / Maybe / No}
+- Relationship trajectory: {trajectory verdict from above}
+- Communication style: {observations from the retro}
+- Review process: {what their approvals were like}
+- Key note: {the single most important thing to remember for next time}
+- Past retros with this client: {N total, including this one}
+```
+
+**The following will be appended to `~/.creativestack/methodology.md`** (only if any
+recommendation in Step 7 was marked with ★ as a methodology change):
+
+```
+### Added {date} — from {Project Name} retro
+- **{Process change}** — {what it is, when to apply it, why it was added}
+```
+
+If no methodology changes came out of the retro, skip this write entirely and tell the
+user: "No methodology changes from this retro — the playbook stays as is."
+
+---
+
+## MCP Integration
+
+### Notion
+
+Check whether Notion tools are available (look for tools prefixed with
+`mcp__claude_ai_Notion__`).
+
+**If Notion MCP IS available** → after generating the retro, offer:
+"Want me to save this retrospective to Notion?"
+
+If yes:
+1. Use `notion-search` to find an existing "Retrospectives" or "Post-Mortems" database/page
+2. If found, create a new page inside it using `notion-create-pages`
+3. If not found, ask where to put it or create a standalone page
+4. Include all sections from the markdown output, formatted for Notion blocks
+
+**If Notion MCP is NOT available** → the markdown above is the complete output.
+
+Never require Notion — always produce the markdown retro first.
+
+## Skill Chains
+
+### Upstream (what feeds post-mortem)
+
+If upstream skills weren't run but would have made the retro sharper, note them — but
+gently. The retro is happening now; these are for next time.
+
+- If no `/creativestack:timesheet-summary` → "Next time, run `/creativestack:timesheet-summary` before the retro — having actual hours and revision tax in front of you changes the conversation."
+- If no `/creativestack:project-profitability` → "Next time, run `/creativestack:project-profitability` before the retro — the commercial section is much sharper with margin data."
+
+### Downstream (what post-mortem triggers)
+
+After generating the retro, suggest the most relevant next action:
+
+- **If the project had strong results** → "Run `/creativestack:case-study` to turn this into a portfolio piece — the project data, definition-of-done check, and results carry forward."
+- **If trend analysis flagged a recurring anti-pattern** → "Run `/creativestack:update-voice` or update `methodology.md` directly — this pattern has appeared {N} times now and it's worth a process change at the playbook level."
+- **If client trajectory was negative** → "Update `clients.md` directly with the new working-relationship notes — and consider whether this client should be on the 'maybe / no' list for new work."
+- **If commercial learnings are significant** → "Reference this next time you run `/creativestack:proposal-generator` or `/creativestack:sow-generator` for a similar project type — the recommendations table is the bridge."
+
+Only suggest 1-2 chains — pick the most relevant for the retro's findings.
+
+## Project State Participation
+
+Post-mortem is the **final reader** of project state. Before generating the retrospective,
+read the full project state file to pull in everything that happened across the project's
+life:
+
+- **Status History** — full trajectory of how the project moved through On Track / At
+  Risk / Off Track. This is gold for the retrospective — show the trend, name the inflection points.
+- **Resolved Decisions + Open Decisions** — what got decided, what never got decided
+- **Risks** — which risks materialised, which were caught, which were missed
+- **Engagement Health** — did the relationship deteriorate? When?
+- **Budget & Pace** — final margin vs planned, burn rate over time
+- **Recent Activity** — the full timeline of skills run on this project
+
+The retrospective should reference these specifically — "Status moved to At Risk on
+2026-03-28 over the CMS blocker; it took 11 days to resolve" is more useful than
+generic platitudes.
+
+After generating the retrospective:
+
+- **Frontmatter** — set `status: closed`, update `last_updated`
+- **Recent Activity** — append `YYYY-MM-DD — post-mortem — project closed, {one-line outcome}`
+- **`_index.md`** — move the project's row from Active to Closed Projects
+
+The state file stays on disk after closing — it's the project's memory for future
+reference (e.g., next time the same client briefs you).
+
+## Edge Cases
+- **Project went badly and team is defensive** → keep tone constructive, focus on systems not people, suggest anonymous mode in Step 4 to lower the temperature.
+- **No metrics or outcomes yet** (project just shipped) → note what to measure and when to revisit. Schedule a 30-day follow-up via `/creativestack:status-update`.
+- **Client relationship ended poorly** → document honestly but professionally in `clients.md`. Focus on what was in your control. Mark "work with again: No" with explicit reason.
+- **Very short project (under 2 weeks)** → simplify structure, skip Mid-Flight Pivots and Scope vs Reality if not meaningful.
+- **Multiple teams or agencies involved** → clarify which learnings are about your team's contribution vs external factors. Keep the brain writes scoped to your team only.
+- **Team won't give honest feedback** → run anonymous mode (Step 4). Note that the retro is only as good as the honesty.
+- **No upstream data available** → skill works standalone, just with less auto-populated data and a less sharp commercial section.
+- **No project state file exists** (project predates project state) → ask the user to reconstruct the timeline manually, and offer to create a project state file retroactively for future reference.
+- **First retro for this client / project type** → trend comparison section says "retro #1 — no patterns yet. This becomes the baseline."
+- **Recommendation has no clear owner** → don't fabricate one. Mark owner as "TBD" and flag in the Slack message that owners need assigning.
+
+### What this skill can't do
+
+This skill runs one retrospective at a time and writes to the brain so future retros
+can pattern-match. It doesn't yet measure whether the recommendations from past retros
+were *actually implemented* — i.e., did the system fixes happen, did the anti-pattern
+stop appearing, did the methodology changes stick. A deeper version would track
+recommendation completion across retros, score whether recurring issues are getting
+better or worse over time, and auto-surface relevant past learnings when a new project
+of the same type kicks off. For now, the trend comparison in Step 3 is the manual
+version of that — it tells you when a pattern has appeared 3+ times, which is when
+something at the methodology level needs to change.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

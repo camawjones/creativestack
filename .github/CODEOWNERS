@@ -1,0 +1,13 @@
+# CreativeStack — Code Owners
+#
+# This file tells GitHub who owns which parts of the repository.
+# When a pull request is opened against any of the matched files,
+# the specified owners are automatically requested as reviewers.
+#
+# Syntax: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# As the sole maintainer, @camawjones owns everything by default.
+# Update this file if other maintainers are added later.
+
+# Default owner for everything in the repo
+* @camawjones

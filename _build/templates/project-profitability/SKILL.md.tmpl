@@ -1,0 +1,370 @@
+---
+name: project-profitability
+description: Brain-first profitability analysis for creative work. Four modes — Analyse (single project or retainer with margin, scenarios, benchmarks), Setup rates (build a reusable rate card so you never re-enter rates), Aggregate (cross-project patterns: by client, by type, by team member, by trend), Backfill (bootstrap project history from past work). Persists rate-card.md, project-history.md, and retainer-history.md so every run gets sharper. Auto-detects project vs retainer mode.
+---
+
+{{PREAMBLE}}
+
+{{PROJECT_STATE}}
+
+# /project-profitability
+
+> Hours + rates + fee in, margin truth out. Saves your rate card once. Learns every project.
+
+## What This Skill Does
+
+Most profitability tools are calculators you fill in fresh every time. This one
+acts as a **profitability brain**:
+
+1. **Reads your rates** from `rate-card.md` — never asks for day rates again
+   after first setup
+2. **Reads your project history** from `project-history.md` — compares this
+   project against your own track record, not just industry averages
+3. **Reads your retainer history** from `retainer-history.md` — enables real
+   3+ month trajectory analysis
+4. **Aggregates across projects** — answers questions like "which clients are
+   most profitable" and "is brand work outperforming digital for us"
+5. **Compounds value** — every analysis offers to save itself, building the
+   brain over time
+
+The first analysis takes 5 minutes to set up the rate card. Every analysis
+after that takes 60 seconds and gets sharper as the history grows.
+
+## Brain Files
+- `rate-card.md` — **the rate DNA**: internal cost rates + billing rates by role and person (this skill creates and maintains it)
+- `project-history.md` — append-only log of every analysed project (this skill creates and maintains it)
+- `retainer-history.md` — monthly data points per retainer for trajectory analysis (this skill creates and maintains it)
+- `team.md` — fallback source for person-level day rates if not in rate-card
+- `freelance-bench.md` — trusted freelance roster with day rates and lead times (used in scenario modelling and cost-out comparisons; from `/creativestack:resource-conflict` Setup bench)
+- `profile.md` — agency name, currency, default target margin
+- `learnings.md` — prose lessons (this skill appends to a § Profitability section, never overwrites)
+
+## Reference Files
+
+This skill loads detail on demand from `references/`. Read each only when relevant:
+
+- **`references/rate-card-schema.md`** — read in **Setup rates** mode, or whenever creating/updating any of the three brain files. Full schemas + setup flows.
+- **`references/benchmarks.md`** — read in **Analyse** mode when generating benchmark comparison. Industry numbers by type with override guidance.
+- **`references/scenarios.md`** — read in **Analyse** project mode when generating scenario modelling. Six scenario patterns with selection guidance.
+- **`references/retainer-analysis.md`** — read in **Analyse** retainer mode. Trajectory rules, over/under-servicing detection, talking points framework, health score.
+- **`references/aggregation.md`** — read in **Aggregate** mode. Cross-project view patterns and insight prioritisation.
+
+## Conversation Flow
+
+### Step 1: Brain check & mode selection
+
+Run brain discovery from the preamble. Check specifically for the files this
+skill cares about:
+
+```bash
+[ -f "$HOME/.creativestack/rate-card.md" ] && echo "RATES_EXIST" || echo "NO_RATES"
+[ -f "$HOME/.creativestack/project-history.md" ] && echo "HISTORY_EXISTS" || echo "NO_HISTORY"
+[ -f "$HOME/.creativestack/retainer-history.md" ] && echo "RETAINER_HISTORY_EXISTS" || echo "NO_RETAINER_HISTORY"
+```
+
+[SELECT] "What do you need?"
+- Analyse — single project or retainer (default)
+- Setup rates — build or update your rate card
+- Aggregate — cross-project patterns from history (needs 3+ projects in history)
+- Backfill — quickly log past projects to bootstrap aggregation
+
+**Routing:**
+- If user picks Analyse and no rate-card exists → offer: "I don't have your rates saved. Want to do a 5-minute Setup rates first? Otherwise I'll ask for rates this once."
+- If user picks Aggregate and history has <3 entries → "Aggregate needs 3+ projects. You have {N}. Want to Backfill some past projects first?"
+- If user picks Aggregate with sufficient data → proceed straight to aggregation
+
+### Step 2: Analyse mode — Upstream skill check
+
+Before asking the user anything, scan the conversation for upstream skill output:
+
+| Skill run earlier | What to pull in | How it's used |
+|---|---|---|
+| `/creativestack:timesheet-summary` | Logged hours, burn rate, revision tax, scope creep | Pre-fills hours data — skip the question |
+| `/creativestack:timeline-generator` | Phase structure, planned durations | Maps phases to budget allocation |
+| `/creativestack:sow-generator` | Fee, payment milestones, revision limits | Pre-fills fee and contractual terms |
+
+When upstream data is available:
+"I have the timesheet data from earlier — {X hours} across {Y team members},
+with a revision tax of {Z%}. Should I use that?"
+
+### Step 3: Analyse mode — Detect project vs retainer
+
+Auto-detect from the input:
+- Fixed total fee + finite duration → **project mode**
+- Monthly hours allocation + monthly fee → **retainer mode**
+- Ambiguous → ask: [SELECT] "Project or retainer?"
+
+### Step 4: Analyse mode — Gather what's not in the brain
+
+Ask only what isn't already known:
+
+- **Fee:** ask if not pre-filled from `/sow-generator` or upstream
+- **Hours:** ask if not pre-filled from `/timesheet-summary`
+- **Rates:** if `rate-card.md` exists, use it. Otherwise ask once and offer to save to rate card at the end.
+- **OOP costs:** ask once. "Any out-of-pocket costs? (freelance, stock, print, travel)" — if freelance is mentioned and `freelance-bench.md` exists, look up the bench rates rather than asking again.
+- **Target margin:** if `default_target_margin` in rate-card.md frontmatter, skip. Otherwise ask, or fall back to industry benchmark for the project type.
+- **Project type:** ask once if not obvious from name/SOW. Use the stable vocabulary from `references/rate-card-schema.md`.
+
+### Step 5: Compute and generate
+
+For project mode:
+- Compute total cost using rate-card lookup order (see `references/rate-card-schema.md` § "Read order in Analyse mode")
+- Compute margin, variance, phase breakdown
+- Read `references/benchmarks.md` to get industry comparison; layer in user's own averages from `project-history.md` if 3+ same-type projects exist
+- Read `references/scenarios.md` to choose and run the 3 most informative scenarios. For team-mix scenarios that involve freelance substitution, read `freelance-bench.md` to use named freelancers with real rates rather than placeholder roles.
+- Generate output
+
+For retainer mode:
+- Compute current month's metrics
+- Read `references/retainer-analysis.md`
+- If `retainer-history.md` has 3+ months for this retainer, generate trajectory section. Otherwise snapshot only.
+- Generate output
+
+### Step 6: Compounding loop — offer to save
+
+After producing the report, offer **at most one** brain enrichment based on what
+will deliver the most value. Do not pile on:
+
+- **No rate-card and the user manually entered rates** → "Want me to save these rates to a rate card? Future runs won't need to ask."
+- **Project mode, history exists** → "Save this project to history? You're now at {N} projects — aggregate mode unlocks at 3."
+- **Project mode, no history yet** → "Save this project as the first entry in your project history? After 3, you can run aggregate."
+- **Retainer mode, no entry for this month** → "Save this month to retainer history? With {N+1} months you'll {unlock trajectory / get a stronger trajectory}."
+- **Aggregate mode just ran** → offer no enrichment; suggest a downstream skill instead.
+
+## Output Format — Project mode
+
+# Project Profitability Analysis
+**Project:** {project name}
+**Client:** {client name}
+**Type:** {project type from stable vocabulary}
+**Fee:** {total fee, in rate-card currency}
+**Date:** {today}
+
+## Verdict
+**{One-line verdict in bold. Lead with brain-aware framing where possible.}**
+
+Examples:
+- *"32% margin — your worst on a brand identity project this year, and 13 points below your average of 45%."* (brain-aware)
+- *"47% margin — slightly above your 45% target, in line with your historical average for brand refresh work."* (brain-aware)
+- *"32% margin — below your 45% target. (No history yet — save this as your first entry to enable comparisons.)"* (no history)
+
+## Summary
+
+| Metric | Value |
+|--------|-------|
+| Total fee | {amount} |
+| Total cost (time) | {amount} |
+| Total cost (OOP) | {amount} |
+| **Gross profit** | **{amount}** |
+| **Gross margin** | **{percentage}** |
+| Target margin | {percentage} |
+| Variance vs target | {+/- percentage points} |
+| Your average ({type}, n={N}) | {percentage} |
+| Variance vs your average | {+/- percentage points} |
+
+{Drop the last two rows if no history available.}
+
+## Phase Breakdown
+| Phase | Fee Allocation | Hours | Cost | Margin | Status |
+|-------|---------------|-------|------|--------|--------|
+| {phase} | {amount} | {hours} | {amount} | {%} | Profitable / Break-even / Loss |
+
+**Most profitable phase:** {phase} at {margin}%
+**Least profitable phase:** {phase} at {margin}%
+
+## By Team Member / Role
+| Person / Role | Hours | Cost Rate | Cost | % of Total Cost |
+|--------------|-------|-----------|------|----------------|
+| {name/role} | {hours} | {rate from card} | {cost} | {%} |
+
+{If a person's rate came from rate-card vs team.md vs ad-hoc, note source in
+parentheses on first occurrence.}
+
+## Where the Margin Went
+{2-4 narrative bullets — specific factors, with numbers}
+- **{Factor}** — {specific change with cost impact}
+- **{Factor}** — {specific change with cost impact}
+
+## Benchmark Comparison
+
+{Generate using `references/benchmarks.md`. Always include "your average" column
+when history has 3+ projects of this type.}
+
+| Metric | This Project | Your Avg ({type}, n={N}) | Industry Range | Assessment |
+|--------|-------------|---------------------------|----------------|------------|
+| Gross margin | {%} | {%} | {range} | {below/in/above} |
+| Revision cost % | {%} | {%} | 10-15% | {assessment} |
+| OOP as % of fee | {%} | {%} | 5-15% | {assessment} |
+
+## Scenarios
+
+{Run 3 scenarios chosen by `references/scenarios.md` § "How to choose scenarios for the output". Use real numbers from this project.}
+
+### {Scenario name}
+{4 lines: change → numbers → new margin → verdict}
+
+### {Scenario name}
+{...}
+
+### {Scenario name}
+{...}
+
+## Recommendations
+1. {Specific to this project's biggest leak}
+2. {Pricing or scoping adjustment for similar future work}
+3. {Process improvement that addresses the structural issue (if any)}
+
+---
+
+## Output Format — Retainer mode
+
+# Retainer Profitability — {Retainer Name}
+**Client:** {client}
+**Terms:** {hours/month, scope summary, fee}
+**Period analysed:** {month or quarter}
+**Months of history:** {N} ({"trajectory available" if N≥3 else "snapshot only"})
+
+## Trajectory
+**{STABLE / IMPROVING / DECLINING / CRITICAL / AT RISK / SNAPSHOT — too few months}**
+
+{One-paragraph trajectory call. If <3 months, say so plainly and tell the user
+when trajectory becomes available.}
+
+## This Month's Snapshot
+
+| Metric | This Month | Allocated | Variance |
+|---|---|---|---|
+| Hours used | {hours} | {hours} | {±} |
+| Margin | {%} | n/a | n/a |
+| Over-servicing | {hours} | n/a | n/a |
+| Scope additions | {count} | n/a | n/a |
+
+## Trajectory (3+ months)
+{Only if retainer-history.md has 3+ months for this retainer. Otherwise skip.
+Use the trajectory table from references/retainer-analysis.md.}
+
+| Metric | 3 Months Ago | 2 Months Ago | Last Month | This Month | Trend |
+|---|---|---|---|---|---|
+| Utilisation | {%} | {%} | {%} | {%} | {arrow} |
+| Margin | {%} | {%} | {%} | {%} | {arrow} |
+| Over-servicing | {hrs} | {hrs} | {hrs} | {hrs} | {arrow} |
+| Scope additions | {count} | {count} | {count} | {count} | {arrow} |
+
+## Over-servicing Analysis
+{Use the patterns from references/retainer-analysis.md § "Over-servicing detection".
+Quantify the cost.}
+
+## Under-utilisation Analysis
+{Same — only include if relevant.}
+
+## Scope Creep
+{List net-new workstreams added since the retainer started, if any. Flag pattern
+if 3+ in a quarter.}
+
+## Talking Points for Client Review
+
+### Value delivered
+{2-4 lines, lead with this. Quantify equivalent project rate value if possible.}
+
+### Areas to discuss
+{Constructive framing. Scope expansion, over-servicing, process friction.}
+
+### Recommendations
+{Specific, time-boxed, with math behind each.}
+
+## Health Score
+
+| Dimension | Score | Notes |
+|---|---|---|
+| Utilisation balance | {1-5} | {one line} |
+| Scope alignment | {1-5} | {one line} |
+| Margin health | {1-5} | {one line} |
+| Client engagement | {1-5} | {one line} |
+| Trajectory | {1-5} | {one line} |
+| **Overall** | **{1-5}** | **{summary}** |
+
+---
+
+## Output Format — Setup rates mode
+
+When the user picks Setup rates, read `references/rate-card-schema.md` § "Setup
+rates flow" and walk through the questions. Write `~/.creativestack/rate-card.md`
+in the schema format. Confirm at the end:
+
+> "Rate card saved with {N} roles{ + M person overrides}. Future profitability
+> runs will use these automatically."
+
+## Output Format — Aggregate mode
+
+Read `references/aggregation.md`. Run the views the user selected (or all by
+default). **Lead with the top 3 insights**, then show the supporting tables.
+Finish with 1-2 specific recommendations and a downstream skill suggestion.
+
+## Output Format — Backfill mode
+
+Goal: quickly log past projects to bootstrap `project-history.md`.
+
+Flow:
+1. "How many past projects are we logging? (Even 5 gets aggregate working)"
+2. For each project, ask the minimum:
+   - Name + client + type (from stable vocabulary)
+   - Fee
+   - Approximate margin (if they don't know cost, ask: "rough margin estimate is fine")
+   - Year/quarter
+3. Optional fields can be skipped — fill with "unknown"
+4. Batch the questions: "Ready for the next project?" pattern
+5. Append to `project-history.md` in chronological order
+6. Confirm: "Logged {N} projects. Aggregate mode is now {available / will be available with {N more}}."
+
+---
+
+## Slack Format
+
+*{Project Name} — Profitability*
+**Margin: {%}** ({verdict in 8 words}) — {one-line factor}
+
+For retainer:
+*{Retainer Name} — {Month}*
+**Trajectory: {STATE}** — {one-line context}
+
+---
+
+## Skill Chains
+
+Pick the most relevant 1-2:
+
+- **Project mode, low margin or structural pricing issue** → "Run `/creativestack:post-mortem` to capture what drove the margin loss, then reference these scenarios in your next `/creativestack:proposal-generator` to price differently."
+- **Retainer mode, declining or at-risk trajectory** → "Run `/creativestack:status-update` to prepare the next QBR conversation."
+
+## Project State Participation
+
+If the analysis is tied to a project (followed the project state discovery + picker
+above), update the state file:
+
+- **Budget & Pace** — update the `Margin: {healthy | thinning | at-risk}` line and the
+  `Updated: YYYY-MM-DD` line. Don't overwrite hours/burn rate fields owned by
+  `/creativestack:timesheet-summary` unless they're empty.
+- **Recent Activity** — append `YYYY-MM-DD — project-profitability — margin {%}, {verdict}`
+- **Frontmatter** — update `last_updated`
+- Update `_index.md`
+
+## Edge Cases
+- **No rate-card** → Run with ad-hoc rates this once, offer Setup rates at the end
+- **No history** → Skip the "your average" column, lean on industry benchmarks
+- **Project still in progress** → Flag as interim, project final figures based on current trajectory
+- **Multiple currencies** → Ask which currency to report in. Convert OOP at current rates. Flag the assumption.
+- **Retainer with 1-2 months only** → Snapshot only, no trajectory. Tell the user explicitly.
+- **Heavily under-utilised retainer** → Frame as cancellation risk, not margin win. See `references/retainer-analysis.md`.
+- **Aggregate mode with <3 history entries** → Refuse and route to Backfill mode
+- **Project type not in stable vocabulary** → Use "other" and prompt user to map it next time
+- **history.md has contradictory project entries (e.g. same project twice)** → Use the most recent, note in output
+
+### What this skill can't do
+
+This skill analyses what you give it. With a deeper integration, it could pull
+time and cost data automatically from your systems, update history without you
+asking, and surface profitability anomalies before you finish a project.
+That's what the Brain enables.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

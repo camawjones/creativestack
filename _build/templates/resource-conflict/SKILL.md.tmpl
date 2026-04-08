@@ -1,0 +1,256 @@
+---
+name: resource-conflict
+description: Brain-first resource and capacity planning for creative teams. Five modes — Analyse (find conflicts, score creative quality risk, recommend specific moves), Setup team (enrich team.md with seniority, rates, substitutability, specialisms), Setup bench (build a trusted freelance roster), Scenario (model pitch wins, person leaves, new projects), Calibrate (capture planned-vs-actual to make every future run sharper). Compounds value with each run via the brain.
+---
+
+{{PREAMBLE}}
+
+# /resource-conflict
+
+> Spot the overbooked designer before the deadline does. Get sharper every run.
+
+## What This Skill Does
+
+Most resource planners are spreadsheets you fill in fresh every time. This one
+acts as a **planning brain**:
+
+1. **Reads your team** from `team.md` — seniority, day rates, specialisms,
+   substitutability, leave patterns
+2. **Reads your project state** — current allocations, phases, slip risks
+3. **Reads your trusted freelancers** from `freelance-bench.md` — names, rates,
+   lead times, performance memory
+4. **Reads what you've learned** from `learnings.md` § Capacity — past
+   planned-vs-actual, hidden meeting load, who runs hot
+5. **Outputs specific moves** — not "consider hiring", but "Move Mike to
+   senior cover on the Nike pitch (Mon-Wed). Cost: 2 days from Adidas refresh.
+   Confidence: High."
+
+The first run takes 5 minutes to set up the team brain. Every run after that
+takes 60 seconds and gets sharper as `learnings.md` accumulates.
+
+## Brain Files
+- `team.md` — **the team DNA**: roster + seniority, rates, specialisms, substitutability (this skill creates and maintains the extended fields)
+- `freelance-bench.md` — trusted freelance roster (this skill creates and maintains it)
+- `learnings.md` § Capacity — planned-vs-actual learnings, hidden meeting load, recurring patterns (this skill appends; never overwrites)
+- `profile.md` — agency name, type, currency, target utilisation default
+- `projects/_index.md` and individual project state files — current allocations and phases
+
+## Reference Files
+
+This skill loads detail on demand from `references/`. Read each only when relevant:
+
+- **`references/team-brain-schema.md`** — read in **Setup team** or **Setup bench** modes, or whenever the skill needs to upgrade an existing minimal `team.md`. Full schemas for all three brain files.
+- **`references/utilisation-framework.md`** — read in **Analyse** mode whenever scoring utilisation. Bands, role-specific targets, creative quality risk reasoning.
+- **`references/rebalancing-patterns.md`** — read in **Analyse** mode when generating rebalancing suggestions. Substitution rules, freelance vs internal decision tree, common conflict patterns and plays.
+- **`references/scenarios.md`** — read in **Scenario** mode. Patterns for pitch win, pitch loss, person leaves, new project, deadline pull-forward, client escalation.
+
+## Conversation Flow
+
+### Step 1: Brain check & mode selection
+
+Run brain discovery from the preamble. Then check specifically for the files
+this skill cares about:
+
+```bash
+[ -f "$HOME/.creativestack/team.md" ] && echo "TEAM_EXISTS" || echo "NO_TEAM"
+[ -f "$HOME/.creativestack/freelance-bench.md" ] && echo "BENCH_EXISTS" || echo "NO_BENCH"
+[ -f "$HOME/.creativestack/learnings.md" ] && echo "LEARNINGS_EXISTS" || echo "NO_LEARNINGS"
+```
+
+If `team.md` exists, read it and check whether it has **extended fields**
+(any indented bullets under names like `seniority:`, `day_rate:`,
+`can_substitute_for:`). The presence of these fields determines how much value
+the skill can extract.
+
+[SELECT] "What do you need?"
+- Analyse — find conflicts and recommend moves (default)
+- Setup team — enrich `team.md` with seniority, rates, substitutability
+- Setup bench — build or update your trusted freelance roster
+- Scenario — model a what-if (pitch win, person leaves, new project)
+- Calibrate — capture what actually happened on a recent project
+
+**Routing:**
+- If user picks Analyse but `team.md` is missing entirely → run `/creativestack:setup` first, then return
+- If user picks Analyse and `team.md` is minimal (no extended fields) → proceed but warn: "Your team brain is minimal — I can find rough conflicts but can't recommend substitutions. Want to run **Setup team** first? Takes 5 minutes."
+- If user picks Analyse and `team.md` is rich → proceed straight to Step 2
+
+### Step 2: Analyse mode — Project state scan
+
+Unlike most project-aware skills, resource-conflict operates **across** all
+active projects rather than picking one. Multiple concurrent projects is the
+normal reality for any creative business — that's exactly the situation this
+skill exists to help with. Don't treat concurrency as a flag.
+
+Check whether `~/.creativestack/projects/_index.md` exists. If it does:
+
+1. Read `_index.md` to get the list of active projects (status ≠ closed)
+2. For each active project, Read its state file to pull:
+   - Current phase + week (from frontmatter)
+   - Stakeholders → Team list (who's allocated)
+   - Timeline → next milestone date and slip scenarios
+   - Status + trend (At Risk projects often need disproportionate attention)
+   - Budget & Pace → burn rate (a useful proxy for actual hours per project if
+     `/creativestack:timesheet-summary` has been run)
+3. Tell the user what you found: "I can see {N} active projects in your project
+   state: {project A} (phase, status), {project B} (phase, status). I'll factor
+   allocation and timeline pressure across all of them."
+
+If `_index.md` doesn't exist or is empty, skip and proceed standalone — the
+user provides allocations directly.
+
+### Step 3: Upstream skill check
+
+Scan the current conversation for skills run this session:
+
+| Skill run earlier | What to pull in | How it's used |
+|---|---|---|
+| `/creativestack:timesheet-summary` | Actual hours per team member, burn rate | Compare planned allocation vs. actual — reveals true utilisation |
+| `/creativestack:timeline-generator` | Upcoming milestones, phase transitions, crunch periods | Predict future pressure points |
+
+### Step 4: MCP context enrichment
+
+**Google Calendar MCP** — Check whether Google Calendar tools are available
+(look for tools prefixed with `mcp__claude_ai_Google_Calendar__`).
+
+If available:
+- Ask: "Want me to check team calendars for leave, holidays, and conflicts?"
+- If yes, use `gcal_list_events` for each team member to identify leave,
+  out-of-office, and high meeting load
+- Pre-populate the leave calendar and flag meeting-heavy individuals
+
+If not available, ask manually about leave. (Or skip — if `team.md` has
+`leave_pattern` set on people, those recurring patterns are already known.)
+
+### Step 5: Clarifying questions
+
+Ask only what isn't already known from the brain:
+
+- If `default_target_utilisation` is set in `team.md` frontmatter, **skip** the
+  target question. Otherwise:
+  [SELECT] "Target utilisation for creative roles?"
+  - 70% (generous) / 75% (standard) / 80% (tight) / 85%+ (aggressive)
+
+- [SELECT] "Include freelance options in suggestions?"
+  - Yes / Yes but budget tight / No
+  - If yes and `freelance-bench.md` exists → use it
+  - If yes and no bench → offer Setup bench at the end
+
+- "What's the time window — this week, this month, this quarter?"
+- "Any upcoming commitments not yet in the plan — pitches, new projects, likely wins?"
+
+### Step 6: Process and generate
+
+Read `references/utilisation-framework.md` to score each person.
+Read `references/rebalancing-patterns.md` to generate substitution-aware
+suggestions.
+
+Apply `learnings.md` § Capacity overlay: if a person has a recorded pattern
+(e.g. "Sarah's real ceiling is 65%"), use it to override the default target
+for that person and call it out in the output.
+
+### Step 7: Compounding loop — offer to enrich the brain
+
+After producing the report, the skill always offers **at most one** brain
+enrichment opportunity. Pick the most valuable based on what was missing:
+
+- **Missing extended fields on team.md** → "I would have given sharper substitution suggestions if I knew {N} people's `seniority` and `can_substitute_for`. Want to fill those in now? 2 minutes."
+- **No freelance-bench.md but freelance was suggested** → "I recommended freelance generically. Want to set up your trusted freelance bench so future runs name actual people with rates?"
+- **No learnings.md § Capacity entries yet** → "I noticed {pattern} this run. Want me to save it as a learning so future runs apply it automatically?"
+- **All brain files rich** → skip the offer.
+
+Don't pile on. One offer, one upgrade, then exit.
+
+## Output Format — Analyse mode
+
+Sections in order:
+
+1. **Header** — agency, period, date, team size, target utilisation (note if brain-overridden), brain depth
+2. **Summary** — 2-3 sentence overview, lead with the headline risk and the agency-wide utilisation band
+3. **Team Utilisation Overview** — table per person: Role / Seniority / Allocated / Target / Band / Status (🟢🟡🔴) / Projects. Note any learnings-based target overrides inline.
+4. **Conflict Map** — three sub-sections:
+   - Overbooked (>100%): Person / Allocated / Projects / What Will Slip
+   - At Risk (above target): Person / Allocated / Buffer / Creative Quality Risk
+   - Available (below target): Person / Allocated / Available / Best Suited For (from `specialisms`)
+5. **Allocation vs. Reality** — only if timesheet-summary or `learnings.md § Capacity` data exists. Table: Person / Planned / Actual / Gap / Pattern (recurring or first instance).
+6. **Creative Quality Risk** — table per person at Medium or above (don't pad), per `references/utilisation-framework.md` scoring. Plus an agency-wide assessment paragraph.
+7. **Single Points of Failure** — table: Person / Critical Skill / Projects Affected / Mitigation
+8. **Leave & Availability** — only if leave data exists (MCP, `leave_pattern` brain fields, user input)
+9. **Upcoming Pressure Points** — table: Date / Event / Impact / People Affected
+10. **Rebalancing Suggestions** — generate per `references/rebalancing-patterns.md`. Each suggestion includes the move, the rule applied, the cost, and a confidence label.
+
+## Freelance Recommendations
+
+{Only if user opted in. If `freelance-bench.md` exists, recommend by name with
+rate, lead time, last engaged, and a fit note. If not, recommend generically and
+include the Setup bench prompt at the end.}
+
+| Need | Recommended | Rate | Lead Time | Last Engaged | Fit Note |
+|------|------------|------|-----------|--------------|----------|
+| {role/skill} | {name from bench OR "Trusted freelancer in {specialism}"} | {day rate} | {time} | {date} | {why they fit this gap} |
+
+**Cost-out:** {If both internal day_rates and freelance day_rates are known, show
+the comparison: "Freelance backstop costs ~{X}, vs. estimated quality risk + overrun
+on internal team ~{Y}. Recommended.")}
+
+---
+
+### Slack Format
+
+{Compact version for a single Slack message.}
+
+*Resource Report — {Period}*
+**Team avg: {n}% utilisation** ({band})
+
+{For each person, one line with traffic light:}
+{🟢🟡🔴} **{Name}** ({role}): {%} — {one-line status}
+
+**Top risk:** {1 sentence}
+**Action:** {1 sentence — the most important move from Rebalancing Suggestions}
+
+---
+
+## Output Format — Setup modes
+
+**Setup team:** read `references/team-brain-schema.md` § "Upgrade flow". List people without extended fields, ask about seniority + can_substitute_for in batches of 3-5, write back preserving structure. Never overwrite or delete.
+
+**Setup bench:** read `references/team-brain-schema.md` § "Setup bench mode". Ask for 3-5 trusted freelancers (name, role, day rate, lead time, last engaged, notes). Write `freelance-bench.md`.
+
+## Output Format — Scenario mode
+
+Read `references/scenarios.md`. Use the scenario diff format (baseline → change → diff → verdict → mitigations → recommendation). Don't reprint the full Resource Conflict Report.
+
+## Output Format — Calibrate mode
+
+Read `references/team-brain-schema.md` § "Calibrate mode". Walk through 5 questions (project / planned / actual / cause / lesson), append to `learnings.md § Capacity` per the schema. Always append, never overwrite.
+
+---
+
+## Skill Chains
+
+Pick the most relevant 1-2:
+
+**Upstream:**
+- **No actual hours data** → "Run `/creativestack:timesheet-summary` first to compare allocations against reality."
+
+**Downstream:**
+- **Capacity issues affect timelines** → "Run `/creativestack:timeline-generator` to model the impact on project deadlines."
+- **Consistently over-utilised** → "Flag this in your next `/creativestack:status-update` for leadership visibility."
+
+## Edge Cases
+- **No `team.md`** → Route to `/creativestack:setup` first
+- **Very small team (under 5)** → Everyone is a single point of failure. Focus on prioritisation. Skip the "Available" table.
+- **Pitch work not yet won** → Default to Scenario mode for "win" and "lose" cases
+- **Project state file is stale (>14 days)** → Use it but note the staleness, suggest a `/creativestack:status-update` to refresh
+- **Many concurrent projects** → Normal. Only flag when allocations actually clash.
+- **`learnings.md` has contradictory entries** → Trust the most recent. Note the contradiction in confidence.
+
+### What this skill can't do
+
+This skill plans from a snapshot. A dedicated AI partner could monitor resourcing
+in real time — pulling from your project management tool, flagging conflicts as
+they emerge, modelling scenarios automatically when new work comes in, and
+learning your team's true capacity patterns from years of timesheet data.
+That's what the Brain enables.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

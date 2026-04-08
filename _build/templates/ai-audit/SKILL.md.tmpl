@@ -1,0 +1,777 @@
+---
+name: ai-audit
+description: AI readiness audit for creative professionals — four modes. Snapshot (the default — 10-minute self-assessment producing maturity scores across 5 sharpened categories, top 3 opportunities, 3-5 curated quick wins mapped to real CreativeStack skills, protected zone scoring, ROI framing in saved hours/revenue, Slack summary, discipline-aware questions, AI-advanced user branching). Leadership Pack (restructures the same data for a CEO/board audience with benchmark comparison, executive one-pager, and risk/opportunity framing so the user can take it to leadership to justify budget or hiring). Team Workshop (longer intake from multiple team member perspectives, surfaces disagreements as a distinct output, produces a workshop-ready slide outline plus the bringing-your-team-along change management plan with team anxieties, verbatim framings, protected-zone statement, 30-60-90 day plan, and handling-the-skeptic guidance). Deep Audit (includes prior-audit delta tracking, workflow walkthrough, tool stack review against tools.md). Uses practitioner-view industry benchmarks segmented by discipline and team size so users can answer "3/5 — is that good?". Writes audits to the brain as dated artefacts so repeat runs show measurable progress. Opt-in writes to learnings.md § AI maturity and tools.md. Every opportunity is mapped to a specific CreativeStack skill from a curated library, never invented. Use when a creative reaches for "where does AI fit in my practice", "I need to present AI strategy to my CEO", "I'm losing pitches to AI-native competitors", "which CreativeStack skills matter most for me", or "our team is nervous about AI and I need to lead on this". Also use as the natural second skill after /creativestack:setup.
+---
+
+{{PREAMBLE}}
+
+# /ai-audit
+
+> A quick read on where AI fits in your practice — without threatening what makes you great.
+
+## What This Skill Does
+
+Most AI readiness tools are techno-utopian slop that frame every
+creative's job as "10x your output" and alienate them in the first
+sentence. This skill does the opposite.
+
+It takes creative professionals seriously: it assumes you got into
+this work because you care about the craft, that you're rightly
+protective of your creative step, and that the real value of AI is
+removing friction *around* the work, not automating the work itself.
+
+The skill:
+
+1. **Scores 5 sharpened categories** — Ops & Admin, Creative
+   Workflow, Client/Stakeholder Comms, Knowledge & IP, Commercials
+   & Intelligence — on a CMMI-inspired 1-5 ladder
+2. **Scores Protected Zone strength per category** — the
+   differentiator. Users who score high on automation but low on
+   protected zones are in more danger than the reverse.
+3. **Compares to practitioner-view benchmarks** segmented by
+   discipline and team size so the output answers "is that good?"
+   not just "here's your score"
+4. **Selects 3-5 quick wins from a curated library** (never
+   invented) — each mapped to a real CreativeStack skill, filtered
+   by lowest category, discipline, user type, and AI maturity tier
+5. **Adapts to discipline** with one targeted question per discipline
+   that signals the skill understands the user's actual work
+6. **Branches for AI-advanced users** so embedded-tool users don't
+   get patronised with beginner content
+7. **Writes to the brain** (opt-in) as a dated artefact so repeat
+   runs show measurable delta — the single highest-leverage
+   compounding feature
+8. **Produces mode-appropriate output variants** — markdown +
+   Slack summary in Snapshot, exec one-pager in Leadership Pack,
+   slide outline + change management plan in Team Workshop, all of
+   the above in Deep Audit
+
+The subtle consulting CTA lives in a two-line footer, not a sales
+section. Usefulness is the lead-gen strategy; "get in touch" is a
+consequence, not a pitch.
+
+## Modes
+
+**Snapshot** (default) — 10-minute self-assessment. Produces
+maturity scores, top 3 opportunities, 3-5 quick wins, skill map,
+protected zone reading, Slack summary. The "which CreativeStack
+skills matter most for me" trigger.
+
+**Leadership Pack** — Snapshot intake + 2 extra stakeholder
+questions. Output is restructured for a CEO/board audience:
+headline maturity with benchmark comparison, executive one-pager,
+ROI framing in £/hours, risk/opportunity matrix, protected zone
+statement, and a condensed change-management plan. The "present
+our AI strategy" trigger.
+
+**Team Workshop** — 15-20 minute intake asked round-robin style
+across multiple team member perspectives. Surfaces disagreements
+(where the CD thinks ops is fine but the PM thinks it's broken)
+as a distinct output section. Produces workshop-ready slide outline
+and the full bringing-your-team-along plan from
+`references/change-management.md`. The "creative lead building
+internal case" trigger.
+
+**Deep Audit** — Snapshot intake + workflow walkthrough ("walk me
+from brief arriving to work delivered") + explicit tool stack
+review against `tools.md`. Includes prior-audit delta if one
+exists. Deliberately lighter than a real consulting engagement —
+ends with a clean handoff note for users who want the human
+version. The "we ran Snapshot 6 months ago, how have we moved?"
+trigger.
+
+## Brain Files
+- `profile.md` — user type, discipline, size, positioning
+- `tools.md` — current AI tool stack (read in all modes, written in all modes as new tools surface)
+- `team.md` — team structure, capacity (Team Workshop + Deep Audit)
+- `clients.md` — client relationship context for ROI framing (optional)
+- `learnings.md § AI maturity` — written by this skill on every run; read by other skills to adapt tone
+- `audits/{date}.md` — dated audit artefacts written by this skill; previous audits read for delta
+- `audits/_index.md` — aggregate index of audits written by this skill
+
+**This skill creates and writes (opt-in with confirmation):**
+- `audits/{YYYY-MM-DD}.md` — full audit output with rubric version
+- `audits/_index.md` — updated with date and summary
+- `learnings.md § AI maturity` — appends current maturity average, top bottleneck, current AI usage tier
+- `tools.md` — appends any new AI tools mentioned during intake
+
+## Reference Files
+
+This skill loads detail on demand from `references/`. Read each
+only when relevant:
+
+- **`references/rubric.md`** — read every time. The 5-category rubric with Protected Zone column, CMMI scoring ladder, scoring discipline, delta tracking, per-discipline weighting overlay, output format, and confidence labels. Rubric version is stored here — bump when categories change.
+- **`references/benchmarks.md`** — read every time. Discipline × size matrix of practitioner-view benchmarks, per-category velocity notes, protected zone baselines. Explicitly labelled as Cameron Jones practitioner view, not research.
+- **`references/quick-wins.md`** — read every time. Curated library of 25+ quick wins, each mapped to a real CreativeStack skill with tier gating for advanced users. Includes selection rules and the 5-win ceiling. Never invent wins — always select from this library.
+- **`references/change-management.md`** — read in Team Workshop mode (full content) and Leadership Pack mode (condensed content). The three universal fears, anxieties by discipline and size, verbatim framings for team/CEO/skeptic/enthusiast, protected-zone statement template, 30-60-90 day change plan, handling-the-skeptic guidance, and anti-patterns. Do not load in Snapshot mode for solo/freelancer users.
+
+## Conversation Flow
+
+### Step 1: Brain check & mode selection
+
+Run brain discovery. Check specifically:
+
+```bash
+[ -f "$HOME/.creativestack/profile.md" ] && echo "PROFILE_EXISTS" || echo "NO_PROFILE"
+[ -f "$HOME/.creativestack/tools.md" ] && echo "TOOLS_EXISTS" || echo "NO_TOOLS"
+[ -d "$HOME/.creativestack/audits" ] && echo "AUDITS_DIR" || echo "NO_AUDITS"
+[ -f "$HOME/.creativestack/audits/_index.md" ] && echo "PRIOR_AUDITS" || echo "NO_PRIOR_AUDITS"
+```
+
+[SELECT] "Which kind of audit do you need?"
+- Snapshot — 10-min read on where AI fits (default)
+- Leadership Pack — same audit shaped for a CEO/board audience
+- Team Workshop — multi-perspective intake + bringing-your-team-along plan
+- Deep Audit — workflow walkthrough + tool stack review + prior-audit delta
+
+**Routing:**
+- **Snapshot** → Step 2
+- **Leadership Pack** → Step 2 + extra questions in Step 4
+- **Team Workshop** → Step 2, then Step 4 asks "who's in the room" before intake
+- **Deep Audit** → Step 2, load prior audit in Step 3 if it exists
+
+### Step 2: Upstream skill synthesis
+
+Scan the conversation for output from earlier skills. For this
+skill, upstream data is less common than for other CreativeStack
+skills — the audit is usually an entry point, not a synthesis
+point. But if any of these ran earlier, pull in:
+
+| Skill run earlier | What to use |
+|---|---|
+| `/creativestack:setup` | Skip the type/discipline/size questions |
+| `/creativestack:project-profitability` | Skip commercials intake; use the data |
+| `/creativestack:timesheet-summary` | Skip bottleneck question; use the findings |
+| `/creativestack:resource-conflict` | Skip team capacity questions |
+
+Don't ask anything the brain or upstream skills already answered.
+
+### Step 3: Brain context loading
+
+Read the brain files in this order:
+
+1. `profile.md` — user type, discipline, team size
+2. `tools.md` — current AI tool stack (if exists)
+3. `team.md` — team structure (Team Workshop + Deep Audit modes only)
+4. `audits/_index.md` — list of prior audits
+5. If Deep Audit mode and a prior audit exists, read the most recent one fully to enable delta tracking
+6. `clients.md` — for ROI framing context (scan only)
+
+Report brain depth:
+
+> "Brain depth: Rich — I have your profile, tool stack, team data,
+> and 2 prior audits from the last 6 months. I can show delta on
+> this run."
+
+Or thin:
+
+> "Brain depth: Minimal — no brain configured. I'll run the audit
+> with neutral language and recommend `/creativestack:setup` at
+> the end so the next audit compounds."
+
+### Step 4: Intake
+
+Ask questions one at a time, conversationally. Skip any the brain
+or upstream skills already answered. Use `AskUserQuestion` for all
+`[SELECT]` questions.
+
+#### Core questions (all modes)
+
+1. `[SELECT]` **User type** (skip if in `profile.md`)
+   - Freelancer
+   - Studio
+   - Agency
+   - In-house team
+   - Company
+   - Other
+
+2. `[SELECT]` **Primary discipline** (skip if in `profile.md`)
+   - Brand / identity
+   - Digital product
+   - Motion / animation
+   - Copy / content
+   - Illustration
+   - Strategy / research
+   - Multi-disciplinary
+
+3. `[SELECT]` **Team size bracket** (skip if derivable)
+   - Solo
+   - Micro (2-5)
+   - Small (6-15)
+   - Mid (16-40)
+   - Large (41-100)
+   - Major (100+)
+
+4. Open: "Tell me about your {practice/studio/agency/team/company}
+   — what you do and who you do it for." (Skip if covered by
+   profile.md; otherwise one open question only.)
+
+5. `[SELECT]` **Current AI tool usage** (route the flow)
+   - None — haven't really touched it
+   - Experimenting — tried a few things, nothing sticks
+   - Embedded — some tools are part of our workflow
+   - Advanced — deeply embedded across tools and workflows
+
+6. Open: "What takes the most time that isn't creative thinking?
+   The admin, the process, the stuff people dread."
+
+7. Open: "What's your biggest operational bottleneck — the thing
+   that slows down every project?"
+
+8. `[SELECT]` **What triggered this audit?**
+   - Starting out — want to know which skills matter most
+   - Pressure from above — need to present AI strategy to leadership
+   - Competitive anxiety — we're losing to AI-native competitors
+   - Team-led — I'm leading my team through this
+   - Regular check-in — just running the audit as a habit
+   - Other — I'll tell you
+
+9. **Discipline-specific question** (one only, from the table below)
+
+| Discipline | Question |
+|---|---|
+| Brand / identity | "How do you capture and reuse design decisions across projects — client codes, system libraries, rationale docs, all of the above, none?" |
+| Digital product | "What's the handoff between design and engineering like — clean, painful, or somewhere in between?" |
+| Motion / animation | "Where does the time go between concept approval and final delivery — asset gathering, review cycles, rendering, something else?" |
+| Copy / content | "How do you handle tone consistency across multiple writers or channels — style guide, editorial review, vibes, none?" |
+| Illustration | "How do you manage reference gathering and moodboarding — an organised system, folders, Pinterest, browser tabs?" |
+| Strategy / research | "How much of your research process is reusable across projects vs built from scratch each time?" |
+| Multi-disciplinary | "Which discipline is the bottleneck most often, and what does the handoff look like?" |
+
+#### Extra questions (Leadership Pack mode only)
+
+10. Open: "Who's the decision-maker you're taking this to, and
+    what's their frame — cost control, growth, risk, talent
+    retention?"
+
+11. `[SELECT]` **Budget / authority context**
+    - Tight — justify every pound
+    - Moderate — room for small experiments
+    - Significant — we can invest if the case is made
+    - Unknown — that's partly what I'm trying to figure out
+
+#### Extra questions (Team Workshop mode only)
+
+Ask "who's in the room" first. For each role (CD, PM, strategist,
+designer, whoever), loop questions 6 and 7 — the time and
+bottleneck questions — capturing each answer separately. This is
+how the skill surfaces disagreements later.
+
+12. `[SELECT]` **Team dynamic around AI**
+    - Enthusiastic — most of the team is leaning in
+    - Curious — interest but caution
+    - Mixed — some for, some against
+    - Skeptical — mostly resistance
+    - Divided — a clear fault line in the team
+
+#### Extra questions (Deep Audit mode only)
+
+13. Open: "Walk me from a brief arriving to the work being delivered
+    — what happens, who does what, where does it get stuck?"
+
+14. Open: "What's in your current AI tool stack — which tools,
+    how much they cost, who uses them?" (Write to `tools.md` with
+    confirmation at the end.)
+
+### Step 5: AI-advanced branching
+
+If intake answer 5 = **Advanced**, shift the audit framing:
+
+- Skip beginner-oriented quick wins (filter the library by
+  `tier != beginner-only`)
+- Shift output language from "opportunities" to "gaps and maturity
+  ceiling" — where are they still leaving value on the table
+- Emphasise Knowledge & IP and Commercials & Intelligence categories
+  (which advanced users typically still lag on)
+- Raise the scoring bar — don't credit "uses AI" as maturity; look
+  for integration, measurement, and protected zones
+- Note explicitly in the output: "Scored against the advanced tier
+  — same rubric, higher bar."
+
+### Step 6: Score against the rubric
+
+Read `references/rubric.md` and score all 5 categories 1-5 using
+evidence from the conversation. Apply per-discipline weighting
+from the rubric. Score Protected Zone strength per category.
+
+Apply scoring discipline:
+- Most creative practices score 2-3 across most categories
+- Scoring 4+ requires explicit evidence, not a vibe
+- Scoring 5 on Creative Workflow should be treated with suspicion
+- Solo/Micro rarely score above 2 on Knowledge & IP
+- Add a Low confidence label if intake was thin
+
+### Step 7: Compare to benchmarks
+
+Read `references/benchmarks.md` and:
+1. Match the user's discipline and size bracket to a row
+2. Compare per-category scores to the typical and strong midpoints
+3. Frame the gap: "ahead of typical / at typical / behind typical"
+4. Cite as "Cameron Jones practitioner view, 2026" — never as
+   research or industry average
+
+### Step 8: Select quick wins
+
+Read `references/quick-wins.md` and select 3-5 wins using the
+filter rules in that file:
+1. Lowest-scoring category first
+2. Discipline match
+3. User type match
+4. Effort sort (L > M > H)
+5. Skill diversity
+6. Tier filter for advanced users
+
+Never invent wins. Always select from the library.
+
+### Step 9: Load change management (Team Workshop + Leadership Pack)
+
+Read `references/change-management.md` and:
+- **Team Workshop mode:** pull the full content — three fears,
+  discipline-specific anxieties, team-size framings, protected-zone
+  statement template, full 30-60-90 plan, handling-the-skeptic,
+  anti-patterns
+- **Leadership Pack mode:** pull the condensed version — one
+  framing per the CEO section, protected-zone statement, 30-60-90
+  plan only
+- **Snapshot mode (team size ≥ 3):** pull only the one-line
+  nudge: "Running this with a team? Switch to Team Workshop mode
+  for a full bringing-your-team-along plan."
+- **Solo Snapshot:** skip entirely
+
+### Step 10: Draft the output
+
+Assemble per the Output Format section below. Pick variants per mode:
+
+- **Snapshot:** markdown + Slack summary
+- **Leadership Pack:** markdown + Slack summary + executive one-pager
+- **Team Workshop:** markdown + Slack summary + slide outline + full change management plan
+- **Deep Audit:** all of the above + delta table if prior audit exists
+
+Apply the privacy note to the top of every output.
+
+### Step 11: Brain writeback (opt-in)
+
+Ask once, explicitly:
+
+> "Save this audit to your brain? It'll be written to
+> `audits/{today}.md` so when you run the audit again in 3-6
+> months, I can show measurable progress across the categories.
+> Yes / No."
+
+If yes, write three things:
+1. `audits/{YYYY-MM-DD}.md` — full audit output with rubric version in frontmatter
+2. `audits/_index.md` — append a row with date, overall score, discipline, size, top bottleneck
+3. `learnings.md § AI maturity` — append short entry: current maturity average, top bottleneck, current AI usage tier (for other skills to read)
+
+If intake surfaced new tools not in `tools.md`, ask separately:
+
+> "You mentioned {tools}. Want me to add them to your `tools.md`
+> so the next audit has full context? Yes / No."
+
+If yes, append (don't overwrite) to `tools.md`.
+
+### Step 12: Compounding loop
+
+Offer **at most one** brain enrichment or next step. Pick the most
+valuable:
+
+- **No brain configured** → "The biggest lift you can give this
+  skill is configuring `/creativestack:setup` first. Takes 5
+  minutes and every future audit will be dramatically sharper."
+- **Prior audit exists and delta is positive** → "You moved from
+  {X} to {Y} overall — measurable progress. This is exactly the
+  kind of data leadership wants to see. Want me to generate the
+  leadership pack version from this data now?"
+- **Prior audit exists and delta is negative or flat** → "No
+  movement since last audit. Usually means the 30-60-90 plan
+  didn't get enacted. Want me to generate a fresh plan targeting
+  the categories that slipped?"
+- **Advanced tier and strong scores** → "You're already past the
+  point where this skill helps much. The remaining leverage is in
+  workflow redesign, not quick wins. That's where the human
+  version of this work lives — jones.cam."
+- **Team Workshop mode surfaced disagreements** → "The disagreements
+  between {role A} and {role B} on {category} are the single most
+  important finding. Want me to draft a conversation agenda to
+  resolve them before the plan kicks off?"
+
+One offer. Don't pile on.
+
+## Output Format
+
+**Privacy note (top of every output):**
+
+> _This audit is generated locally and stored in your brain only.
+> Share deliberately._
+
+---
+
+# AI Readiness Audit: {Name / Practice}
+**Mode:** {Snapshot / Leadership Pack / Team Workshop / Deep Audit}
+**Discipline:** {from intake or brain}
+**Size:** {bracket}
+**AI maturity tier:** {None / Experimenting / Embedded / Advanced}
+**Date:** {today}
+**Rubric version:** {from references/rubric.md}
+**Brain depth:** {Rich / Partial / Minimal}
+
+---
+
+## Headline
+
+{2-3 sentences. Lead with the maturity level + protected zone
+reading. Name the single biggest opportunity. No ROI numbers in
+the headline — save them for the Opportunities section.}
+
+Example: "You're at **Emerging** maturity with a **Partial**
+protected zone — strong on creative workflow but carrying a lot
+of invisible drag on commercials and knowledge capture. Your
+biggest unlock is building institutional memory; the rest compounds
+from there."
+
+---
+
+## Maturity Scoring
+
+{Full rubric table from `references/rubric.md` § "Output format for the rubric". Include per-category score, level, Protected Zone status, one-line note using the user's own language, and the radar summary.}
+
+**Overall maturity: {X.X}/5** — {level label}
+**Protected zone: {headline}**
+
+{If prior audit exists and rubric version matches, add the Δ column.}
+
+---
+
+## Benchmark Comparison
+
+_Cameron Jones practitioner view, 2026 — not survey data._
+
+| Category | Your score | Typical {discipline/size} | Strong {discipline/size} | Read |
+|---|---|---|---|---|
+| Ops & Admin | {X} | {X} | {X} | {ahead of typical / at typical / behind typical} |
+| Creative Workflow | {X} | {X} | {X} | {read} |
+| {Client/Stakeholder} Comms | {X} | {X} | {X} | {read} |
+| Knowledge & IP | {X} | {X} | {X} | {read} |
+| Commercials & Intelligence | {X} | {X} | {X} | {read} |
+
+{2-3 sentences synthesising the comparison — what's ahead, what's behind, what's unusual.}
+
+---
+
+## Your Top 3 Opportunities
+
+### 1. {Opportunity name}
+**Category lifted:** {category} | **Impact:** {H/M/L} | **Effort:** {H/M/L}
+{2-3 sentences using the user's own language.}
+
+**ROI framing:** {Per user type —
+- freelancer/studio/agency/company: billable hours, revenue saved, or time reclaimed with a specific range. E.g., "If you spend ~4 hours/week on status updates across 8 projects, drafting saves ~160 hours/year — roughly a month of billable time."
+- in-house: internal efficiency and stakeholder satisfaction. E.g., "Your team spends ~6 hours/week compiling updates for 3 BUs. Drafting gives that time back to creative work and reduces stakeholder follow-ups."
+}
+
+**Maps to:** `/creativestack:{skill-name}`
+
+### 2. {Opportunity name}
+{same shape}
+
+### 3. {Opportunity name}
+{same shape}
+
+---
+
+## Quick Wins (run these this week)
+
+{3-5 wins selected from `references/quick-wins.md`. Use the output
+shape defined in that file.}
+
+### {Win title}
+**Category lifted:** {category} | **Effort:** {L/M/H} | **Time to value:** {phase}
+
+{Before/after one-liner}
+
+**Run it now:** `/creativestack:{skill-name}`
+
+{Repeat for each selected win. Never exceed 5.}
+
+---
+
+## Skill Map
+
+{Map each identified pain point or opportunity to specific skills.
+Filter using skill chain rules — don't suggest resource-conflict
+to freelancers, don't suggest proposal-generator to in-house teams,
+etc.}
+
+| Pain point (their words) | Skill | What it does |
+|---|---|---|
+| {phrase from intake} | `/creativestack:{skill}` | {one-line benefit} |
+
+---
+
+## What We'd Protect
+
+{Pull per-category Protected Zone content from `references/rubric.md`
+and adapt to the user's discipline and size. Explicit list of things
+that should NOT be automated. This is the skill's differentiator —
+give it real weight, not a throwaway line.}
+
+For {discipline} at {size} size:
+
+- {Protected thing 1}
+- {Protected thing 2}
+- {Protected thing 3}
+
+{One sentence synthesising why this matters for this specific user.}
+
+---
+
+## Bringing Your Team Along
+_Team Workshop mode: full content. Leadership Pack mode: condensed. Snapshot solo/micro: skip. Snapshot team: one-line nudge._
+
+{Content from `references/change-management.md`, mode-appropriate.}
+
+---
+
+## 30-60-90 Day Change Plan
+_Leadership Pack + Team Workshop modes only._
+
+{From `references/change-management.md` § "30-60-90 day change plan template", adapted with the user's specific categories and wins.}
+
+---
+
+## Prior Audit Delta
+_Deep Audit mode, only if prior audit exists and rubric version matches._
+
+| Category | {prior date} | Current | Δ |
+|---|---|---|---|
+| Ops & Admin | {X} | {X} | {↑/→/↓ ±X} |
+| ... | ... | ... | ... |
+
+{2-3 sentences on what moved, what stalled, what's new.}
+
+---
+
+## Executive One-Pager
+_Leadership Pack mode only._
+
+**Headline:** {one sentence}
+**Current maturity:** {level} ({X.X}/5) vs typical {typical} for {discipline/size}
+**Protected zone:** {status}
+**Top 3 opportunities:** {numbered, one line each}
+**ROI framing:** {aggregate figure}
+**90-day target:** {specific, measurable}
+**What we protect:** {one line}
+**Next step:** {specific action, not "get in touch"}
+
+---
+
+## Slide Outline (for your own deck)
+_Team Workshop mode only._
+
+1. Where we are (maturity + benchmark)
+2. What we'd protect (and why)
+3. The three fears (universal + team-specific)
+4. What's changing — the quick wins
+5. What's not changing — the protected zone statement
+6. The 30-60-90 plan
+7. How we'll know it's working (the review gates)
+8. Open questions for the team
+
+---
+
+## Team Disagreements
+_Team Workshop mode only._
+
+{Distinct section showing where the multi-perspective intake
+surfaced disagreement. Format:}
+
+**{Category}** — {Role A} scored this {X}/5, {Role B} scored it
+{Y}/5. Usually means {likely reason}. Worth a conversation before
+the plan kicks off.
+
+---
+
+## Brain Writes
+_Only if the user opted in at Step 11._
+
+- ✓ `audits/{YYYY-MM-DD}.md` — full audit saved
+- ✓ `audits/_index.md` — index updated
+- ✓ `learnings.md § AI maturity` — current state logged
+- {✓ `tools.md` — {N} new tools added}
+
+---
+
+## Slack Summary
+
+*AI Readiness Audit: {Name}*
+**Maturity:** {X.X}/5 ({level}) — {ahead of / at / behind} typical for {discipline/size}
+**Protected zone:** {status}
+**Lowest category:** {category} ({X}/5)
+**Top opportunity:** {1-line}
+**Quick wins:** {count} selected, first value this week
+**Next step:** `/creativestack:{skill}`
+
+---
+
+## Gotchas
+
+The slop patterns that damage this skill's credibility. Read every
+time.
+
+### Techno-utopian slop
+- **"10x your output"** — never use this phrase or any variant.
+  Creatives know the difference between "output" and "work" and
+  they get into creative work precisely to avoid being measured in
+  output. This is the single fastest way to lose the user's trust.
+- **"Disrupt your workflow"** — the opposite of what creatives
+  want. Frame as "remove friction", "give time back", "protect
+  the work". Never as "disrupt", "transform", or "revolutionise".
+- **"AI will change everything"** — specific claims or nothing.
+  Vague futurism makes the audit sound like a LinkedIn post.
+
+### ROI theatre
+- **Made-up percentages** — never say "industry average is 37%
+  time savings" or similar. If there's no source, don't invent one.
+- **Unsourced benchmarks** — always cite benchmarks as "Cameron
+  Jones practitioner view". Never as research or studies.
+- **Compounding fantasy math** — "save 2 hours/week = 100 hours/year
+  = 2.5 working weeks = £X" is fine if the starting figure is real.
+  If you're making up the 2 hours/week figure, the rest is theatre.
+
+### Tool-slop
+- **Recommending 15 tools** — never recommend more than the quick
+  wins limit (5). More is paralysis.
+- **Recommending tools outside CreativeStack** — this skill maps
+  to CreativeStack skills, not general AI tools. If the right
+  answer is "use ChatGPT", surface that in the `tools.md`
+  suggestion, not as a quick win.
+- **Recommending a skill that doesn't exist** — always check
+  `references/quick-wins.md`. Every skill mapping must be real.
+
+### Scoring slop
+- **Scoring generously** — if every category scores 3-4, the
+  rubric isn't doing its job. Most intake conversations produce
+  2-3 averages. Don't soften scores to spare feelings.
+- **Scoring 5 on Creative Workflow** — almost never real. If the
+  evidence warrants it, flag suspicion: "Scored 5 based on your
+  evidence, but Creative Workflow at 5 is rare — consider whether
+  this is aspirational."
+- **Ignoring Protected Zone** — skipping Protected Zone scoring
+  is the single worst failure mode. It's the differentiator.
+- **Scoring from vibes** — every score must cite evidence from
+  the conversation. "Based on what you said about..." is the
+  right phrasing.
+
+### Discipline-blindness slop
+- **Treating all user types the same** — a 2-person brand studio
+  and a 50-person digital agency have radically different audits.
+  Always adapt language, benchmarks, and quick wins.
+- **Ignoring in-house nuances** — in-house teams don't have
+  clients; they have stakeholders. Pipeline becomes backlog.
+  Proposal-generator becomes irrelevant. Skipping these adaptations
+  makes the audit feel copy-pasted.
+- **Freelancer-blindness** — resource-conflict, job-description,
+  and team management skills don't apply. Never suggest them.
+
+### Protected-zone slop
+- **Listing "creativity" as a protected zone** — too vague to be
+  useful. Always name specific things: "concept development",
+  "typography calls", "client pitch conversations".
+- **Putting protected zones in the footer** — they should be a
+  full section, not a disclaimer. The skill's differentiator is
+  this framing; give it real estate.
+- **Protecting everything** — if the protected zone contains
+  every category, nothing is actually protected. Be specific
+  about what can change and what can't.
+
+### Lead-gen slop
+- **Hard-selling the consulting** — never. The consulting mention
+  is a two-line footer. Anything more feels like a pitch and
+  damages the skill's credibility as a genuine tool.
+- **Gating value behind "get in touch"** — every mode produces
+  full value. Deep Audit is deliberately lighter than a real
+  engagement but it still stands alone.
+- **"Contact Cameron Jones" CTAs in the middle of the output** —
+  only at the end, in a subtle footer. Creatives will find the
+  consulting when they want it.
+
+---
+
+## Edge Cases
+
+- **No brain at all** → use neutral language ("your work", "your
+  clients"), skip type-specific adaptations, end with a strong
+  nudge to `/creativestack:setup` for next time.
+- **Brain exists but very thin** (profile only) → run the audit
+  but note reduced depth in the output header.
+- **User is AI-advanced** → branch per Step 5. Never patronise.
+- **User is AI-beginner and nervous** → lean heavily on the
+  Protected Zone content, keep ROI language grounded (hours saved,
+  not revenue growth), skip advanced quick wins.
+- **User is hostile to AI** → the skill still works. Shift the
+  framing entirely to "protect what makes you great" — lead with
+  the Protected Zone section, treat quick wins as "experiments to
+  run", and de-emphasise maturity scoring. The goal is to leave
+  them with something useful, not to convert them.
+- **Answers are very short** → work with what you have, add a
+  Low confidence label, recommend a longer intake next time.
+- **Prior audit exists with different rubric version** → show
+  absolute scores only, note that direct delta isn't possible due
+  to rubric change, point at the rubric version field in both
+  audits.
+- **Team Workshop mode with a solo operator** → gracefully degrade
+  to Snapshot mode with a note ("Team Workshop needs a team of 2+").
+- **Leadership Pack mode but the user is the leader** → still
+  works. Frame the executive one-pager as "what you'd tell the
+  board", not "what you'd tell your CEO".
+- **User runs this as part of a CreativeStack demo** → respect
+  the privacy note, skip brain writeback offers, don't compound.
+- **Multiple audits in one day** → honour subsequent runs but
+  flag ("Second audit today — unusual, are you iterating?").
+
+## Skill Chains
+
+### Upstream (what feeds ai-audit)
+
+- **No brain** → "`/creativestack:setup` first — takes 5 minutes and every future audit will be sharper."
+- **No tone of voice** → "Consider `/creativestack:update-voice` before the next audit so the output matches your voice."
+- **Running as a follow-up to setup** → natural flow, no nudge needed.
+
+### Downstream (what ai-audit triggers)
+
+Based on the audit's findings, suggest 1-2 of:
+
+- **Lowest category = Knowledge & IP** → "Start with `/creativestack:case-study` and `/creativestack:setup` — institutional memory is the single highest-leverage move."
+- **Lowest category = Ops & Admin** → "Run `/creativestack:sow-generator` or `/creativestack:timesheet-summary` this week — fastest wins, lowest risk."
+- **Lowest category = Creative Workflow** → "Run `/creativestack:brief-sharpener` on your next incoming brief to feel the difference immediately."
+- **Lowest category = Client Comms** → "Run `/creativestack:status-update` this week — 5-minute drafts your clients will notice."
+- **Lowest category = Commercials** → "Run `/creativestack:project-profitability` on your live projects this week."
+- **Protected zone is Weak** → "The protected zone statement in this audit is the most important thing you can take to your team. Adapt it, share it, and revisit quarterly."
+- **Triggered by leadership pressure** → "Run `/creativestack:ai-audit` again in Leadership Pack mode if you haven't — the exec one-pager is shaped for exactly that conversation."
+- **Triggered by team-led** → "Run `/creativestack:ai-audit` again in Team Workshop mode — the multi-perspective intake is built for this."
+
+Only suggest 1-2. Pick the most urgent based on lowest category
+and trigger.
+
+### What this skill can't do
+
+This skill is an audit, not a transformation. It gives you the
+map; the walking is yours. A full AI readiness engagement goes
+deeper:
+
+- **Workflow mapping** for every process from brief to delivery
+- **Team interviews** to find where time actually goes vs where
+  people think it goes
+- **Tool stack analysis** of what's paid for vs used vs missing
+- **Prioritised roadmap** with phased implementation and review gates
+- **Brain design** — a knowledge base that makes every tool
+  contextually aware of the work
+- **Change management support** through the 30-60-90 plan
+
+**Cameron Jones** works with creative professionals on exactly
+this — protecting creative culture while removing operational
+friction. If the audit surfaced something you want real help with:
+**jones.cam**.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

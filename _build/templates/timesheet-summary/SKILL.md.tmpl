@@ -1,0 +1,377 @@
+---
+name: timesheet-summary
+description: Turn raw time tracking data into a creative-industry project health report. Surfaces what actually bleeds margin in studios and agencies — revision tax, craft-vs-admin ratio, focus fragmentation, seniority mix leaks, sustainability signals, waiting-time gaps, and scope creep — with narrative verdicts, archetype-tuned benchmarks, burn projections, and planned-vs-actual comparison. Accepts any tracker (Harvest, Toggl, Clockify, Float, Forecast, Runn, Productive, Everhour, spreadsheets). Chains into status-update, profitability, post-mortem, and resource skills.
+---
+
+{{PREAMBLE}}
+
+{{PROJECT_STATE}}
+
+# /timesheet-summary
+
+> Raw time data in, creative project health story out.
+
+## Brain Files
+- `profile.md` (for context and user type)
+- `team.md` (for roles, rates, seniority)
+- `clients.md` (for client behaviour history)
+- `learnings.md` (for past project benchmarks)
+
+## What This Skill Does
+
+Turns raw time tracking data into a creative project health report. Surfaces the
+metrics that actually decide whether a studio/agency project is healthy: craft vs
+admin ratio, focus fragmentation, seniority leaks, revision tax, sustainability,
+and client-side idle time. Output fits client updates, internal PM reviews, or a
+frank Slack to the studio lead. Chains into `/status-update`,
+`/project-profitability`, `/post-mortem`, `/resource-conflict` — data carries forward.
+
+## Upstream Skill Synthesis
+
+Check whether any of these ran earlier this session and carry the data forward:
+
+| Skill | What to pull | Use |
+|---|---|---|
+| `/timeline-generator` | Planned phases, budgeted hours | Planned vs Actual — skip budget question |
+| `/project-kickoff` | Team, phases, archetype | Pre-fills context |
+| `/creative-brief` | Archetype, scope | Tunes benchmarks, enables scope creep |
+| `/resource-conflict` | Utilisation context | Enriches Sustainability section |
+
+Tell the user once when upstream data is detected, then don't re-ask those questions.
+
+## Inputs
+- Pasted time tracking data (any format)
+- Optional: archetype, budgeted hours per phase, reporting period, billable rate, seniority map
+
+## Data Parsing
+
+Auto-detect before asking:
+
+1. **Tracker format** — Harvest, Toggl, Clockify, Float, Forecast, Runn, Productive, Scoro, Resource Guru, Everhour, TMetric, spreadsheet exports. Confirm the guess.
+2. **Reporting period** — infer from date range, confirm.
+3. **Project/client name** — infer from data, confirm.
+4. **Multi-project** — if present, offer single-project deep-dive or portfolio roll-up (don't silently merge).
+5. **Signal scan** — before asking:
+   - Hour-of-day timestamps → unlock Focus Time + After-Hours
+   - Task names with "revision/rev/r1/amends/feedback" → Revision Tax
+   - Task names with "meeting/call/status/review/email/admin/internal" → Craft vs Admin
+   - 2+ working days with zero activity on an active project → Waiting Time
+   - Team member + task description + `team.md` roles → Seniority Mix
+
+Only ask what the data doesn't tell you.
+
+## Conversation Flow
+
+1. User pastes data.
+2. Auto-detect + confirm.
+3. [SELECT] Archetype (skip if kickoff/brief set it): Identity / Campaign / Website / Motion / Content / Packaging / Product / Other.
+4. [SELECT] Client update (polished) or Internal review (flags everything).
+5. Ask for budgeted hours per phase (skip if timeline-generator has it).
+6. Ask about financial summary + rate (offer blended rates from `team.md` if present).
+7. Generate.
+
+## Archetype Benchmarks
+
+Reference line for Revision Tax and Craft Ratio. Frame as "typical", not "correct".
+
+| Archetype | Revision Tax | Craft Ratio | High-burn phase |
+|---|---|---|---|
+| Identity / brand system | 18-25% | 65-75% | Concept & iteration |
+| Campaign | 15-20% | 60-70% | Concept + production |
+| Website / digital product | 10-15% | 70-80% | Build & QA |
+| Motion / film | 12-18% | 60-70% | Post / animation |
+| Content / editorial | 8-15% | 70-80% | Writing & review |
+| Packaging / print | 12-18% | 65-75% | Artwork & repro |
+| Product / UX | 10-15% | 70-80% | Design & prototyping |
+
+Unknown archetype → 15% Revision Tax, 70% Craft Ratio.
+
+## Output Format
+
+# Timesheet Summary: {Project/Client Name}
+**Period:** {reporting period}
+**Archetype:** {archetype}
+**Date:** {today}
+**Prepared by:** {agency/studio name from brain}
+
+## The Vibe Check
+{One short paragraph — plain creative-industry language, no corporate hedging.
+Tone example: "Running hot. Concept came in lean but production is eating the savings
+— senior designer is carrying 40% of hours into Friday evenings. Reshape the next
+two weeks or we're landing 20 hours over and the team will feel it."}
+
+## Project Health: {ON TRACK / AT RISK / OVER BUDGET / BURNING OUT}
+
+**Burn projection:** {At current pace, budget exhausted by [date] with [estimated %]
+of deliverables remaining. OR: "On pace to complete within budget with [X hours] margin."}
+
+## Overview
+| Metric | Value |
+|--------|-------|
+| Total hours logged | {hours} |
+| Budgeted hours | {hours or N/A} |
+| Variance | {+/- hours} ({%}) |
+| Burn rate | {hours/week — trend: accelerating / stable / decelerating} |
+| Team members | {count} |
+| Workstreams | {count} |
+
+## Planned vs Actual — Phase Comparison
+
+{If timeline-generator was run or the user provided budgeted hours per phase, generate
+this. Otherwise skip and note: "Run `/timeline-generator` first for automatic
+planned-vs-actual tracking."}
+
+| Phase | Planned | Actual | Variance | % Used | Status |
+|-------|---------|--------|----------|--------|--------|
+| {phase} | {planned} | {actual} | {+/-} | {%} | On Track / Over / Under |
+
+**Biggest overrun:** {phase} at {+X hrs} ({%} over)
+**Biggest saving:** {phase} at {-X hrs} ({%} under)
+
+{Narrative: e.g., "Strategy came in at 60% of budget, but the savings are being eaten
+by Production which is already at 110% with deliverables still outstanding."}
+
+## Creative Craft Ratio
+
+*The single most useful metric for a creative team: time on actual craft vs meetings,
+admin, email, and internal overhead.*
+
+| Category | Hours | % |
+|---|---|---|
+| Creative craft (design, writing, concept, production) | {hrs} | {%} |
+| Client meetings & calls | {hrs} | {%} |
+| Internal meetings & reviews | {hrs} | {%} |
+| Email, Slack, admin | {hrs} | {%} |
+| Other / unclassified | {hrs} | {%} |
+
+**Craft Ratio: {%}** — archetype benchmark {X%} — **{Healthy / Squeezed / Critical}**
+
+**Assessment:** {e.g., "52% vs 70% benchmark. Half the team's time is in meetings —
+that's the margin. Biggest offenders: weekly status calls (12 hrs), internal reviews (8 hrs)."}
+
+{If task names don't allow classification, note the gap and recommend tagging
+tasks as 'design:', 'meeting:', 'admin:'.}
+
+## Revision Tax
+
+*The #1 hidden margin killer in creative work. Always include this section.*
+
+| Metric | Value | Archetype Benchmark | Assessment |
+|---|---|---|---|
+| Revision hours | {hrs} | — | — |
+| Revisions as % of total | {%} | {archetype benchmark}% | {above/in/below range} |
+| Revision rounds tracked | {count} | 2-3 typical | {above/in/below} |
+| **Revision Tax** | **{%}** | **{archetype benchmark}%** | **{Healthy / Elevated / Critical}** |
+
+**Assessment:** {e.g., "32% on identity work — above the 18-25% range. At blended
+rate that's {amount} in rework. Revisions stack after Round 2 — stakeholder likely
+not in the room until late."}
+
+**Trend:** {Compare to `learnings.md` if available; otherwise recommend `/post-mortem`.}
+
+**Client behaviour signal:** {If revisions cluster after specific review dates, flag:
+"60% of revision hours land in the 48 hours after the Tuesday client review —
+client-driven rework, not craft iteration. Raise at next WIP."}
+
+{If revision data isn't tagged, note the gap and recommend tagging revision time.}
+
+## Focus Time vs Fragmentation
+
+*Only runs if hour-of-day timestamps are present. Creative work needs contiguous blocks.*
+
+| Metric | Value |
+|---|---|
+| Avg contiguous block | {hrs} (healthy: 2+, fragmented: <1) |
+| Deep-work days (4+ hr block) | {count} |
+| Context-switch days (3+ projects/person/day) | {count} |
+| Most fragmented | {name} — {avg block} |
+
+**Assessment:** {e.g., "Team averaged 42-minute blocks. Designers need 90-minute
+minimums for anything with taste. Most fragmented: {name} at 28 min, bouncing
+between {N} projects per day."}
+
+{Skip and note once if no timestamps.}
+
+## Seniority Mix
+
+*Where margin quietly leaks: senior hours on junior tasks, junior hours on work
+needing senior judgment. Requires `team.md` roles or a quick role map.*
+
+| Team Member | Role | Hours | Senior-on-Junior | Junior-on-Senior |
+|---|---|---|---|---|
+| {name} | {role} | {hrs} | {hrs} | {hrs} |
+
+**Senior hours on junior tasks:** {hrs} — **margin leak: {£ at rate delta}**
+**Junior hours on senior tasks:** {hrs} — **quality risk, flag for review**
+
+**Assessment:** {e.g., "CD logged 14 hrs on artwork amends — £1,680 leak vs a mid
+designer rate. Junior designer spent 8 hrs on concept direction — QA pass before
+it goes out."}
+
+{Skip and note if no role map available.}
+
+## Sustainability Signals
+
+*Burnout is a project risk.*
+
+| Signal | Value | Flag |
+|---|---|---|
+| Evening hours (outside 9-6) | {hrs} ({%}) | >15% elevated |
+| Weekend hours | {hrs} ({%}) | any = flag |
+| Highest weekly load | {name} — {hrs} | >45 = flag |
+| Concentration (top person) | {%} | >40% = risk |
+| Consecutive high-load weeks | {count} | 3+ = burnout watch |
+
+**Assessment:** {e.g., "Senior designer: 11 weekend hrs, carrying 42% across three
+48+ hr weeks. Burnout profile + single-point-of-failure for this project. Conversation now, not later."}
+
+{Skip after-hours portions if no timestamps — concentration and weekly load still work.}
+
+## Waiting Time / Idle Gaps
+
+*Dead periods on an active project usually mean the client is the blocker.*
+
+| Gap | Working days | Context |
+|---|---|---|
+| {start} → {end} | {N} | {last task before, first task after} |
+
+**Total idle days:** {days}
+
+**Assessment:** {e.g., "7 days between 12-20 March, bookended by 'sent decks for
+approval' and 'kickoff revisions'. Client-side lag silently compressing runway."}
+
+{Skip if no gaps.}
+
+## By Phase / Workstream
+
+For each phase, show a brief block:
+
+**{Phase}** — Status: {On Track / Over / Under} — {actual}/{budget} hrs ({%})
+Top tasks: {task 1 — hrs}, {task 2 — hrs}. Flags: {e.g., "3x estimate", "unbudgeted"}.
+
+## Scope Creep Detection
+
+| Task | Hours | In Scope? | Notes |
+|---|---|---|---|
+| {task} | {hrs} | Y/N/? | {context} |
+
+**Total unscoped:** {hrs} ({%})
+
+{Skip with note if no scope baseline — recommend `/creative-brief`.}
+
+## By Team Member
+| Member | Hours | Phases | Avg/Day | Utilisation |
+|---|---|---|---|---|
+| {name} | {hrs} | {phases} | {avg} | {high/normal/low} |
+
+## Team Efficiency Patterns
+
+*Patterns meaningful over multiple projects — note first-run caveat if needed.*
+
+| Member | Strongest Phase | vs Team Avg | Notes |
+|---|---|---|---|
+| {name} | {phase} | {X% faster/slower} | {e.g., "assign identity work here"} |
+
+**Observations:** 2-3 specific, actionable bullets.
+
+## Budget Comparison
+| Phase | Budget | Actual | Remaining | % | Projection |
+|---|---|---|---|---|---|
+| {phase} | {b} | {a} | {r} | {%} | On track/At risk/Over |
+
+**Overall:** {used}/{budget} hrs ({%}). Remaining {hrs}. Projected total {hrs}. Projected completion {date}.
+
+## Financial Summary
+{Only if billable rate provided. Prefer blended rates from `team.md` when available.}
+
+| Metric | Value |
+|---|---|
+| Billable hours | {hrs} |
+| Rate (blended or flat) | {rate} |
+| Revenue (this period) | {amount} |
+| Revenue (project to date) | {amount} |
+| Budget remaining (£) | {amount} |
+| Effective hourly rate (actual) | {fee ÷ actual hrs — if project fee known} |
+| **Margin leak — Revision Tax cost** | {revision hrs × blended rate} |
+| **Margin leak — Senior-on-junior work** | {delta hrs × rate delta} |
+
+## Flags & Alerts
+
+*Ranked by impact × confidence. Top 3-5 only.*
+
+1. **{Flag}** — {e.g., "Design at 85% budget, 60% deliverables done — will exceed by ~15 hrs."}
+2. **{Flag}** — {e.g., "Revision Tax 32% vs 18-25% — cap at 2 more rounds."}
+3. **{Flag}** — {e.g., "Craft Ratio 52% — trim the Thursday review."}
+
+## Recommendations
+
+*Specific and actionable — PM can take each into their next WIP.*
+
+1. {e.g., "Reallocate 10 hrs from strategy to production."}
+2. {e.g., "Formalise the Round 3 revision gate with the client."}
+3. {e.g., "Move CD off artwork amends to recover ~£1,600 margin."}
+
+---
+
+## Slack Format
+
+*Compact single-message version for PMs to paste.*
+
+*{Project} — Timesheet — {Period}*
+**Health: {ON TRACK / AT RISK / OVER BUDGET / BURNING OUT}**
+*Vibe:* {one-liner}
+*Hours:* {actual}/{budgeted} ({%})
+*Burn:* {hrs/wk} — {accelerating/steady/decelerating}
+*Craft Ratio:* {%} {🟢/🟡/🔴 vs archetype}
+*Revision Tax:* {%} {🟢/🟡/🔴 vs archetype}
+*Sustainability:* {OK / Watch / Burnout risk}
+*Remaining:* {hrs} (~{weeks} wks)
+*Top flags:* {1-2 or "None"}
+
+---
+
+## Skill Chains
+
+Pick 1-2, not all:
+
+- Margin concern → `/project-profitability` (data carries forward)
+- Project wrapping → `/post-mortem` (revision tax, craft ratio feed in)
+- Communicate upward → `/status-update` (vibe, burn, flags carry forward)
+- Burnout signals → `/resource-conflict`
+- Revisions look client-driven → `/feedback-consolidator` before next review
+
+## Project State Participation
+
+If this analysis is tied to a project (followed the project state discovery + picker
+above), update the state file:
+
+- **Budget & Pace** (this skill owns this section) — write hours actual/budgeted, burn
+  rate, trend direction, and the date. If a margin estimate exists, include it.
+- **Recent Activity** — append `YYYY-MM-DD — timesheet-summary — burn {hrs/wk}, {%} used, {trend}`
+- **Frontmatter** — update `last_updated`
+- Update `_index.md`
+
+If the burn rate or scope creep is severe enough that the status should change, don't
+update `status` in frontmatter directly — that's `/creativestack:status-update`'s job.
+Instead, surface it as a recommendation to the user: "Burn rate is accelerating sharply
+— next status update should probably move this to At Risk."
+
+## Edge Cases
+- **Unfamiliar tracker** → ask user to describe columns.
+- **No budget** → skip Budget/Planned-vs-Actual/projection. Keep Craft Ratio, Revision Tax, Sustainability.
+- **1-day period** → daily summary, skip trends and sustainability.
+- **Mixed projects** → offer deep-dive or roll-up, don't silently merge.
+- **No timestamps** → skip Focus Time + after-hours. Keep concentration/weekly load.
+- **No role map** → skip Seniority Mix, note the gap.
+- **No scope** → skip Scope Creep, recommend `/creative-brief`.
+- **Revision not tagged** → note, recommend tagging, estimate from task names.
+- **Solo/freelancer** → skip Seniority + Team Efficiency, soften Concentration. Keep Craft Ratio + Sustainability (solos burn out faster).
+
+### What this skill can't do
+
+Manual paste today. With a connected Brain, it could pull from your tracker, compare
+against historical burn curves, predict overruns, alert in real time, and generate
+weekly summaries on a schedule.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

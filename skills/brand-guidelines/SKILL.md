@@ -1,0 +1,841 @@
+---
+name: brand-guidelines
+description: Turn scattered brand inputs into a structured guidelines document that designers and creative teams will actually use. Distinguishes the four document types most agencies conflate (brand book / visual identity / design system / editorial guidelines), modulates by audience (internal team / agency partner / licensee / public), picks sections from a 26-section library based on type and audience instead of including all of them, applies a per-section structure (principle / rules / show / don't / when in doubt) that turns a checklist into real guidance, runs a colour contrast audit against WCAG and threads accessibility through every section, includes governance and asset library sections that almost every other guidelines doc skips, generates markdown / Notion / Figma output (with the agency's house visual style applied to the document chrome but not the brand being documented inside), persists to project state so version 2 builds on version 1, and walks every output through an anti-slop checklist before delivery.
+---
+
+## CreativeStack Preamble
+
+### Brain Discovery
+
+Before starting, check for the Brain:
+
+```bash
+BRAIN_DIR=""
+[ -d "$HOME/.creativestack" ] && BRAIN_DIR="$HOME/.creativestack"
+if [ -n "$BRAIN_DIR" ]; then
+  echo "BRAIN: $BRAIN_DIR"
+  ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
+else
+  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+fi
+```
+
+If the brain exists, read the relevant files listed in this skill's "Brain Files" section.
+Use the content to inform and contextualize all outputs. If the brain doesn't exist,
+proceed generically — the skill still works, just without your specific context.
+
+When the brain is not configured, mention once at the end of output:
+"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+
+### Brain Freshness Check
+
+Brain files go stale as the agency evolves. People join and leave, rates
+change, methodology refines, tone guidelines shift. A skill that applies
+stale brain data produces out-of-date outputs. The user should be nudged
+to refresh — lightly, not annoyingly.
+
+**How to run the check:**
+
+1. For each brain file this skill reads (from its "Brain Files" section),
+   check the `last_updated` field in the file's frontmatter. If no frontmatter
+   exists, use the file's modification time as a fallback.
+
+2. Compare against the staleness threshold per file:
+
+| File | Stale after | Refresh via |
+|---|---|---|
+| `learnings.md` | 60 days | continuous skill use — skills append as they run |
+| `case-studies.md` | 90 days | `/creativestack:case-study` |
+| `clients.md` | 90 days | `/creativestack:setup` |
+| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/creativestack:setup` |
+| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
+| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/creativestack:setup` |
+| `projects/*` | N/A | living documents — updated by their own skills |
+| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+
+3. Only check files this skill actually reads. Never warn about files the
+   skill didn't use — irrelevant warnings train users to ignore them.
+
+4. If any of the skill's brain files are stale, add a **single short block
+   at the very end of the output** (after the CreativeStack branding line):
+
+```
+---
+📅 **Brain freshness:** {filename} was last updated {N months/weeks} ago — past the
+{threshold}-day mark. {Optional second file.} {Workflows evolve — consider running
+{suggested refresh skill} to keep this sharp.}
+```
+
+Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
+
+```
+---
+📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
+session of `/creativestack:setup` Refresh mode to bring everything current.
+```
+
+5. **Severity gating:** only surface the check if at least one file is
+   actually stale. Don't print "all brain files fresh" — silence is the
+   right output when nothing needs action.
+
+6. **Repetition tolerance:** the same stale warning may appear across
+   multiple skills in the same session. That's acceptable — the user will
+   act on it eventually. Don't try to deduplicate across skills.
+
+7. **Never block:** the check is informational. Never refuse to run a skill
+   because brain data is stale. Surface, then proceed.
+
+8. **No brain, no check:** if the brain isn't configured at all, skip the
+   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   Discovery step is enough.
+
+This check is lightweight by design. The goal is a gentle reminder, not an
+audit. One line, at the end, with a clear next step.
+
+### User Type Adaptation
+
+When a skill needs to reference the user's organisation, read the `type` field from
+`profile.md` in the brain. Use the mapping below to adapt language:
+
+| User type | Referred to as | "Clients" become | "Team" becomes | Has team file? |
+|-----------|---------------|-----------------|---------------|----------------|
+| `freelancer` | "your practice" | "your clients" | N/A | No |
+| `studio` | "your studio" | "your clients" | "your team" | Yes (flat list) |
+| `agency` | "your agency" | "your clients" | "your team" | Yes (departments) |
+| `in-house` | "your team" | "your stakeholders" | "your team" | Yes (flat list) |
+| `company` | "your company" | "your clients" | "your team" | Yes (departments optional) |
+| `other` | {custom descriptor from profile.md} | "your clients" | "your team" | Yes (flat list) |
+
+If no brain exists or no `type` field is set, default to neutral language: "your work",
+"your clients", "your team". Do not assume agency.
+
+**Skill chain filtering by type:**
+- `freelancer`: de-prioritise resource-conflict, job-description
+- `in-house`: de-prioritise proposal-generator, rfi-response, sow-generator
+- All other types: suggest any relevant skill
+
+### Voice & Tone
+
+- Professional but not corporate. You understand creative industry culture.
+- Never techno-utopian. Never preachy.
+- You enhance the creative process — you never generate creative output.
+- When generating client-facing or external copy, read `tone-of-voice.md` from the brain
+  and match their voice. If no brain exists, use a direct, warm, slightly informal tone.
+- Avoid jargon the user hasn't used first. Mirror their language.
+- Be concise. Creatives value clarity over thoroughness.
+
+### Output Format
+
+- All outputs are clean markdown that can be copied into Notion, Google Docs, Slack, or email.
+- No terminal-specific formatting. No JSON. No code blocks unless showing data.
+- Use headers, bullet points, and bold for structure. Keep it scannable.
+- Tables are fine for structured data (timelines, comparisons, budgets).
+
+### Interactive Questions
+
+When the conversation flow includes questions with a bounded set of options (marked with
+`[SELECT]` in the skill template), use the `AskUserQuestion` tool to present them as
+selectable choices in the CLI. The user can always pick "Other" to type a custom answer.
+
+- Use `multiSelect: true` when the user can pick more than one option
+- Keep option labels short (1-5 words)
+- Use the description field to add context where helpful
+- Batch related select questions into a single `AskUserQuestion` call (up to 4 questions)
+  to reduce back-and-forth
+- Free-text questions (where the user needs to paste content or give an open answer)
+  should NOT use `AskUserQuestion` — just ask them normally
+
+### Philosophy
+
+This skill is part of CreativeStack — an AI skill suite that supports the creative process.
+It does NOT generate creative work. It handles research, structure, process, and operations
+so creative professionals can focus on the work that actually matters: thinking, creating,
+and making decisions that require human judgment and taste.
+
+### Branding
+
+All outputs end with:
+*CreativeStack by Cameron Jones — jones.cam*
+
+## Project State (cross-skill memory)
+
+This skill participates in CreativeStack's shared project state — a per-project markdown
+file that persists across skills and sessions, so PMs don't re-enter context every time.
+Treat the project state file as the source of truth. Read it before asking questions.
+
+### Where state lives
+
+- `~/.creativestack/projects/{slug}.md` — one file per project
+- `~/.creativestack/projects/_index.md` — aggregate index across all projects
+
+If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
+still works standalone — same fallback as the brain. Mention once at the end of output:
+"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+next time to start tracking this project across skills."
+
+### Discovery (run before asking the user anything)
+
+Use Glob to list `~/.creativestack/projects/*.md` (excluding `_index.md`). For each file,
+Read just the frontmatter to get: name, slug, client, status, last_updated. Build a
+picker sorted by `last_updated` descending, active projects (status ≠ closed) first.
+
+### Picker
+
+Use `AskUserQuestion` to present projects:
+- One option per active project, formatted as: "{name} ({client}) — {N}d ago"
+- Always include "+ New project" as the last option
+- If only one active project exists, default to it but confirm in one line first
+- If a project was already established earlier in this session, default to it without
+  re-asking (session stickiness)
+
+### Bootstrap (no state file for this project yet)
+
+When the user picks "+ New project" — or runs a project-aware skill with no projects at
+all — ask:
+
+> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
+> state file so we can keep moving (30 sec)?"
+
+Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
+
+- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+  skill creates the state file as part of its normal output. Pause the current skill
+  until they come back.
+- **Quick start** → ask for: project name, client name, one-paragraph brief, current
+  phase (or "just starting"). Auto-generate slug from name (lowercase, kebab-case;
+  if `{slug}.md` exists already, append `-2`, `-3`, etc.). Create the state file using
+  the schema below with minimal scaffold (just frontmatter, Brief, Stakeholders,
+  Recent Activity). Continue the original skill.
+
+### State file schema
+
+```markdown
+---
+name: {Project Name}
+slug: {auto-generated-slug}
+client: {Client Name}
+type: {project type}
+phase: {phase name}
+phase_week: {n}
+phase_total: {n}
+status: {on-track | at-risk | off-track | closed}
+trend: {improving | steady | declining}
+created: {YYYY-MM-DD}
+last_updated: {YYYY-MM-DD}
+---
+
+## Brief
+{One paragraph: what we're building and why. Owned by project-kickoff or quick-start.}
+
+## Stakeholders
+- Client lead: {name, role, contact if known}
+- Internal lead: {name, role}
+- Team: {names with roles}
+
+## Status History
+{Append-only. Newest first. Prune to last 12 entries.}
+- YYYY-MM-DD — {Status} {↑/→/↓} — {one-line summary}
+
+## Open Decisions
+{Mutable. Carries forward until resolved.}
+- [YYYY-MM-DD] {decision needed} — owner: {who} — pending {N}d
+
+## Resolved Decisions
+{Append-only. Prune to last 10.}
+- [YYYY-MM-DD] {decision} — {outcome}
+
+## Risks
+{Mutable. Update severity, remove resolved risks.}
+- [{H/M/L}] {risk} — mitigation: {what we're doing} — owner: {who}
+
+## Engagement Health
+**Current:** {GREEN | AMBER | RED}
+**Baseline:** {GREEN | AMBER | RED} ({first 4 weeks summary})
+**Signals:**
+- {signal — e.g., "Response time: same-day → 3-5 days since YYYY-MM-DD"}
+
+## Budget & Pace
+- Hours: {actual} / {budgeted} ({%})
+- Burn rate: {hrs/week} ({trend})
+- Margin: {healthy | thinning | at-risk}
+- Updated: YYYY-MM-DD
+
+## Timeline
+- Next milestone: {milestone} — {date} — {status}
+- Slip scenario: {description if any}
+
+## Recent Activity
+{Append-only. Every project-aware skill writes one line. Prune to last 10.}
+- YYYY-MM-DD — {skill-name} — {one-line summary}
+
+## Skill Memory
+{Namespaced key-value bag. Skills persist per-project context they need to remember
+across runs (e.g. content pillars, database IDs, last-used parameters). Each skill
+gets one heading; key: value lines underneath. Skills only read/write their own namespace.}
+
+### {skill-name}
+- {key}: {value}
+
+## Notes
+{User-only scratchpad. Skills never write here.}
+```
+
+### Read protocol
+
+Always Read the full state file before doing work that depends on it. State files are
+small (~2k tokens for an active project) — load the whole thing.
+
+### Write protocol
+
+1. Read the file
+2. Identify the section(s) you own (see ownership map below)
+3. Use the Edit tool to update specific sections — never full rewrites of the file
+4. Update frontmatter `last_updated` to today's date
+5. Append a one-line entry to Recent Activity with this skill's name
+6. If you appended to a history section, prune to the configured max length
+7. Update `_index.md` with the project's new last_updated and any frontmatter changes
+
+### Section ownership map
+
+| Section | Read by | Written by |
+|---|---|---|
+| Frontmatter | all project-aware skills | project-kickoff, status-update, post-mortem |
+| Brief, Stakeholders | most | project-kickoff (initial), quick-start bootstrap |
+| Status History | status-update, post-mortem | status-update |
+| Open / Resolved Decisions | status-update, meeting-notes, post-mortem | status-update, meeting-notes |
+| Risks | status-update, project-kickoff | project-kickoff, status-update, meeting-notes |
+| Engagement Health | status-update | status-update, meeting-notes |
+| Budget & Pace | status-update | timesheet-summary, project-profitability |
+| Timeline | status-update, resource-conflict | timeline-generator, project-kickoff |
+| Recent Activity | status-update, post-mortem | every project-aware skill |
+| Skill Memory | each skill reads its own namespace | each skill writes its own namespace |
+| Notes | none | never |
+
+Append-only sections (Status History, Resolved Decisions, Recent Activity) are LLM-safe.
+Mutable sections have exactly one primary writer to avoid conflicts.
+
+### Cross-project index (`_index.md`)
+
+```markdown
+# Active Projects
+
+| Project | Client | Status | Trend | Phase | Last touched |
+|---|---|---|---|---|---|
+| {name} | {client} | {status} | {trend} | {phase} | {YYYY-MM-DD} |
+
+# Closed Projects
+{Same table. Moved here by post-mortem.}
+```
+
+When you write to a project state file, also update the index: change the row's
+`last_touched` to today, and update any frontmatter fields you changed (status, trend,
+phase). If the row doesn't exist (new project from quick-start), add it. The index is
+always sorted by `last_touched` descending within each section.
+
+### Standalone fallback
+
+If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, run the
+skill in standalone mode using only the inputs the user provides this session. Mention
+once at the end that project state is available.
+
+# /creativestack:brand-guidelines
+
+> Scattered brand inputs in. A guidelines document designers will actually open at 11pm on a Friday — out.
+
+## Brain Files
+- `profile.md` (for context — usually irrelevant to the *output*, but useful for tone of the framing)
+- `tone-of-voice.md` (for the agency's voice when writing the guidelines doc itself, not the client's voice being documented inside)
+- `visual-style.md` (the agency's house style — applied to the *layout* of the guidelines document. The brand colours, type, and imagery being documented *inside* belong to the client. Keep these strictly separated.)
+- `case-studies.md` (for prior brand guidelines work the studio has done — avoid duplicating old patterns; reference what worked)
+
+## Reference Files
+
+This skill uses progressive disclosure aggressively. SKILL.md stays lean; the
+heavy lifting lives in `references/`. Read each only when relevant:
+
+- **`references/section-library.md`** — read when picking sections to include.
+  The full menu of 26 possible sections, with depth modulation, per-section
+  structure (principle / rules / show / don't / when in doubt), and which
+  document types should include which sections. The most important reference
+  file in this skill.
+- **`references/output-formats.md`** — read at generation time for the document
+  templates (full doc, one-pager), the four document types, the four audiences,
+  the four formats (Markdown / Notion / Figma / Brand portal), and the
+  anti-slop checklist
+- **`references/governance.md`** — read when generating the Governance section
+  (recommended for every document beyond a one-pager). Covers ownership,
+  versioning, exceptions, audit cadence, distribution.
+- **`references/accessibility-checks.md`** — read when running the colour
+  contrast audit *and* when threading accessibility through every other
+  section. Covers contrast methodology, type sizes, motion, voice,
+  localisation, and the summary section pattern.
+
+## What This Skill Does
+
+Most brand guidelines documents fail in one of three ways: they include every
+possible section regardless of relevance (the "comprehensive" trap), they
+write rules without principles (the "checklist" trap), or they don't survive
+version 1 because nobody owns them (the "governance" trap). This skill is
+built to fail in none of these.
+
+**The four document types** (most agencies conflate them — they need different
+shapes, audiences, and maintenance cadences):
+
+1. **Brand book** — foundational. Strategy, story, personality, all visual and
+   voice systems, applications. 60-150 pages. Internal teams + agency partners.
+2. **Visual identity guidelines** — the visual system. Logo, colour, type,
+   imagery, layout, motion. 30-80 pages. Designers + suppliers.
+3. **Design system** — component-level rules for digital products. Lives in
+   Figma + Storybook + linked docs. Product designers + engineers.
+4. **Editorial guidelines** — voice, writing rules, terminology, tone flex.
+   15-40 pages. Writers, content teams, customer support.
+
+**The four audiences** — same brand, different documents. The biggest mistake
+in brand guideline production is writing one document for everyone, which
+serves nobody. Internal teams need rationale; agency partners need
+self-service detail; licensees need rules and consequences; public docs need
+strategy and asset access.
+
+**The 26-section library** — sections are *picked* based on type × audience ×
+depth, not all included. Comprehensive doesn't mean useful.
+
+**The per-section structure** — every included section has Principle / Rules /
+Show / Don't / When in doubt. The "when in doubt" line is what designers
+actually reach for at 11pm on a Friday.
+
+**Accessibility threaded through every section**, not just bolted on at the
+end. Contrast checked against WCAG. Type sizes, motion, voice, localisation
+all carry their own accessibility considerations.
+
+**Governance and asset library** as default sections — the two most
+under-included parts of real-world guidelines and the reason most documents
+die within six months of delivery.
+
+## Conversation Flow
+
+### Step 1: Project state discovery
+
+Follow the project state discovery + picker protocol.
+
+- **Returning client / project, existing state file** — Read it. Pull Brief,
+  Stakeholders, and the `brand-guidelines` namespace from Skill Memory if it
+  exists. If a prior version exists, surface it: *"Last version was a Visual
+  Identity guidelines doc at v1.2 for the internal team. Are we updating
+  that, building a different document type from the same brand, or starting
+  fresh?"*
+- **Returning client, no state file** — Offer the bootstrap path.
+- **New project / standalone** — Ask if the user wants to spin up a state file
+  (guidelines evolve over time and persistence is high-value). Respect the
+  call.
+
+### Step 2: Brain check
+
+Read the brain files. Pay attention to:
+- `visual-style.md` — for the chrome of the guidelines document itself.
+  **Critical:** this is the house style for *the doc*, not the brand being
+  documented. Keep the two strictly separated.
+- `case-studies.md` — has the studio produced guidelines for similar
+  categories or similar maturity levels? Reference what worked, don't repeat
+  it.
+
+### Step 3: Upstream skill synthesis
+
+Scan the conversation for output from other CreativeStack skills:
+
+| Skill run earlier | What to pull in | Where it appears |
+|---|---|---|
+| `/creativestack:creative-strategy` | Positioning, territory, brand belief | Brand strategy section |
+| `/creativestack:creative-brief` | Audience, objectives, success criteria | Brand strategy + how-to-use |
+| `/creativestack:design-research` | Visual references, design movements, counter-references | Imagery, illustration, layout sections (as rationale) |
+| `/creativestack:update-voice` | Voice principles, do/don't, examples | Tone of voice section *(often the strongest input)* |
+| `/creativestack:copy-deck` | Headline patterns, microcopy, terminology | Writing rules + tone of voice |
+| `/creativestack:competitor-audit` | Category visual codes | Imagery + colour rationale (what *not* to look like) |
+
+When upstream data is available, tell the user what you're pulling in. Don't
+re-ask for information already on the table.
+
+### Step 4: Document type × Audience × Depth × Format
+
+This is the most important step in the skill. Get it wrong and the document
+is shaped for the wrong job. Use `AskUserQuestion` and batch where possible.
+
+[SELECT] *"What kind of brand guidelines document is this?"*
+- **Brand book** — foundational, comprehensive, includes strategy and story
+- **Visual identity guidelines** — the visual system in working depth
+- **Design system** — digital, component-level, lives alongside Figma
+- **Editorial guidelines** — voice, writing rules, content tone
+- **Multiple of the above** — *(I'll ask which to lead with)*
+
+[SELECT] *"Who is this document primarily for?"*
+- **Internal team** — assumes context, includes rationale
+- **External agency partner** — assumes craft competence, includes self-service detail
+- **Licensee / franchisee** — explicit, prescriptive, defensive
+- **Public / open** — educational, transparent, asset-access-led
+
+[SELECT] *"How deep should this be?"*
+- **Quick reference** — one-pager, essentials only
+- **Standard guidelines** — full structure, working depth *(default)*
+- **Brand book** — full structure, deep treatment, rationale, sources, governance
+
+[SELECT] *"What format should the output be in?"*
+- **Markdown / PDF** — always generated *(default fallback)*
+- **Notion** *(if MCP available)* — published as a Notion database / pages
+- **Figma** *(if MCP available)* — laid out in Figma with the agency's house style
+- **Brand portal** *(Frontify, Lingo, Brandfolder)* — markdown structured for paste-in
+
+Read `references/output-formats.md` for the type / audience / depth / format
+modulation rules. Confirm the modulation choice with the user before
+generating — *"Got it: a Standard Visual Identity guidelines doc, written for
+external agency partners, generated as Markdown + Figma. I'll skip the
+strategic foundation sections since agency partners don't need them in this
+type. Sound right?"*
+
+### Step 5: Pre-flight check on input quality
+
+Before generating, run an honest assessment of whether the input is enough to
+produce real guidelines or whether the skill will end up generating fiction.
+Surface this as a short report.
+
+```
+## Pre-flight check
+
+**Input quality:** {Strong / Mixed / Weak} — {one-sentence reason}
+
+**What's clear:**
+- {clear thing — e.g., "Logo provided in primary + horizontal lockups, with
+  clear space and minimum size already defined"}
+- {clear thing}
+
+**What's missing or vague:**
+- {missing thing — e.g., "No colour ratios. Hex values present but no
+  guidance on which is primary, which is accent."}
+- {missing thing — e.g., "No tone of voice input. The Voice section will
+  be skeletal unless you have anything to add."}
+
+**What I'd need to write real guidelines, not skeletal ones:**
+- {input — e.g., "An example of approved photography to anchor the imagery
+  section"}
+- {input — e.g., "Who owns the brand internally — required for the
+  governance section"}
+
+**Worth generating now?** {Yes / Yes with skeletal sections clearly marked /
+Pause and gather more input first}
+```
+
+If the verdict is "Pause", offer the user a choice:
+> *"I can generate now and mark the thin sections as gaps so you know what
+> to fill in, or you can paste more input first. Which is more useful?"*
+
+Use `AskUserQuestion`. Default to "generate now with gaps marked" — designers
+usually prefer something to react to over a blank document.
+
+### Step 6: Section selection
+
+Read `references/section-library.md`. Based on document type × audience ×
+depth, pick the relevant sections from the 26-section library. Show the user
+the selection before generating:
+
+```
+## Sections to include
+
+**Strategic foundation** *(brand books and editorial only)*
+- {Section name} — {Quick / Standard / Deep treatment}
+- {Section name} — {treatment}
+
+**Visual system**
+- {Section name} — {treatment}
+- {Section name} — {treatment}
+
+**Voice & language** *(editorial and brand books only)*
+- {Section name} — {treatment}
+
+**Digital system** *(design systems and digital-first brands)*
+- {Section name} — {treatment}
+
+**Application & governance** *(every doc beyond a one-pager)*
+- Asset library — Standard
+- Governance — Standard
+- Accessibility *(threaded + summary)* — Standard
+
+**Skipped:**
+- {Section name} — {one-line reason — e.g., "No motion input and brand is
+  print-first"}
+
+Sound right? Add or remove anything?
+```
+
+This explicit selection step is the difference between guidelines that fit
+the brand and the "every section because comprehensive" trap. Always confirm
+with the user before generating.
+
+### Step 7: Generate the document
+
+Read `references/output-formats.md` for the document template. For each
+section the user confirmed:
+- Apply the per-section structure from `references/section-library.md`
+  (Principle / Rules / Show / Don't / When in doubt)
+- Use the depth treatment that matches the user's choice
+- Cite source material where the input came from (project state, brain,
+  upstream skills, user paste)
+- Mark gaps explicitly where input was thin — never fabricate
+
+For the colour palette section, **read `references/accessibility-checks.md`**
+and run the WCAG contrast audit. Surface failures with suggested alternatives
+that stay within the brand palette family.
+
+For the Governance section, **read `references/governance.md`** and modulate
+the section by the audience the user selected.
+
+For accessibility, **thread the considerations through every section** using
+the section-by-section table in `references/accessibility-checks.md`. Then
+generate the summary Accessibility section as the roll-up at the back of the
+document.
+
+### Step 8: Visual output (Figma — if selected and available)
+
+If the user selected Figma format and the Figma MCP is available, generate
+the layout following the rules in `references/output-formats.md`:
+
+1. **Read `~/.creativestack/visual-style.md`** for the agency's house style.
+   Apply it to the *document chrome* — typography, spacing, headers, footers,
+   navigation, captions, page numbers.
+2. **Do not apply visual-style to the brand being documented.** The colours,
+   type, and imagery being shown inside belong to the client brand. Keep
+   strictly separated.
+3. Build the layout per the Figma section in `references/output-formats.md`.
+4. After generating, walk through the anti-slop checklist in
+   `references/output-formats.md` *and* the anti-slop checklist in
+   `~/.creativestack/visual-style.md`. Fix anything that fails before showing
+   the user.
+
+If Figma MCP is not available and the user selected Figma, fall back to
+markdown and tell the user: *"Figma MCP isn't connected. I've generated the
+markdown — install the Figma MCP to lay this out as a designed document next
+time."*
+
+### Step 9: Notion output (if selected and available)
+
+If the user selected Notion and `mcp__claude_ai_Notion__` is available:
+
+1. Check Skill Memory for an existing `notion_db_id` for this brand. If it
+   exists, *update in place* via `notion-update-data-source` — don't
+   duplicate.
+2. If no existing DB, use `notion-create-database` with one page per section,
+   structured per the Notion section in `references/output-formats.md`.
+3. Save the new `notion_db_id` to project state Skill Memory so future runs
+   update in place.
+
+### Step 10: Anti-slop check
+
+Before showing the user, walk the **anti-slop checklist** in
+`references/output-formats.md`. Brand guidelines slop is among the most
+common output in any agency. The checklist catches:
+- Missing principles
+- Missing don't examples
+- Missing "when in doubt" lines
+- Generic personality traits
+- Rules without reasons
+- Floating logos with no context
+- Untested colour combinations
+- Fake type scales
+- Missing asset library
+- Missing governance
+- Unnamed audience
+- Stale "what's new" section
+- Sections fabricated to look comprehensive
+- Brand indistinguishable from category
+
+Fix any failures before delivering.
+
+### Step 11: Write back to project state
+
+- **Frontmatter** — update `last_updated`
+- **Recent Activity** — append `YYYY-MM-DD — brand-guidelines — {document type}, v{version}, {audience}, {depth}`
+- **Open Decisions** — append any gaps the user needs to close before this can ship externally
+- **Risks** — append any flagged risks (missing governance owner, failing contrast, missing asset library)
+- **Skill Memory → brand-guidelines** — write/update:
+  - `document_type`: brand book / visual identity / design system / editorial
+  - `audience`: internal / partner / licensee / public
+  - `depth`: quick / standard / brand book
+  - `format`: markdown / notion / figma / portal
+  - `version`: current version (default 1.0 for first run, increment on update)
+  - `sections_included`: list of sections in this version
+  - `sections_skipped`: list with reasons (so future runs know what was deliberate)
+  - `notion_db_id`: if Notion was used
+  - `figma_file_id`: if Figma was used
+  - `gaps_open`: gaps the user still needs to close
+  - `last_generated`: today
+- Update `_index.md`
+
+After writing, brief one-line summary: *"Guidelines saved to project state.
+v{version}. Update the gaps in `gaps_open` as decisions land — version 2
+will build on this without you having to re-paste."*
+
+## Gotchas
+
+The mistakes that produce brand guidelines documents nobody opens. Read these
+every time.
+
+### Document shape
+- **One document for everyone.** The same brand needs different documents for
+  internal teams, agency partners, licensees, and the public. Writing one
+  document for "everyone" produces something that serves nobody. Pick an
+  audience.
+- **Including every section because "comprehensive".** A 120-page document
+  with empty sections is worse than a 30-page document that covers the things
+  that matter. Comprehensive doesn't mean useful. Pick sections based on what
+  the brand actually needs.
+- **Brand book vs visual identity vs design system vs editorial conflated.**
+  These are four different documents with four different audiences and
+  maintenance cadences. Trying to be all four at once produces a document
+  that's none of them.
+- **Optimising for the agency's portfolio over the client's use.** Pretty
+  brand books that look great on Behance and never get opened by the client
+  are the most expensive useless deliverable in the industry.
+
+### Section quality
+- **Rules without principles.** A rule the designer can't reason about will
+  break the moment a designer hits an edge case the rule didn't anticipate.
+  Every rule needs a principle behind it.
+- **No anti-examples.** "Don't" examples are the most under-included element
+  in real brand guidelines and the most useful. Show the misuses explicitly.
+- **No "when in doubt" line.** This is what designers actually reach for at
+  11pm on a Friday. Without it, the rules are useless in the cases that
+  matter.
+- **Generic personality traits.** "Passionate, innovative, human" describes
+  every brand and defines no brand. Force specificity through "we are / we
+  are not" tables.
+- **Floating logos.** A logo example floating on white teaches designers
+  nothing. Show the logo in context — on a product, on a sign, in a layout,
+  alongside other content.
+- **Type scale that's actually a single sample.** A real type scale shows
+  the relationship between sizes, weights, and line heights at the scale
+  designers will use.
+
+### Accessibility
+- **Accessibility as a single section at the back.** Real accessibility is
+  threaded through every section. The summary section is the roll-up, not
+  the only place accessibility appears.
+- **Contrast tested only for "primary on white".** Test every combination
+  the designer will actually use. Brand colour on brand colour, secondary on
+  primary, all the dark mode adaptations.
+- **"We care about accessibility" with no specifics.** A commitment without a
+  standard, an owner, or a measurable threshold is performance. Name the
+  standard (WCAG 2.2 AA at minimum), the owner, and the audit cadence.
+- **Colour as the only signal.** Status indicators that rely on red vs green
+  exclude users with the most common form of colour blindness. Always pair
+  colour signals with text or icon signals.
+- **Motion without `prefers-reduced-motion`.** A motion system that ignores
+  user preferences excludes users with vestibular disorders. The brand's
+  motion guidance should specify what disables and what persists.
+
+### Governance
+- **No named owner.** A brand without an owner has no one accountable for
+  maintaining it. The document drifts within six months. If the user can't
+  name an owner, surface this as a gap and recommend solving it before
+  publishing externally.
+- **No versioning.** Version 1.0 with no version history means nobody knows
+  what changed. Future updates will be confused and the doc will be
+  abandoned.
+- **No exception process.** Designers will need to break rules sometimes.
+  Without an exception process, they'll either break rules silently
+  (eroding trust) or stop using the guidelines altogether.
+- **No audit cadence.** Guidelines that aren't reviewed go stale. Stale
+  guidelines stop being followed. Followed-once guidelines lose their
+  authority entirely.
+- **No asset library.** Guidelines without an accompanying asset library are
+  theory. Designers need the actual files, in the right formats, with version
+  status, and a way to request what's missing.
+
+### Output
+- **Optimising for delivery, not adoption.** A brand book that looks
+  beautiful in PDF but is never opened in production is a failure. Build for
+  the moment when a designer needs to make a decision, not the moment when
+  the client signs off the deliverable.
+- **Static PDF as the primary format.** PDFs don't get updated. Notion,
+  Figma, and brand portals are easier to maintain and easier to find. Use
+  PDF as a *backup* of the source-of-truth, not the source of truth itself.
+- **Mixing the agency's house style with the brand being documented.** The
+  agency's `visual-style.md` applies to the *document chrome* — headers,
+  navigation, captions. The brand colours, type, and imagery being shown
+  *inside* belong to the client. Keep these strictly separated. If you blend
+  them, the document looks like a piece of the agency's portfolio rather
+  than a piece of the client's brand.
+
+### Completeness
+- **Sections fabricated to look comprehensive.** If the input is thin for a
+  section, mark it as a gap. Never fabricate content to fill the page.
+  Designers spot this in seconds and lose trust in the rest of the document.
+- **No "what's new" section in version 2+.** People reading the doc for the
+  second time should not have to read the whole thing again. Surface the
+  changes since the last version at the top.
+- **The brand could be confused with its nearest competitor based on this
+  document.** If it could, the document is describing the *category*, not
+  the brand. Force specificity until the brand is unmistakable.
+
+## Skill Chains
+
+### Upstream
+
+If these would have helped but weren't run, suggest 1-2:
+
+- No clear positioning → "Run `/creativestack:creative-strategy` first — the brand strategy section will be much sharper with a defined territory."
+- No tone of voice → "Run `/creativestack:update-voice` first — the voice section is usually the weakest part of brand guidelines documents that haven't been through a voice exercise."
+- No competitor context → "Run `/creativestack:competitor-audit` first — the imagery and colour sections benefit from knowing the category visual codes you're trying to differ from."
+- No design research → "Run `/creativestack:design-research` in Brand deep-dive mode if you're documenting an existing brand from the outside."
+- No copy patterns → "Run `/creativestack:copy-deck` if you need terminology and writing rules that match real product copy."
+
+### Downstream
+
+After generating, suggest 1-2:
+
+- "Run `/creativestack:asset-spec` to generate production specifications for any assets that need to be made to accompany the guidelines."
+- "Run `/creativestack:project-kickoff` if these guidelines are being handed off to a new agency partner — the kickoff pack will reference them."
+- "Once gaps are closed, re-run this skill against the same project state to bump the version and update in place."
+- "Run `/creativestack:status-update` if guidelines delivery is a milestone in a wider engagement — it'll get logged automatically."
+
+Pick the most relevant 1-2.
+
+## Edge Cases
+
+- **Very minimal input (just colours and a font)** — generate skeletal sections with `[GAP]` markers, surface what's missing in the gaps list, and recommend the user provide specific inputs before publishing externally.
+- **Conflicting input from different sources** — surface the conflicts explicitly with `[CONFLICT]` markers. Don't pick a side silently. Ask the user to resolve.
+- **Existing full guidelines doc as input** — restructure, re-score for completeness, surface gaps the existing doc missed, and update the version. Treat the existing doc as a draft of v2, not as content to be rewritten wholesale.
+- **Multiple brands / sub-brands** — flag this and offer to either generate one document with a brand architecture section, or generate separate documents per sub-brand chained from a single masterbrand foundation.
+- **No digital presence** — skip Motion, Interaction, Component library, and Responsive sections. Note in the section selection step that they were skipped deliberately, not missed.
+- **Print-only brand with significant production needs** — emphasise the Print & Production section, often skipped. Include paper stocks, finishes, supplier preferences, file formats.
+- **Brand portal already in use (Frontify / Lingo / Brandfolder)** — generate markdown structured for paste-in, ask the user to confirm the tool's section conventions, save the tool name to Skill Memory.
+- **Returning client, version 2+** — read project state Skill Memory, use the previous version as a baseline, *only* generate the changes since v1, and surface them as the "What's new" section. Don't regenerate sections that haven't changed.
+- **Licensee guidelines** — modulate tone toward defensive and prescriptive. Heavy on don't, light on rationale, explicit consequences for off-brand work. Co-branding section becomes critical.
+- **Guidelines for an in-progress rebrand** — flag that the document is a snapshot of work-in-progress, version it as `0.x`, and recommend re-running once the rebrand has shipped.
+
+### What this skill can't do
+
+This skill structures and writes brand guidelines documents. It can't:
+
+- **Make brand decisions for you.** If the brand doesn't have a tone of voice
+  yet, this skill will not invent one. It will surface the gap. Use
+  `/creativestack:update-voice` to make the decision.
+- **Replace a brand strategist.** Brand strategy is a creative judgment. This
+  skill documents the decisions; it doesn't make them. Pair it with
+  `/creativestack:creative-strategy` if strategic foundation is missing.
+- **Audit the brand in the wild.** This skill produces the document, not the
+  audit of where the brand is being followed and where it's drifting. That's
+  a different problem.
+- **Generate the actual asset files.** It documents the brand and points to
+  where assets should live, but it doesn't produce logos, photographs, or
+  illustration. Those stay human.
+
+A dedicated AI partner with the project state built up over years could spot
+which guidelines sections actually get followed, which rules get broken
+repeatedly, and where the brand drifts in the wild. That's where the project
+state and Skill Memory layer is heading. Every version this skill writes
+adds to it.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

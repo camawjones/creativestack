@@ -1,0 +1,13 @@
+# User data (vault)
+.creativestack/
+
+# Client pitches
+pitches/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

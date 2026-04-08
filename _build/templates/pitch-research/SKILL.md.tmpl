@@ -1,0 +1,324 @@
+---
+name: pitch-research
+description: Brain-first pitch intelligence for creative agencies. Four modes — Research (deep prospect dossier with fit score, decision-maker profiles, brain-backed angles, killer hook, warm path in), Refresh (update an existing dossier with what's changed), Pitch prep (1-page in-the-room brief for the meeting itself), Log outcome (capture meeting notes and win/loss with reasons). Persists prospects/{slug}.md dossiers and learnings.md § Pitching so every future pitch gets sharper. Aggregates win/loss patterns across past pitches automatically. Calls /creativestack:source-scrape for live evidence.
+---
+
+{{PREAMBLE}}
+
+# /pitch-research
+
+> Know everything about a prospect before you walk in the room. Get sharper with every pitch.
+
+## What This Skill Does
+
+Most pitch research is one-shot: you research, you pitch, you forget. This skill
+acts as a **pitch intelligence brain**:
+
+1. **Reads your full brain** — case studies, methodology, clients (for adjacency
+   not just direct relationships), team backgrounds (for warm paths), tone of
+   voice (for framing), and your own pitching learnings
+2. **Builds a persistent dossier** at `~/.creativestack/prospects/{slug}.md`
+   that grows with every meeting and outcome
+3. **Scores prospect fit** before you commit time — pursue or pass in 30 seconds
+4. **Surfaces the warm path in** — direct relationships, sector overlap,
+   team adjacencies, ex-employee connections
+5. **Generates a killer hook** — pressure-tested single sentence designed for
+   the first 60 seconds of the meeting
+6. **Applies past pitch learnings automatically** — "you've pitched 4 sport
+   brands, won 1, lost 3, all citing 'too small' — address scale upfront"
+7. **Produces a separate Pitch Prep doc** for the room itself — different
+   format, different audience, one printed page
+8. **Captures outcomes** so the brain compounds. Five outcomes in and the skill
+   knows what kinds of pitches you actually win.
+
+The first prospect takes 5 minutes to dossier. Every future run on that prospect
+is incremental. Every new prospect benefits from the pattern library you've built.
+
+## Brain Files
+- `prospects/_index.md` + `prospects/{slug}.md` — **the pitch DNA**: dossiers per prospect (this skill creates and maintains them)
+- `learnings.md § Pitching` — accumulated win/loss patterns (this skill appends to a Pitching section, never overwrites)
+- `profile.md` — agency name, positioning, type, specialisms
+- `case-studies.md` — backs angles with specific case study evidence
+- `clients.md` — direct relationships AND adjacency (sector overlap, competitor work)
+- `team.md` — warm path in via team backgrounds
+- `methodology.md` — for "how we'd actually approach this prospect" framing
+- `tone-of-voice.md` — pitch language register
+
+## Reference Files
+
+This skill loads detail on demand from `references/`. Read each only when relevant:
+
+- **`references/dossier-schema.md`** — read whenever creating, reading, or updating a dossier or the prospects index. Schemas, slugging rules, read/write flows.
+- **`references/decision-maker-profiling.md`** — read in **Research** or **Refresh** mode when generating decision-maker profiles. Sourcing, communication-style inference, "in the room" framing.
+- **`references/angles-and-hooks.md`** — read in **Research** mode when generating fit score, angles, killer hook, and warm path in. The operational core.
+- **`references/pitch-prep-format.md`** — read in **Pitch prep** mode. The strict 1-page format for the in-the-room brief.
+- **`references/win-loss-patterns.md`** — read in **Log outcome** mode. Capture format, learnings.md § Pitching schema, aggregation patterns. Also read in **Research** mode when applying past pitch learnings overlay.
+
+## Conversation Flow
+
+### Step 1: Brain check & mode selection
+
+Run brain discovery from the preamble. Check specifically for:
+
+```bash
+[ -d "$HOME/.creativestack/prospects" ] && echo "PROSPECTS_DIR_EXISTS" || echo "NO_PROSPECTS_DIR"
+[ -f "$HOME/.creativestack/learnings.md" ] && grep -q "## Pitching" "$HOME/.creativestack/learnings.md" && echo "PITCHING_LEARNINGS" || echo "NO_PITCHING_LEARNINGS"
+```
+
+[SELECT] "What do you need?"
+- Research — deep prospect dossier (default)
+- Refresh — update an existing dossier
+- Pitch prep — 1-page brief for an upcoming meeting
+- Log outcome — capture meeting notes or win/loss
+
+**Routing:**
+- If user picks Research and a dossier already exists for the slugged prospect name → "I have an existing dossier for {prospect}. Refresh it instead?" Default to Refresh.
+- If user picks Pitch prep and no dossier exists → refuse, route to Research first
+- If user picks Log outcome and no dossier exists → ask which prospect, create a stub dossier, then log
+
+### Step 2: Research mode — Brain context loading
+
+Before any web research, read the brain files in this order:
+
+1. `profile.md` — agency positioning and specialisms
+2. `clients.md` — direct relationships and sector overlap
+3. `team.md` — team backgrounds for warm path
+4. `case-studies.md` — for angle evidence
+5. `methodology.md` — for "how we'd approach this" framing
+6. `learnings.md § Pitching` — for past pitch learnings overlay (skip if section doesn't exist)
+7. `prospects/_index.md` — to check for existing dossier (collision check)
+
+### Step 3: Research mode — Upstream skill check
+
+Scan the conversation for output from earlier skills run this session:
+
+| Skill run earlier | What to pull in | How it's used |
+|---|---|---|
+| `/creativestack:source-scrape` | Live brand and people evidence | Pre-fills brand activity and decision-maker sources |
+| `/creativestack:trend-report` | Category trends | Trend Position section + pitch angles |
+| `/creativestack:competitor-audit` | Competitive landscape | Competitor section + positioning context |
+
+### Step 4: Research mode — Initial questions
+
+Ask only what isn't already known:
+
+1. "Who's the prospect?" (slug it, check for existing dossier)
+2. "Do you know what they're looking for, or is this credentials-led?"
+3. "Is there a known meeting date or pitch deadline?"
+
+### Step 5: Research mode — Live research via source-scrape
+
+Call `/creativestack:source-scrape` for prospect brand activity and
+decision-makers (session cache will reuse if already run):
+
+> "I'll call `/creativestack:source-scrape` with query='{prospect} recent
+> campaigns {last 18 months}', mode='brands', output='data', time_window='last_year'."
+
+In parallel, call again for leadership profiles:
+
+> "I'll call `/creativestack:source-scrape` with query='{prospect} creative
+> leadership marketing director', mode='people', output='data'."
+
+Parse `## VISUAL_CAPTURES` and `## FINDINGS` for brand evidence; parse
+`## FINDINGS` from the people call for named individuals, current roles,
+recent moves, and public quotes.
+
+If `## COVERAGE_GAPS` lists significant gaps (e.g. "no leadership info found"),
+surface them as confidence flags in the dossier.
+
+### Step 6: Research mode — Compute fit score
+
+Read `references/angles-and-hooks.md` § "Fit scoring". Compute the 5-dimension
+score using brain content. Output the score before going deeper — if it's
+1-2, offer the user the chance to stop:
+
+> "Fit score is 2/5. Specialism overlap is weak and you have no sector
+> experience in the brain. Want me to continue researching anyway, or pass?"
+
+If the user opts to continue (or fit is 3+), proceed.
+
+### Step 7: Research mode — Build the dossier
+
+Generate the dossier using the schema in `references/dossier-schema.md`.
+Each section should pull from the brain plus live research, in this order:
+
+1. Brand snapshot
+2. **Adjacency check / Warm path in** — read `references/angles-and-hooks.md` § "The warm path in"
+3. Recent work & campaigns
+4. Decision-maker profiles — read `references/decision-maker-profiling.md`
+5. Press & industry commentary
+6. Competitor landscape
+7. Trend position (if upstream)
+8. Pain points
+9. **Angles ranked by fit** — read `references/angles-and-hooks.md` § "Angles ranked by fit"
+10. **Killer hook** — read `references/angles-and-hooks.md` § "The killer hook"
+11. **Past pitch learnings overlay** — read `references/win-loss-patterns.md` § "Aggregation across past dossiers"
+
+### Step 8: Research mode — Save dossier
+
+Write `prospects/{slug}.md` and update `prospects/_index.md`. If the prospects
+directory doesn't exist, create it and confirm to the user.
+
+### Step 9: Refresh mode
+
+When the user picks Refresh:
+
+1. Read existing dossier
+2. Ask: "What do you want refreshed?" [SELECT]:
+   - Brand snapshot + recent work (default)
+   - Decision-makers
+   - Everything (full re-research)
+   - Just the killer hook
+3. For each chosen section, re-run the relevant research steps
+4. **Diff the changes** in the output: "What's new since last run: {bullet list}"
+5. Update the dossier (preserve outreach log, meeting notes, outcomes — only refresh research sections)
+6. Update `last_updated` in frontmatter and index
+
+Surface staleness: if the dossier hasn't been refreshed in 30+ days, prompt
+proactively in any other mode.
+
+### Step 10: Pitch prep mode
+
+When the user picks Pitch prep:
+
+1. Read existing dossier (refuse if missing)
+2. Read `references/pitch-prep-format.md`
+3. Ask: "What's the meeting date and what's the goal of this specific meeting?"
+4. Generate the 1-page format using only existing dossier content — no new research
+5. If the dossier is >14 days old, add a staleness banner and offer Refresh
+6. If the dossier is missing fields needed for Pitch Prep (no killer hook, no decision-maker profiles), refuse and route to Refresh first
+
+### Step 11: Log outcome mode
+
+When the user picks Log outcome:
+
+1. Read existing dossier (offer to create stub if missing)
+2. Read `references/win-loss-patterns.md` § "Capturing the outcome"
+3. Walk through the structured questions (5 minutes max)
+4. Append to dossier § Outcome
+5. Append to `learnings.md § Pitching` (create the section if missing)
+6. Update `_index.md` row with new status and outcome
+7. Confirm: "Logged. This will inform every future Research run that matches {sector / type / scale}."
+
+### Step 12: Compounding loop
+
+After every Research, Refresh, or Pitch prep run, offer **at most one** brain
+enrichment based on what's most valuable:
+
+- **Research just ran for a new prospect** → "Save as dossier? You're now at {N} prospects."
+- **Refresh just ran on an old dossier** → No offer; the refresh itself was the enrichment
+- **Pitch prep just ran** → "Calendar this — when's the meeting? I can prompt for Log outcome after."
+- **Dossier shows status=Pitching but no outcome logged** → "Has this pitch closed? Log the outcome — it'll sharpen every future run in this sector."
+- **Research found weak fit (1-2)** → No enrichment offer; suggest passing instead
+
+Don't pile on. One offer, one upgrade.
+
+## Output Format — Research mode
+
+The full dossier format lives in `references/dossier-schema.md`. The user-facing
+output mirrors that schema, with one addition at the very top:
+
+```markdown
+# Pitch Research: {Prospect Name}
+**Researched:** {date}
+**Confidence:** {High/Medium/Low — based on public info found}
+**Visual evidence:** {Yes — via /source-scrape / Limited — text descriptions only}
+**Fit score:** {N}/5 — {Strong / Good / Marginal / Weak / Bad pursue}
+
+{Then everything from references/dossier-schema.md § "prospects/{slug}.md — Full dossier"}
+```
+
+If `clients.md` shows a competitive concern (worked with their direct
+competitor), surface it prominently in the Adjacency Check section — don't
+bury it.
+
+## Output Format — Refresh mode
+
+```markdown
+# Refreshed: {Prospect Name}
+**Last refreshed:** {previous date} → **Now:** {today}
+**Sections refreshed:** {list}
+
+## What's New
+{Bullet list of changes since last refresh — new campaigns, new decision-makers,
+moved people, status changes}
+
+## Updated Dossier
+{Full updated dossier or just the refreshed sections, depending on user choice}
+```
+
+## Output Format — Pitch prep mode
+
+Strict 1-page format from `references/pitch-prep-format.md`. Don't expand it.
+
+## Output Format — Log outcome mode
+
+```markdown
+# Outcome Logged: {Prospect Name}
+**Result:** {Won / Lost / Stalled / etc.}
+**Logged:** {today}
+
+## Captured
+- **Stated reason:** {their words}
+- **Our read:** {team's honest assessment}
+- **Lesson:** {what to do differently}
+- **Hook retrospective:** {did the hook land?}
+
+## What This Updates
+- ✓ Dossier § Outcome
+- ✓ prospects/_index.md (status: {new status})
+- ✓ learnings.md § Pitching (new entry)
+
+## Pattern Update
+{If this outcome adds to an existing pattern, surface it. Examples:
+"You've now lost 3 sport pitches citing 'too small' — this is a clear pattern.
+Address scale upfront in the next sport pitch."
+"This is your 2nd cultural-sector win in 6 months — building a real track record here."}
+```
+
+---
+
+## Slack Format
+
+For Research mode:
+
+*Pitch Research — {Prospect}*
+**Fit: {N}/5** — {one-line verdict}
+**Hook:** "{killer hook}"
+**Warm path:** {one line}
+**Top angle:** {one line from Strong Fit}
+
+For Pitch prep mode:
+
+*Pitch Prep — {Prospect} — {meeting date}*
+**Hook:** "{killer hook}"
+**In room:** {names + styles, one line each}
+**Lead with:** {one line}
+**Avoid:** {one line}
+
+---
+
+## Skill Chains
+
+Pick the most relevant 1-2:
+
+- **Research just ran, strong fit** → "Run /creativestack:pitch-research in **Pitch prep** mode the day before the meeting."
+- **Pitch closed (won or lost)** → "Run **Log outcome** mode. Outcomes here will sharpen every future pitch in this category combination."
+
+## Edge Cases
+- **Prospect is a current client's competitor** → Flag prominently. Adjacency Check becomes a risk section.
+- **No web results at all** → Use training data, label as potentially outdated. Lean on team adjacencies as the only real signal.
+- **No brain configured** → Works but without case study backing, adjacency check, or past pitch learnings. Flag prominently.
+- **Existing dossier >90 days old** → Refuse fresh Research, route to Refresh mode.
+- **User wants to research a prospect they already pitched and lost** → Pull the existing dossier, surface the loss reason, ask whether to attempt re-engagement (likely needs a different angle).
+
+### What this skill can't do
+
+This research uses public sources. With a deeper integration, this skill could
+also surface internal knowledge — past interactions captured in CRM, who in
+your network knows them, attendance at the same conferences, and live tracking
+of when they post a brief. The Brain enables some of this; deeper integrations
+unlock the rest.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

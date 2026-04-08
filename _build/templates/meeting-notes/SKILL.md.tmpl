@@ -1,0 +1,325 @@
+---
+name: meeting-notes
+description: Brain-first meeting intelligence for creative agencies. Three modes — Notes (transcript in, structured notes out with What Only the Brain Caught panel that cross-references decisions against the brief, methodology, project state, past meetings, client patterns, rate card, and team capacity), Pre-meeting (brief built entirely from brain context with no transcript needed), Patterns (cross-meeting analysis: sentiment trajectory, recurring scope creep, action completion, communication patterns). Persists projects/{slug}-meetings.md and learnings.md § Client Patterns so every meeting compounds. Accepts Granola, Otter, Fireflies, Zoom, Read.ai, or raw notes. Does what recording tools cannot — agency-specific cross-referencing the transcript can't see.
+---
+
+{{PREAMBLE}}
+
+{{PROJECT_STATE}}
+
+# /meeting-notes
+
+> Recording tools transcribe. This skill cross-references. Agency context the transcript can't see.
+
+## What This Skill Does
+
+Granola, Otter, Fireflies, and Read.ai already do meeting transcription and
+basic notes. **This skill does what they can't:** cross-references decisions
+against your brief, your methodology, your project state, your past meetings
+on this project, your client communication patterns, your rate card, and your
+team's capacity.
+
+The transcript is raw material. The brain is the differentiator.
+
+Three modes:
+
+1. **Notes** — paste a transcript (any source), get structured notes with a
+   prominent **"What Only the Brain Caught"** panel showing what no recording
+   tool could see
+2. **Pre-meeting** — generate a 1-page pre-meeting brief from brain context
+   alone (no transcript needed). Walks the team into the meeting prepared.
+3. **Patterns** — cross-meeting analysis for a project or client: sentiment
+   trajectory, recurring scope creep, action completion rates, communication
+   patterns
+
+The first meeting takes a minute longer to set up. Every meeting after that
+gets sharper as the project log and client patterns accumulate.
+
+## Brain Files
+- `projects/{slug}-meetings.md` — **the meeting DNA**: append-only meeting log per project (this skill creates and maintains it)
+- `learnings.md § Client Patterns` — accumulated communication patterns per client/person (this skill appends to a Client Patterns section, never overwrites)
+- `projects/{slug}.md` — project state, brief, open decisions, risks, engagement health
+- `methodology.md` — for flagging decisions that skip required process steps
+- `rate-card.md` — for pricing scope changes in £ (requires `/creativestack:project-profitability` Setup rates first)
+- `team.md` — for flagging actions assigned to overbooked or absent people
+- `clients.md` — client relationship history
+- `tone-of-voice.md` — for client-facing output language
+
+## Reference Files
+
+This skill loads detail on demand from `references/`. Read each only when relevant:
+
+- **`references/transcript-parsing.md`** — read at the start of every Notes run. Per-source quirks (Granola, Otter, Fireflies, Zoom, Read.ai, raw), extraction targets, confidence labels.
+- **`references/brain-cross-reference.md`** — read in Notes mode after extraction. The 7 cross-reference checks that produce the "What Only the Brain Caught" section. The operational core.
+- **`references/sentiment-and-patterns.md`** — read in Notes and Patterns modes. Sentiment scoring, trajectory tracking, pattern detection rules, when to save patterns.
+- **`references/meeting-log-schema.md`** — read whenever writing to `{slug}-meetings.md` or `learnings.md § Client Patterns`. Schemas + read/write flows.
+- **`references/pre-meeting-brief.md`** — read in Pre-meeting mode only. The 1-page brief format and generation rules.
+
+## Conversation Flow
+
+### Step 1: Brain check & mode selection
+
+Run brain discovery from the preamble. Then check the meeting-specific files:
+
+```bash
+[ -f "$HOME/.creativestack/learnings.md" ] && grep -q "## Client Patterns" "$HOME/.creativestack/learnings.md" && echo "PATTERNS_EXIST" || echo "NO_PATTERNS"
+[ -f "$HOME/.creativestack/rate-card.md" ] && echo "RATE_CARD_EXISTS" || echo "NO_RATE_CARD"
+```
+
+Project state discovery (per `{{PROJECT_STATE}}`) will identify the current
+project and slug. From the slug, also check:
+
+```bash
+[ -f "$HOME/.creativestack/projects/{slug}-meetings.md" ] && echo "MEETINGS_LOG_EXISTS" || echo "NO_MEETINGS_LOG"
+```
+
+[SELECT] "What do you need?"
+- Notes — process a meeting transcript (default)
+- Pre-meeting — generate a brief for an upcoming meeting (no transcript needed)
+- Patterns — cross-meeting analysis for this project or client
+
+**Routing:**
+- If user picks Notes, proceed to Step 2
+- If user picks Pre-meeting and there's no project context → "I need a project to generate the brief from. Pick one first." Use the project state picker.
+- If user picks Pre-meeting and the project has no meetings logged → fall back to a "first meeting brief" using only project state and brief content; flag the limitation
+- If user picks Patterns and there's no meetings log → "No meeting history yet — Patterns mode needs at least 2 meetings logged. Run Notes mode a couple of times first."
+
+### Step 2: Notes mode — Upstream skill check
+
+Scan the conversation for output from earlier skills run this session:
+
+| Skill run earlier | What to pull in | How it's used |
+|---|---|---|
+| `/creativestack:creative-brief` | Deliverables, objectives, constraints | Brief contradiction check |
+| `/creativestack:timeline-generator` | Milestones, critical path, current phase | Timeline impact detection |
+| `/creativestack:feedback-consolidator` | Outstanding actions, contradictions | Cross-reference new feedback |
+| `/creativestack:resource-conflict` | Capacity per person, overbooked flags | Capacity flag for action assignments |
+| `/creativestack:project-profitability` | Rate card, current margin status | Cost the scope changes |
+
+### Step 3: Notes mode — MCP context enrichment
+
+**Google Calendar MCP** — check for `mcp__claude_ai_Google_Calendar__*` tools.
+
+If available:
+- Use `gcal_list_events` to find the meeting by title or recent time
+- Pull attendees and agenda
+- Confirm: "I pulled the attendee list from your calendar — confirm or adjust."
+
+If not available, ask manually.
+
+**Gmail MCP** — check for `mcp__claude_ai_Gmail__*` tools.
+
+If available and the user mentions pre-meeting context:
+- Use `gmail_search_messages` for recent project-related emails
+- Pull pre-reads and open threads to inform context
+
+If not available, skip silently.
+
+### Step 4: Notes mode — Receive transcript
+
+The user pastes from any source. Identify the source format if possible (Granola
+has structured speaker labels, Otter has timestamps, Fireflies has bullet
+summaries, Zoom often has no labels, raw notes are unstructured).
+
+Read `references/transcript-parsing.md` and apply the parsing rules for the
+detected source.
+
+### Step 5: Notes mode — Clarifying questions
+
+Ask only what isn't already known:
+
+- [SELECT] "What type of meeting was this?" — only ask if not derivable from
+  context. Options: client_review / internal_standup / pitch / workshop /
+  kickoff / qbr / other
+- "What project is this for?" — skip if project state picker already established it
+- "Who was in the room?" — skip if pulled from calendar; otherwise ask once
+
+### Step 6: Notes mode — Extract and parse
+
+Per `references/transcript-parsing.md`, extract:
+- Speakers
+- Decisions
+- Actions (with owners and dates if available)
+- Scope change indicators
+- Sentiment markers
+- Open questions
+- Risks
+- Verbatim quotes worth preserving
+
+Briefly confirm the extraction count to the user before generating output:
+
+> "Extracted: 6 decisions, 4 actions (3 with owners), 2 scope change
+> indicators, 1 risk. Sentiment: cautiously positive. Anything I missed?"
+
+This is fast and gives them a chance to add context the transcript didn't capture.
+
+### Step 7: Notes mode — Brain cross-reference (the core value)
+
+Read `references/brain-cross-reference.md` and run the 7 checks against the
+extracted signals:
+
+1. **Brief contradiction check** — against project brief
+2. **Methodology violation check** — against `methodology.md`
+3. **Scope change cost check** — using `rate-card.md`
+4. **Action capacity check** — using `team.md` and recent resource-conflict data
+5. **Recurring scope check** — against `{slug}-meetings.md` history
+6. **Action completion check** — against last meeting's actions
+7. **Client pattern check** — against `learnings.md § Client Patterns`
+
+The findings become the **"What Only the Brain Caught"** section. Skip checks
+that return empty. Don't pad.
+
+### Step 8: Notes mode — Sentiment scoring
+
+Read `references/sentiment-and-patterns.md`. Score 3 dimensions (engagement,
+trust, alignment) on 1-5 each. Compute aggregate. If `{slug}-meetings.md` has
+2+ past meetings, compute trajectory.
+
+### Step 9: Notes mode — Generate output
+
+Generate three output blocks (see Output Format section):
+1. Internal version (full detail with brain panel, sentiment, scope, actions)
+2. Client-facing version (decisions and actions only, in agency tone)
+3. Slack format (compact)
+
+### Step 10: Notes mode — Write to project state and meeting log
+
+Write the meeting entry to `projects/{slug}-meetings.md` (per
+`references/meeting-log-schema.md`).
+
+Update the project state file `projects/{slug}.md`:
+- **Open Decisions** — append unresolved questions
+- **Resolved Decisions** — append previously open ones now closed
+- **Risks** — add or update
+- **Engagement Health** — append signal if sentiment shifted
+- **Recent Activity** — append `YYYY-MM-DD — meeting-notes — {type}, {N actions}, sentiment {trajectory}`
+- **Frontmatter** — update `last_updated`
+- Update `_index.md`
+
+Briefly tell the user what was updated.
+
+### Step 11: Notes mode — Compounding loop
+
+Offer **at most one** brain enrichment based on what's most valuable:
+
+- **New pattern detected with 2+ instances and not yet saved** → "I noticed Marcus has now used 'we'll think about it' twice. Want me to save this as a client pattern? It'll be checked automatically in future meetings."
+- **Action overdue from a past meeting** → "Sarah's action from 2026-03-15 is 14 days overdue. Want me to flag it in the project state risks?"
+- **Sentiment trajectory turned DECLINING** → "Engagement is down 2 points across 3 meetings. Want me to flag this in engagement health?"
+- **Recurring scope item just hit 3 instances** → "The social rollout has come up 3 times now without a formal scope change. Want me to add a high-severity risk to the project state?"
+- **No rate card and scope changes were detected** → "I couldn't price the scope changes — no rate card. Want to set one up via /creativestack:project-profitability Setup rates? Future meetings will price scope changes automatically."
+
+Don't pile on. One offer.
+
+### Step 12: Pre-meeting mode
+
+When the user picks Pre-meeting:
+
+1. Confirm the project (use project state picker)
+2. Read `references/pre-meeting-brief.md` for the format
+3. Read all relevant brain files:
+   - `projects/{slug}.md` for current state
+   - `projects/{slug}-meetings.md` for last 1-3 meetings
+   - `learnings.md § Client Patterns` for patterns matching expected attendees
+   - `clients.md` for relationship context
+4. Ask: "Who's expected in the meeting?" (or pull from calendar via MCP if available)
+5. Ask: "What's the meeting type and goal?"
+6. Generate the 1-page brief per the format rules
+7. If brain depth is insufficient, refuse rather than pad — see the format file
+
+### Step 13: Patterns mode
+
+When the user picks Patterns:
+
+1. Confirm scope: this project, this client (across projects), or specific person?
+2. Read all relevant `{slug}-meetings.md` files
+3. Read `learnings.md § Client Patterns` for the relevant scope
+4. Run the analyses:
+   - **Sentiment trajectory** across meetings
+   - **Recurring scope items** (anything mentioned 2+ times)
+   - **Action completion rate** (percentage of actions completed by next meeting)
+   - **Communication patterns** (existing patterns + new candidates)
+5. Generate the Patterns output (see Output Format section)
+6. Offer to save any new patterns found
+
+## Output Format — Notes mode
+
+Generate three versions in a single output, clearly separated.
+
+**Internal Version** — full detail, sections in order:
+1. Header (project, meeting type, date, attendees, duration, source, confidence)
+2. **⚡ What Only the Brain Caught** — generated per `references/brain-cross-reference.md` § "What Only the Brain Caught — output section". Order findings by action urgency. If all 7 checks return empty, skip and add a note: "*Brain cross-reference: no flags.*"
+3. Key Decisions
+4. Actions table — Action / Owner / Deadline / Priority / Capacity Flag (⚠ if owner is overbooked per `team.md` or recent resource-conflict)
+5. Scope & Brief Changes — each change priced via `rate-card.md` (£range), with brief impact noted if the brief is available
+6. Tone & Sentiment — overall read + 2-3 notable verbatim signals + trajectory (only if 2+ past meetings)
+7. Open Questions
+8. Raw Notes
+
+**Client-Facing Version** — polished, decisions and actions only. No brain panel, no sentiment flags, no cost estimates. Voice from `tone-of-voice.md`. Sections: header → Decisions Made → Actions table (Us / Your team / named person) → What We Need From You → Next Steps.
+
+**Slack Format:**
+```
+*{Project} — {Meeting Type} — {Date}*
+**Brain caught:** {top finding from "What Only the Brain Caught", or "no flags"}
+**Decisions:** {1-2 sentence summary}
+**Actions:** {owner: action} | {owner: action}
+**Scope changes:** {Yes — £range / None}
+**Sentiment:** {trajectory state or one word}
+**Next:** {next step + date}
+```
+
+---
+
+## Output Format — Pre-meeting mode
+
+The full format lives in `references/pre-meeting-brief.md`. Strict 1-page rules.
+
+## Output Format — Patterns mode
+
+Sections (in order): Sentiment Trajectory (ASCII bar chart + state label STABLE/IMPROVING/DECLINING/CRITICAL/VOLATILE) → Recurring Scope Items (table of items mentioned 2+ times) → Action Completion Rate (last meeting / last 3 / all-meetings table) → Communication Patterns (confirmed from `learnings.md § Client Patterns` + new candidates) → Recommendations (2 specific actions). End with a save offer for any new pattern candidates.
+
+---
+
+## Notion MCP Integration
+
+After generating notes (Notes mode only), check whether Notion tools are
+available (look for `mcp__claude_ai_Notion__*`).
+
+If available:
+- Ask: "Want me to save these notes to a Notion page?"
+- If yes, use `notion-search` to find the relevant project page, then
+  `notion-create-pages` to add as a subpage
+
+If not available, skip silently.
+
+## Skill Chains
+
+Pick the most relevant 1-2:
+
+**Upstream:**
+- **No brief or rate card** → "Run `/creativestack:creative-brief` and `/creativestack:project-profitability` Setup rates to enable brief contradiction checks and scope cost pricing."
+
+**Downstream:**
+- **Sentiment declining or capacity flag triggered** → "Run `/creativestack:status-update` to prepare a leadership-visible flag, or `/creativestack:resource-conflict` Scenario mode to model the impact."
+- **Pre-meeting mode just ran** → "Run /creativestack:meeting-notes Notes mode after the meeting to log it."
+
+## Edge Cases
+- **Very short transcript** → ask for more context, lower confidence
+- **Multiple projects discussed in one meeting** → split into sections per project, write separate entries to each `{slug}-meetings.md`
+- **Pre-meeting requested but no meetings logged** → fall back to "first meeting" brief from project state; flag the limitation
+- **Patterns requested but only 1 meeting** → refuse, suggest running Notes mode a couple more times first
+- **User pastes a Granola/Otter summary** (not full transcript) → process it, flag lower confidence on sentiment/scope
+- **Same person attended under different names** → ask once, normalise going forward
+
+### What this skill can't do
+
+This skill processes one meeting at a time from the transcript you provide.
+It can't watch the meeting live, transcribe it, or attend on your behalf.
+What it can do — and what no recording tool can — is bring the agency's full
+context to bear on what was said. With a deeper integration, this skill could
+also auto-trigger from calendar events, watch for patterns in real time, and
+propagate decisions to all affected systems automatically. The Brain enables
+the cross-referencing; deeper integrations unlock the rest.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

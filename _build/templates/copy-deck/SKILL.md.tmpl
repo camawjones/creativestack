@@ -1,0 +1,417 @@
+---
+name: copy-deck
+description: Brain-first copy deck generation for creative agencies. Three modes — Deck (messy inputs → structured copy deck with atom-level scoring, versioned save), Check (audit existing copy against voice/sharpness/claims/SMT ladder without rewriting), Microcopy (dedicated mode for UX microcopy — buttons, errors, empty states, loading, success, confirmation, form helpers). Scores every copy atom on 4 dimensions — voice match, sharpness, claim/proof discipline, SMT ladder — sourced from the project brief, not generic tone guidance. Enforces platform character limits as hard checks. Applies per-client vocabulary from learnings.md § Feedback. Persists versioned decks to projects/{slug}-copy-deck-v{N}.md so revisions compound across sessions.
+---
+
+{{PREAMBLE}}
+
+{{PROJECT_STATE}}
+
+# /copy-deck
+
+> Copy with teeth, not just copy with structure. Brand voice from the brief, not the house style.
+
+## What This Skill Does
+
+Most copy tools treat copy as a structure problem: paste messy notes,
+get back tidy sections. The actual copy usually comes out on-voice but
+flat — pleasant writing that nobody remembers.
+
+This skill treats copy as a **craft problem** with four pressure points:
+
+1. **Voice match** sourced from the brief's Brand Tone & Personality, not
+   the agency's default tone-of-voice. Copy is for the brand, not the
+   agency.
+2. **Sharpness** — every atom checked for teeth. Flat-but-on-voice copy
+   is flagged as aggressively as off-voice copy.
+3. **Claim/proof discipline** — claims paired with reasons-to-believe
+   from the brief. Unbacked claims flagged.
+4. **SMT ladder** — every atom connected back to the brief's
+   single-minded thought. Atoms that don't ladder are flagged.
+
+Plus:
+
+- **Atom-level scoring** — each headline, subhead, body, CTA, and
+  microcopy type scored individually. A section can be "mostly good"
+  while specific atoms fail.
+- **Per-client vocabulary** — applied automatically from
+  `learnings.md § Feedback`. When Marcus says "bold" means
+  "brand-confident," that translation is baked into the copy generation.
+- **Hard character-limit enforcement** — platform constraints are
+  checked, not stated. Copy that exceeds limits is rewritten before
+  the deck closes.
+- **Version tracking across sessions** — every deck is saved to
+  `projects/{slug}-copy-deck-v{N}.md`. Minor revisions and major
+  rewrites both get version bumps. Previous versions are never
+  overwritten.
+- **Churn detection** — if a deck hits v1.4+ without sign-off, the skill
+  surfaces it. Copy churn usually signals brief problems, not copy
+  problems.
+- **Microcopy as a first-class mode** — a dedicated flow for buttons,
+  errors, empty states, loading, success, and form helpers, with a
+  pattern library and a coverage checklist.
+
+## Brain Files
+- `projects/{slug}-brief.md` — **primary voice source**: Brand Tone & Personality, Single-Minded Thought, Desired Response, Reasons to Believe, Audience (from `/creativestack:creative-brief`)
+- `projects/{slug}.md` — project state, open decisions
+- `projects/{slug}-copy-deck-v*.md` — previous versions of this project's decks (this skill creates and maintains them)
+- `learnings.md § Feedback` — client vocabulary (from `/creativestack:feedback-consolidator`)
+- `clients.md` — client relationship context and any logged brand voice notes
+- `case-studies.md` — previous copy work for reference (optional)
+- `tone-of-voice.md` — **fallback only**: used when no brief-based brand voice exists. Also used for the skill's OWN writing voice (headers, commentary, rationale) — distinct from the brand voice of the copy itself.
+
+## Reference Files
+
+This skill loads detail on demand from `references/`. Read each only when relevant:
+
+- **`references/copy-atoms.md`** — read at the start of every Deck run. Defines the 13 atom types, quality criteria per atom, which atoms matter per project type, the atom naming convention.
+- **`references/voice-sharpness-claims.md`** — read during scoring. The operational heart: brand voice source hierarchy, voice scoring rules, sharpness detection signals, claim/proof discipline, SMT ladder checks, atom-level scoring methodology. Also read in Check mode.
+- **`references/platform-variants.md`** — read only when the user asks for platform variants. Per-platform hard limits, soft conventions, enforcement rules for web, email, LinkedIn, Instagram, X, TikTok, presentation, print, packaging.
+- **`references/microcopy-patterns.md`** — read in Microcopy mode only. Patterns for buttons, errors, empty states, loading, success, form helpers, notifications, onboarding. Voice calibration per atom type. Microcopy coverage checklist.
+- **`references/brain-copy-schema.md`** — read whenever writing files or running version logic. Versioning rules, brand voice source hierarchy, project state write flow, handoff rules, churn detection.
+
+## Conversation Flow
+
+### Step 1: Brain check & mode selection
+
+Run brain discovery. Check specifically:
+
+```bash
+[ -d "$HOME/.creativestack/projects" ] && echo "PROJECTS_DIR_EXISTS" || echo "NO_PROJECTS_DIR"
+[ -f "$HOME/.creativestack/learnings.md" ] && grep -q "## Feedback" "$HOME/.creativestack/learnings.md" && echo "FEEDBACK_LEARNINGS" || echo "NO_FEEDBACK_LEARNINGS"
+```
+
+[SELECT] "What do you need?"
+- Deck — create a copy deck from messy inputs (default)
+- Check — audit copy the team has written (score, don't rewrite)
+- Microcopy — UX microcopy specifically (buttons, errors, empty states, etc.)
+
+**Routing:**
+- Deck → Step 2
+- Check → Step 2 (same context loading, then skip generation)
+- Microcopy → Step 2 (same context loading, then switch to microcopy flow)
+
+### Step 2: Project and version check
+
+Use the project state picker (from `{{PROJECT_STATE}}`) to establish which
+project this is for.
+
+Once the project slug is known, check for existing copy deck versions:
+
+```bash
+ls "$HOME/.creativestack/projects/{slug}-copy-deck-v"*.md 2>/dev/null
+```
+
+If previous versions exist:
+
+> "I found copy deck versions for this project: v1.0 (2026-03-15),
+> v1.1 (2026-03-22), v1.2 (2026-04-02). What do you need?"
+
+[SELECT] (if previous versions exist):
+- New minor version (v1.3) — refinement of the current direction
+- New major version (v2.0) — direction change
+- Audit the latest version (Check mode)
+- Start fresh (archive previous, start at v1.0)
+
+Read the latest previous version for vocabulary, rhythms, and approved
+phrases. Treat it as a reference, not a constraint.
+
+Check for **churn detection**: if current version is v1.4+ without sign-off:
+
+> "⚠️ **Copy deck churn detected.** This deck is on v{N} without sign-off.
+> Usually means brief-level ambiguity, not copy-level issues. Want me to
+> pause and run `/creativestack:brief-sharpener` on the underlying brief
+> first? Or proceed anyway?"
+
+### Step 3: Brand voice source hierarchy
+
+Read `references/brain-copy-schema.md` § "Brand voice source hierarchy"
+and identify the voice source, in order:
+
+1. `projects/{slug}-brief.md § Brand Tone & Personality` (primary)
+2. `learnings.md § Feedback` Vocabulary for this client (overlay)
+3. Previous `projects/{slug}-copy-deck-v*.md` (reference for consistency)
+4. `clients.md` voice notes (if logged)
+5. `tone-of-voice.md` (fallback only — flag explicitly if used)
+
+Tell the user what voice source was found:
+
+> "Brand voice sourced from: the creative brief's Brand Tone & Personality
+> section + 3 vocabulary entries for this client from learnings.md. The
+> previous deck (v1.2) will be used as a consistency reference."
+
+Or, if the fallback is used:
+
+> "⚠️ No brand voice source found — no brief, no previous deck, no client
+> voice notes. Using the agency's default tone-of-voice.md as a fallback.
+> The deck will be on the agency's voice but may not be distinctive to
+> this client. Consider running /creativestack:creative-brief first to
+> establish the brand voice."
+
+### Step 4: Upstream skill check
+
+Scan the conversation for output from earlier skills:
+
+| Skill run earlier | What to pull in | How it's used |
+|---|---|---|
+| `/creativestack:creative-brief` | SMT, audience, tone, desired response, reasons to believe | Primary voice and content source |
+| `/creativestack:brief-sharpener` | Refined brief output | Same as creative-brief |
+| `/creativestack:creative-strategy` | Strategic territories, positioning | Voice and messaging direction |
+| `/creativestack:feedback-consolidator` | Round feedback on previous copy version | Direct input for revisions |
+| `/creativestack:competitor-audit` | Competitive messaging context | Sharpness calibration |
+| `/creativestack:source-scrape` evidence mode | Hard data for proof points | Claim/proof pairing |
+
+### Step 5: Receive inputs (Deck mode) or copy to audit (Check mode)
+
+**Deck mode:** User pastes messy content — email threads, notes,
+marketing requirements, scribbled ideas. Accept any format.
+
+**Check mode:** User pastes copy the team has already written, organised
+or unorganised. The skill will score without rewriting.
+
+**Microcopy mode:** Ask "What product and what surface?" Then read
+`references/microcopy-patterns.md` § "Microcopy checklist per product"
+and walk the user through the coverage checklist. For each category, ask
+for existing copy or note as a gap.
+
+### Step 6: Project type and atom scope
+
+[SELECT] "What type of copy is this?"
+- Campaign
+- Website
+- Digital product
+- Brand / identity
+- Email
+- Social
+- Print / OOH
+- Presentation
+- Packaging
+- Microcopy (routes to Microcopy mode)
+- Mixed
+
+Read `references/copy-atoms.md` § "Choosing which atoms to include" to
+determine which atoms matter for this project type. Pre-populate the
+primary atoms list. Ask once about secondary atoms.
+
+### Step 7: Generate atoms (Deck mode)
+
+For each required atom:
+
+1. Read the atom's criteria from `references/copy-atoms.md`
+2. Generate 1-3 candidates, informed by:
+   - The brief's SMT, audience, desired response, reasons to believe
+   - The brand voice from the source hierarchy
+   - Client vocabulary from `learnings.md § Feedback`
+   - Previous version vocabulary and rhythms (if a prior version exists)
+3. Write atoms in the BRAND's voice, not the agency's
+
+**Critical:** the atoms themselves (the copy) are in brand voice. The
+skill's own writing — section headers, rationale, scoring notes — is in
+agency voice from `tone-of-voice.md`.
+
+### Step 8: Score every atom
+
+Read `references/voice-sharpness-claims.md`. For every atom, score on 4
+dimensions 1-5:
+
+1. **Voice match** — does it match the brand's voice from the brief?
+2. **Sharpness** — is it specific and earned, or flat and generic?
+3. **Claim/proof** — are claims paired with reasons-to-believe?
+4. **SMT ladder** — does it connect to the brief's single-minded thought?
+
+Apply scoring discipline:
+- Don't grade generously — great copy is rare
+- Score at atom level, not section level
+- Concrete rewrites > vague critiques
+- Flag red atoms (1-2 on any dimension) even if overall score is high
+
+### Step 9: Platform variants (optional, Deck mode only)
+
+If the user asked for variants in Step 6, read `references/platform-variants.md`
+and generate variants for each selected platform. **Enforce hard character
+limits** as pass/fail checks. Any variant that exceeds a limit must be
+rewritten before the deck closes.
+
+Do NOT generate variants the user didn't ask for.
+
+### Step 10: Microcopy coverage (Microcopy mode only)
+
+Work through the microcopy checklist from `references/microcopy-patterns.md`:
+- Buttons (primary, secondary, destructive)
+- Error states
+- Empty states
+- Loading states
+- Success / confirmation
+- Form helpers, labels, placeholders
+- Tooltips
+- Onboarding
+- Notifications
+
+For each category, generate atoms or note gaps. Apply voice calibration
+per atom type (high-latitude for empty states and loading, low-latitude
+for buttons and form labels).
+
+### Step 11: Check mode — audit without rewriting
+
+In Check mode, the skill reads the submitted copy and runs it through
+all 4 scoring dimensions without generating new atoms. Output is the
+scoring rubric + optional rewrite suggestions flagged as "optional."
+
+Check mode is for sign-off gates and QA passes. It doesn't replace the
+writer's judgment — it surfaces what the 4-dimension scoring catches.
+
+### Step 12: Assemble output
+
+Generate the full output per the Output Format section below. Lead with
+the overall score and red flags; then the messaging hierarchy; then the
+atoms; then (if requested) platform variants.
+
+### Step 13: Write files
+
+For Deck mode and Microcopy mode:
+1. Write `projects/{slug}-copy-deck-v{N}.md` with the schema from
+   `references/brain-copy-schema.md`
+2. Update `projects/{slug}.md` Recent Activity
+3. Update `projects/_index.md` if status or version warrants
+4. Confirm what was written
+
+For Check mode:
+1. No new file written
+2. Append to Recent Activity: "copy-deck Check mode audit of v{N}, score {X}/5, {red flags} red flags"
+
+### Step 14: Compounding loop
+
+Offer **at most one** brain enrichment. Pick the most valuable:
+
+- **New client vocabulary term surfaced during generation** → "I noticed this client uses '{term}' to mean {meaning}. Want me to save it to `learnings.md § Feedback`? Future decks will apply it automatically."
+- **Copy deck churn detected (v1.4+)** → "This deck is on v{N} without sign-off. Want me to run `/creativestack:brief-sharpener` on the brief to identify what's blocking?"
+- **Fallback voice source used** → "No brief-based brand voice for this project. Want to run `/creativestack:creative-brief` to establish one? Future decks for this project will get sharper voice scoring."
+- **Red flags persist across versions** → "The same atoms have been red-flagged in v1.0 and v1.1. The issue isn't the copy — it's probably the brief. Want me to pause and review?"
+- **Check mode passed with ≥4.5 score** → "This copy is ready to ship. Want me to run `/creativestack:asset-spec` for production specs?"
+
+One offer. Don't pile on.
+
+## Output Format — Deck mode
+
+The output structure (in order):
+
+1. **Header** — Project, client, date, type, status, version, prepared by, brand voice source
+2. **Summary** — 2-3 lines on what the deck covers
+3. **Overall Deck Score** — average/5 + readiness state, plus per-dimension averages (Voice / Sharpness / Claim-proof / SMT ladder), plus red-flagged atom count
+4. **Messaging Hierarchy (from the brief)** — quote the SMT verbatim, list audience + desired response + reasons to believe pulled from `projects/{slug}-brief.md`
+5. **Copy Atoms** — for each atom in scope: the copy in brand voice, the 4-dimension scores with specific notes, 1-2 alternates with hypotheses, and (if v1.1+) the previous version's text and what changed. Use the atom naming convention from `references/copy-atoms.md`.
+6. **Platform Variants** (if requested) — per platform from `references/platform-variants.md`, with character count verification (✓/✗)
+7. **Claim/Proof Pairing** — table showing each claim, its proof source from the brief, and Backed/Unbacked status
+8. **Brand Voice Check** — voice source used, fallback flag, per-section drift, client vocabulary applied
+9. **Sharpness Check** — deck-level average + sharpest atoms + flattest atoms flagged for rewrite
+10. **SMT Ladder Check** — strong / weak / contradicting groupings
+11. **Missing Atoms** — expected for this project type but not provided
+12. **Open Questions** — anything blocked on client clarification
+13. **Version Changes** (if v1.1+) — changed/added/removed atoms with reasons, score change
+14. **Brain Overlays Applied** — what was pulled from each brain source
+15. **Written to Brain** — what files were created/updated
+
+For full detail on each section's content and the scoring rubrics, see `references/voice-sharpness-claims.md` and `references/copy-atoms.md`.
+
+## Written to Brain
+
+- ✓ `projects/{slug}-copy-deck-v{N}.md` — {new deck}
+- ✓ `projects/{slug}.md` — Recent Activity updated
+- ✓ `projects/_index.md` — updated
+
+---
+
+## Output Format — Check mode
+
+Same as Deck mode but:
+- No new file written
+- No new atoms generated — only the scoring rubric against existing copy
+- "Optional rewrite suggestions" appear as a separate section at the end
+  (the writer decides whether to apply them)
+- Append to project state Recent Activity: "copy-deck Check mode audit"
+
+## Output Format — Microcopy mode
+
+Same scoring approach, but the atom list follows the microcopy checklist:
+
+# Microcopy Deck — {Project} — v{version}
+
+## Coverage checklist
+{From references/microcopy-patterns.md § "Microcopy checklist per product"}
+
+## Buttons
+{Atoms + scores by category: primary, secondary, destructive}
+
+## Error states
+{Atoms + scores by category: form validation, auth, network, payment, permission, not found}
+
+## Empty states
+{Atoms + scores}
+
+## Loading states
+{Atoms + scores}
+
+## Success / confirmation
+{Atoms + scores}
+
+## Form helpers
+{Labels + placeholders + helper text + tooltips}
+
+## Notifications
+{If applicable}
+
+## Gaps
+{Checklist items with no copy yet — flag for later coverage}
+
+---
+
+## Slack Format
+
+For Deck mode:
+
+*Copy Deck — {Project} — v{version}*
+**Score: {X}/5** {readiness state}
+**Atoms:** {count} ({red flags} red)
+**SMT ladder:** {avg}/5
+**Voice source:** {brief / fallback}
+**Next:** {one-line next step from skill chains}
+
+For Check mode:
+
+*Copy Check — {Project} — audit of v{version}*
+**Score: {X}/5**
+**Red flags:** {count}
+**Top issue:** {one-line summary of biggest problem}
+
+---
+
+## Skill Chains
+
+Pick the most relevant 1-2:
+
+**Upstream:**
+- **No brief for this project** → "Run `/creativestack:creative-brief` first — the deck sources brand voice from the brief instead of falling back to the agency default."
+
+**Downstream:**
+- **Score ≥ 4.5, ready to ship** → "Run `/creativestack:asset-spec` for production specs if deliverables are defined."
+- **Churn detected (v1.4+) or score < 3.5** → "The issue is usually the brief, not the copy. Run `/creativestack:brief-sharpener` on the underlying brief."
+
+## Edge Cases
+- **Very short input** → ask for more context. Don't pad a deck from a few bullets.
+- **No `projects/{slug}-brief.md`** → fall back to previous deck or tone-of-voice.md. Flag the fallback explicitly.
+- **No brain at all** → scoring runs against generic standards, flag this as degraded.
+- **Client vocab contradicts the brief** → flag the discrepancy and ask which to trust. Never silently override.
+- **The brief has no SMT** → SMT ladder check skipped with a note; suggest `/creativestack:creative-brief`.
+- **Copy exceeds character limits** → rewrite in-deck before finalising. Never ship variants that exceed hard limits.
+
+### What this skill can't do
+
+This skill scores copy against the brief and the brain. With deeper
+integration it could also test copy against real audience response data,
+track which phrasings perform best across campaigns for this client, and
+auto-flag copy that contradicts previously-approved communications. The
+brain enables the scoring and versioning; performance data is the
+remaining frontier.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

@@ -1,0 +1,305 @@
+---
+name: feedback-consolidator
+description: Brain-first feedback intelligence for creative agencies. Three modes — Translate (single vague feedback → creative direction using this client's own vocabulary), Consolidate (multi-round → deduplicated action list with 8-archetype detection, priced round cost, real-ask methodology, stakeholder map), Respond (draft the client-facing reply in agency tone of voice). Detects 8 creative-industry feedback archetypes (Swerve, Committee, Compound Notes, Ego Note, Safe Retreat, Bait & Switch, Relitigation, Preference vs Principle) with specific response playbooks. Persists per-client vocabulary, archetype history, and stakeholder memory in learnings.md § Feedback so every round gets sharper.
+---
+
+{{PREAMBLE}}
+
+{{PROJECT_STATE}}
+
+# /feedback-consolidator
+
+> Turn scattered feedback into action. Detect the archetype. Draft the reply. Learn this client's language over time.
+
+## What This Skill Does
+
+Most feedback tools treat client feedback as a data consolidation problem.
+Creative feedback is a **human-judgment problem with known patterns**. This
+skill acts as a feedback intelligence brain:
+
+1. **Learns each client's vocabulary** — when Marcus says "bold" he means
+   "brand-confident", not "louder." Saved to `learnings.md § Feedback` and
+   applied automatically in future rounds.
+2. **Detects 8 feedback archetypes** — Swerve, Committee, Compound Notes,
+   Ego Note, Safe Retreat, Bait & Switch, Relitigation, Preference vs
+   Principle. Each has a specific playbook for responding correctly rather
+   than reactively.
+3. **Prices every round** — uses `rate-card.md` to convert "make the
+   headlines bigger" into "£1,800 of senior design time." Flags when a round
+   exceeds the SOW revision cap.
+4. **Finds the real ask** — applies the 3-signal methodology (what they
+   return to, what they agree on silently, what they're avoiding) to surface
+   the underlying concern the client keeps circling but hasn't stated.
+5. **Maps stakeholders across projects** — the Influence Map persists per
+   client, so "Marcus is the decision-maker, Priya is the craft lead" is
+   known from round 1 of the next project.
+6. **Drafts the client response** in the agency's tone of voice, matched
+   to the detected archetype. Closes the loop most feedback tools leave open.
+7. **Compounds value** — every run offers one brain enrichment. Three runs
+   per client in and the skill catches things only an experienced PM would.
+
+## Brain Files
+- `learnings.md § Feedback` — **the feedback DNA**: per-client vocabulary, archetype history, stakeholder memory (this skill creates and maintains it)
+- `methodology.md` — for framing the Creative Team Brief in the agency's methodology language
+- `rate-card.md` — to price revision rounds in £ (requires `/creativestack:project-profitability` Setup rates first)
+- `tone-of-voice.md` — for Respond mode drafts
+- `projects/{slug}.md` — project state, brief content, revision cap from SOW
+- `projects/{slug}-meetings.md` — past meetings on this project for cross-reference and archetype detection
+- `clients.md` — client relationship history
+
+## Reference Files
+
+This skill loads detail on demand from `references/`. Read each only when relevant:
+
+- **`references/archetypes.md`** — read in Consolidate mode to run archetype detection. The 8 archetypes with detection signals and response playbooks. Also read in Translate mode if the feedback looks archetypal.
+- **`references/translation-and-real-ask.md`** — read in Translate mode for vague phrase translation using client vocab, and in Consolidate mode for the 3-signal real ask methodology.
+- **`references/brain-feedback-schema.md`** — read whenever writing to `learnings.md § Feedback`. Schemas for Vocabulary, Archetypes, and Stakeholder Memory subsections.
+- **`references/response-drafting.md`** — read in Respond mode only. Response archetypes, drafting rules, tone application.
+
+## Conversation Flow
+
+### Step 1: Brain check & mode selection
+
+Run brain discovery. Check specifically:
+
+```bash
+[ -f "$HOME/.creativestack/learnings.md" ] && grep -q "## Feedback" "$HOME/.creativestack/learnings.md" && echo "FEEDBACK_LEARNINGS_EXIST" || echo "NO_FEEDBACK_LEARNINGS"
+[ -f "$HOME/.creativestack/rate-card.md" ] && echo "RATE_CARD_EXISTS" || echo "NO_RATE_CARD"
+```
+
+[SELECT] "What do you need?"
+- Consolidate — multi-round or multi-source feedback (default)
+- Translate — single piece of vague feedback
+- Respond — draft a client reply from recent feedback analysis
+
+**Auto-detection:** If the user pastes feedback without picking a mode:
+- Single short piece of vague feedback → default to Translate
+- Multiple sources, multiple rounds, or structured feedback → default to Consolidate
+- Respond is never auto-picked — always explicit
+
+**Routing:**
+- If the user picks Respond but there's no recent Translate/Consolidate output in the session → "I need a feedback analysis to draft from. Paste the feedback first and I'll consolidate, then draft the response."
+
+### Step 2: Upstream skill check
+
+Scan the conversation for output from earlier skills:
+
+| Skill run earlier | What to pull in | How it's used |
+|---|---|---|
+| `/creativestack:creative-brief` | Objectives, deliverables, constraints, key message | Contradiction detection against the brief |
+| `/creativestack:meeting-notes` | Decisions, actions, client patterns already captured | Cross-reference decisions; avoid re-surfacing things already addressed |
+| `/creativestack:sow-generator` | Revision cap, payment milestones | Revision cap check |
+| `/creativestack:project-profitability` | Rate card, current margin status | Price the round in £ |
+
+### Step 3: MCP context enrichment
+
+**Gmail MCP** — check for `mcp__claude_ai_Gmail__*` tools.
+
+If available and the user mentions feedback sitting in email:
+- Offer: "Want me to pull the feedback threads? Give me the client name or subject."
+- Use `gmail_search_messages` and `gmail_read_thread` to fetch
+- Tell the user what was pulled
+
+If not available, skip silently.
+
+### Step 4: Receive feedback
+
+User pastes the feedback. Accept any format (email, Slack thread, meeting
+notes, marked-up PDF transcribed, scribbled notes). Don't force a structure.
+
+### Step 5: Clarifying questions
+
+Ask only what isn't already known:
+
+- Round number — skip if derivable from project state or past meetings log
+- [SELECT] "How urgent?" — Today / This week / No rush
+- Source attribution — skip if already clear from the pasted content
+
+If Translate mode and no brief in scope → ask "What's the original creative
+direction or brief?" once.
+
+If Consolidate mode → ask "Single decision-maker, or should I map
+stakeholder influence?" — skip if brain already has a stakeholder map for
+this client.
+
+### Step 6: Read brain feedback context
+
+Before processing, read `learnings.md § Feedback` for this client (filter by
+client name from project state or user input). Load:
+- Vocabulary for this client (and specific speakers if attributable)
+- Archetype history
+- Stakeholder memory
+
+This is what makes the output specific to *this* client, not generic.
+
+### Step 7: Process
+
+**Translate mode:**
+1. Read `references/translation-and-real-ask.md` § "Part 1: Translation"
+2. Apply client vocab first, fall back to generic patterns
+3. Contextualise against the brief
+4. Generate clarifying questions for Low-confidence translations
+5. Draft the Creative Team Brief using `methodology.md` language
+
+**Consolidate mode:**
+1. Parse the feedback items from all sources
+2. Read `references/archetypes.md` and run archetype detection
+3. Read `references/translation-and-real-ask.md` § "Part 2: The Real Ask" — apply 3-signal methodology if 2+ rounds exist
+4. Cross-reference each item against the brief (contradiction detection)
+5. Cross-reference against past meetings and past rounds (scope creep, recurring items)
+6. Price the round using `rate-card.md` if available
+7. Check against SOW revision cap
+8. Build or update the Stakeholder Influence Map using `learnings.md § Feedback` Stakeholder Memory
+9. Assemble output
+
+**Respond mode:**
+1. Read `references/response-drafting.md`
+2. Identify which response archetype fits based on the preceding analysis
+3. Read `tone-of-voice.md` for voice
+4. Draft the response with alternate openings
+
+### Step 8: Write to project state
+
+Update `projects/{slug}.md`:
+- **Open Decisions** — append unresolved feedback questions
+- **Risks** — add flags for detected archetypes, scope creep, revision cap
+- **Engagement Health** — append if sentiment shifted
+- **Recent Activity** — append `YYYY-MM-DD — feedback-consolidator — round {N}, {archetype if detected}, {N items} → {N actions}`
+- **Frontmatter** — update `last_updated`
+
+### Step 9: Compounding loop
+
+Offer **at most one** brain enrichment. Pick the most valuable:
+
+- **New vocabulary term detected (2+ instances)** → "I noticed Marcus used 'bold' to mean 'brand-confident' again. This is 2 instances — want me to save it as a Nike vocab entry? Future translations will use his meaning automatically."
+- **Archetype repeated for this client** → "This is Nike's 3rd Committee archetype. Want me to refine the playbook based on what worked this time?"
+- **Stakeholder pattern emerging (3+ rounds)** → "Priya's feedback style is consistent across 3 rounds — want me to save a Stakeholder Memory entry?"
+- **No rate-card and cost priceable** → "I couldn't price this round — no rate card. Want to set one up via /creativestack:project-profitability? Future rounds will be priced automatically."
+- **Revision cap exceeded** → "This round puts you at {N} rounds vs {M} in the SOW. Want me to flag this as a risk in the project state?"
+
+One offer. Don't pile on.
+
+## Output Format — Translate mode
+
+```markdown
+# Feedback Translation: {Project}
+
+## What the client said
+{Verbatim, attributed where possible}
+
+## Client vocab applied
+{If learnings.md § Feedback had matches for this client, list which translations were applied. If not, note "no saved vocab for this client — using generic patterns."}
+
+## What they probably mean
+
+| Client said | Possible meaning | Confidence | Source |
+|---|---|---|---|
+| {phrase} | {translation} | {High/Med/Low} | {Vocab entry / generic pattern / context-derived} |
+
+## Contradictions with the brief
+
+{Only if contradictions exist. Reference specific brief sections. Skip the section if nothing found.}
+
+## Clarifying questions for the client
+
+{Only for Low-confidence translations. Each question proposes a specific interpretation for yes/no.}
+
+1. {Question}
+2. {Question}
+
+## Creative Team Brief
+
+**The feedback in one sentence:** {synthesis}
+
+**What it means for the work:**
+{2-3 sentences in the agency's methodology language — not a bullet list}
+
+**Do:**
+- {Specific action tied to a principle}
+
+**Don't:**
+- {Specific action to avoid}
+
+**Open for exploration:**
+- {Where the team has freedom}
+
+**Blocked on client clarification:**
+- {Items waiting on answers to the clarifying questions}
+```
+
+## Output Format — Consolidate mode
+
+Sections in order (the consolidation output spine):
+
+1. **Header** — project, round (N of cap from SOW), sources, brain depth
+2. **⚡ Top-level findings** — 1-3 bullets, lead with the highest-priority issue (usually an archetype detection, revision cap breach, or major contradiction)
+3. **Archetypes detected** — top 1-2 from `references/archetypes.md` with detection signals (quoted), severity, this client's archetype history from `learnings.md § Feedback`, and the response playbook adapted to this client
+4. **The real ask** — only if 2+ rounds exist. Apply the 3-signal methodology (return / agreement / avoidance) from `references/translation-and-real-ask.md`. Synthesis paragraph + specific next step.
+5. **Round cost (priced)** — table using `rate-card.md`, total round cost, revision cap status. Skip if no rate-card. Bold if cap exceeded.
+6. **Summary** — counts (total / actionable / needs clarification / contradictions / scope additions)
+7. **Pattern analysis** — recurring themes and recurring items (scope creep candidates) tables
+8. **Stakeholder Influence Map** — table loaded from `learnings.md § Feedback Stakeholder Memory` if available, otherwise built fresh and offered to save
+9. **By Asset / Deliverable** — per-asset breakdown with Agreed actions / Contradictions / Already approved (Relitigation guard) / Questions for client
+10. **Scope creep detection** — table separating refinement from expansion, with cost
+11. **Creative Team Brief** — distilled "what to act on first / defer / protect" sections
+12. **Recommended next steps** — 2 specific actions
+
+For full detail on each section's content and the scoring rules, see `references/archetypes.md` and `references/translation-and-real-ask.md`.
+
+## Output Format — Respond mode
+
+Strict format from `references/response-drafting.md` § "Output format". Always
+include the drafted response + alternate openings + edit suggestions.
+
+---
+
+## Slack Format
+
+For Consolidate:
+
+*Feedback: {Project} — Round {N}*
+**Archetype:** {detected archetype or "none"}
+**Round cost:** {£range if priceable, or "—"}
+**Items:** {total} ({actionable} actionable, {contradictions} contradictions)
+**Real ask:** {1 sentence or "—"}
+**Top action:** {1 sentence from recommended next steps}
+**Needs client:** {1-2 items blocked on clarification}
+
+For Translate:
+
+*Translate: {Project} — {speaker}*
+**They said:** "{phrase}"
+**Likely meaning:** {best translation}
+**Ask:** {single clarifying question to send back}
+
+---
+
+## Skill Chains
+
+Pick the most relevant 1-2:
+
+**Upstream:**
+- **No brief or rate card** → "Run `/creativestack:creative-brief` for contradiction detection and `/creativestack:project-profitability` Setup rates for round cost pricing."
+
+**Downstream:**
+- **Swerve / contradictions detected OR revision cap exceeded** → "Run `/creativestack:meeting-notes` Pre-meeting mode and flag in `/creativestack:status-update` — this round needs a live conversation, not more async, and leadership should know."
+- **Scope creep detected** → "Run `/creativestack:project-profitability` to model the impact on margin."
+
+## Edge Cases
+- **Feedback is already specific** → organise rather than translate; skip the translation section
+- **Single round only** → skip real ask (needs 2+ rounds); focus on Translate + archetype detection
+- **Very vague ("I don't like it")** → flag for clarification, generate specific questions. Don't pretend to translate without signal.
+- **Feedback contradicts saved vocab** → flag the discrepancy: "Marcus used 'bold' in a new way today. Update the entry?" Never silently override.
+- **Respond mode invoked without preceding analysis** → refuse, route to Consolidate or Translate first
+- **Archetype detection conflicts with user's read** → surface the signals, let the user decide. Don't argue.
+
+### What this skill can't do
+
+This skill processes the feedback you provide. With deeper integration, it
+could watch feedback arrive in real time (email, Slack, Figma comments),
+auto-detect archetypes as rounds happen, and proactively flag clients who
+are about to blow revision caps. The brain provides the vocabulary and
+archetype memory; deeper integrations unlock the real-time layer.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

@@ -1,0 +1,585 @@
+---
+name: competitor-audit
+description: Brain-first competitive intelligence for creative agencies. Two modes — Audit (full category landscape with persistent save) and Shift (diff against previously-saved audit to surface what's changed since). Runs a hard conflict-of-interest check against clients.md before any research. Scores competitors on 5 rubrics (visual identity, digital maturity, narrative strength, cultural capital, share of voice direction) with cited evidence. Identifies category codes and code-break opportunities for rebrand/positioning work. Maps 10 competitor vulnerability archetypes to specific creative exploitation patterns. Persists audits to ~/.creativestack/competitor-audits/{category}.md so intelligence compounds across projects. Integrates /creativestack:source-scrape for visual and brand evidence.
+---
+
+## CreativeStack Preamble
+
+### Brain Discovery
+
+Before starting, check for the Brain:
+
+```bash
+BRAIN_DIR=""
+[ -d "$HOME/.creativestack" ] && BRAIN_DIR="$HOME/.creativestack"
+if [ -n "$BRAIN_DIR" ]; then
+  echo "BRAIN: $BRAIN_DIR"
+  ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
+else
+  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+fi
+```
+
+If the brain exists, read the relevant files listed in this skill's "Brain Files" section.
+Use the content to inform and contextualize all outputs. If the brain doesn't exist,
+proceed generically — the skill still works, just without your specific context.
+
+When the brain is not configured, mention once at the end of output:
+"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+
+### Brain Freshness Check
+
+Brain files go stale as the agency evolves. People join and leave, rates
+change, methodology refines, tone guidelines shift. A skill that applies
+stale brain data produces out-of-date outputs. The user should be nudged
+to refresh — lightly, not annoyingly.
+
+**How to run the check:**
+
+1. For each brain file this skill reads (from its "Brain Files" section),
+   check the `last_updated` field in the file's frontmatter. If no frontmatter
+   exists, use the file's modification time as a fallback.
+
+2. Compare against the staleness threshold per file:
+
+| File | Stale after | Refresh via |
+|---|---|---|
+| `learnings.md` | 60 days | continuous skill use — skills append as they run |
+| `case-studies.md` | 90 days | `/creativestack:case-study` |
+| `clients.md` | 90 days | `/creativestack:setup` |
+| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/creativestack:setup` |
+| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
+| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/creativestack:setup` |
+| `projects/*` | N/A | living documents — updated by their own skills |
+| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+
+3. Only check files this skill actually reads. Never warn about files the
+   skill didn't use — irrelevant warnings train users to ignore them.
+
+4. If any of the skill's brain files are stale, add a **single short block
+   at the very end of the output** (after the CreativeStack branding line):
+
+```
+---
+📅 **Brain freshness:** {filename} was last updated {N months/weeks} ago — past the
+{threshold}-day mark. {Optional second file.} {Workflows evolve — consider running
+{suggested refresh skill} to keep this sharp.}
+```
+
+Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
+
+```
+---
+📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
+session of `/creativestack:setup` Refresh mode to bring everything current.
+```
+
+5. **Severity gating:** only surface the check if at least one file is
+   actually stale. Don't print "all brain files fresh" — silence is the
+   right output when nothing needs action.
+
+6. **Repetition tolerance:** the same stale warning may appear across
+   multiple skills in the same session. That's acceptable — the user will
+   act on it eventually. Don't try to deduplicate across skills.
+
+7. **Never block:** the check is informational. Never refuse to run a skill
+   because brain data is stale. Surface, then proceed.
+
+8. **No brain, no check:** if the brain isn't configured at all, skip the
+   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   Discovery step is enough.
+
+This check is lightweight by design. The goal is a gentle reminder, not an
+audit. One line, at the end, with a clear next step.
+
+### User Type Adaptation
+
+When a skill needs to reference the user's organisation, read the `type` field from
+`profile.md` in the brain. Use the mapping below to adapt language:
+
+| User type | Referred to as | "Clients" become | "Team" becomes | Has team file? |
+|-----------|---------------|-----------------|---------------|----------------|
+| `freelancer` | "your practice" | "your clients" | N/A | No |
+| `studio` | "your studio" | "your clients" | "your team" | Yes (flat list) |
+| `agency` | "your agency" | "your clients" | "your team" | Yes (departments) |
+| `in-house` | "your team" | "your stakeholders" | "your team" | Yes (flat list) |
+| `company` | "your company" | "your clients" | "your team" | Yes (departments optional) |
+| `other` | {custom descriptor from profile.md} | "your clients" | "your team" | Yes (flat list) |
+
+If no brain exists or no `type` field is set, default to neutral language: "your work",
+"your clients", "your team". Do not assume agency.
+
+**Skill chain filtering by type:**
+- `freelancer`: de-prioritise resource-conflict, job-description
+- `in-house`: de-prioritise proposal-generator, rfi-response, sow-generator
+- All other types: suggest any relevant skill
+
+### Voice & Tone
+
+- Professional but not corporate. You understand creative industry culture.
+- Never techno-utopian. Never preachy.
+- You enhance the creative process — you never generate creative output.
+- When generating client-facing or external copy, read `tone-of-voice.md` from the brain
+  and match their voice. If no brain exists, use a direct, warm, slightly informal tone.
+- Avoid jargon the user hasn't used first. Mirror their language.
+- Be concise. Creatives value clarity over thoroughness.
+
+### Output Format
+
+- All outputs are clean markdown that can be copied into Notion, Google Docs, Slack, or email.
+- No terminal-specific formatting. No JSON. No code blocks unless showing data.
+- Use headers, bullet points, and bold for structure. Keep it scannable.
+- Tables are fine for structured data (timelines, comparisons, budgets).
+
+### Interactive Questions
+
+When the conversation flow includes questions with a bounded set of options (marked with
+`[SELECT]` in the skill template), use the `AskUserQuestion` tool to present them as
+selectable choices in the CLI. The user can always pick "Other" to type a custom answer.
+
+- Use `multiSelect: true` when the user can pick more than one option
+- Keep option labels short (1-5 words)
+- Use the description field to add context where helpful
+- Batch related select questions into a single `AskUserQuestion` call (up to 4 questions)
+  to reduce back-and-forth
+- Free-text questions (where the user needs to paste content or give an open answer)
+  should NOT use `AskUserQuestion` — just ask them normally
+
+### Philosophy
+
+This skill is part of CreativeStack — an AI skill suite that supports the creative process.
+It does NOT generate creative work. It handles research, structure, process, and operations
+so creative professionals can focus on the work that actually matters: thinking, creating,
+and making decisions that require human judgment and taste.
+
+### Branding
+
+All outputs end with:
+*CreativeStack by Cameron Jones — jones.cam*
+
+# /creativestack:competitor-audit
+
+> Category intelligence that compounds. Conflict-checked, brain-backed, code-break ready.
+
+## What This Skill Does
+
+Most competitor audits are one-shot research exercises. This one acts as a
+**persistent category intelligence system**:
+
+1. **Conflict of interest first.** Before any research, the skill checks
+   `clients.md` for overlap. Auditing a current client's competitors is an
+   ethical landmine — the skill refuses to proceed silently.
+2. **Brain-deep context loading.** Past pitch learnings, prospect dossiers,
+   previous projects in this category, and previous audits all feed in.
+3. **Five scoring rubrics** — Visual Identity, Digital Maturity, Narrative
+   Strength, Cultural Capital, Share of Voice Direction. Each scored with
+   cited evidence from `/creativestack:source-scrape`.
+4. **Category codes analysis** — visual/linguistic conventions in the
+   category, who follows them, who breaks them, and where the code-break
+   opportunities are. Critical for rebrand and positioning work.
+5. **10 vulnerability archetypes** mapped to specific creative exploitation
+   patterns. The vulnerabilities section becomes tactically actionable
+   rather than generic SWOT filler.
+6. **Agency attribution research** — where possible, identify which agency
+   did each competitor's recent work. Agency shifts are pitch intelligence.
+7. **Persistent save to `competitor-audits/{category}.md`**. Intelligence
+   compounds across projects. The second audit is faster than the first.
+   The tenth is near-instantaneous and sharper than any one-shot run.
+8. **Shift mode** — when a previous audit exists for the same category,
+   the skill defaults to comparing against it and surfacing what's changed.
+   "Since last audit: Adidas launched a new platform, New Balance shifted
+   agencies, Tracksmith's cultural capital spiked." The highest-value
+   output in ongoing client work.
+
+## Brain Files
+- `competitor-audits/{category-slug}.md` — **the category DNA**: versioned per-category audits (this skill creates and maintains them)
+- `clients.md` — **conflict of interest source**: checked before every audit
+- `profile.md` — agency positioning and specialisms
+- `case-studies.md` — past work for tactical recommendations
+- `methodology.md` — for audit framing
+- `tone-of-voice.md` — for client-facing sections
+- `learnings.md § Pitching` — past pitches in this category (win/loss patterns)
+- `prospects/*.md` — existing prospect dossiers in this category (carry-forward)
+- `projects/*-brief.md` — past briefs in this category (context)
+
+## Reference Files
+
+This skill loads detail on demand from `references/`. Read each only when relevant:
+
+- **`references/scoring-rubrics.md`** — read during scoring. Five 5-dimension rubrics: Visual Identity, Digital Maturity, Narrative Strength, Cultural Capital, Share of Voice Direction. Methodology, anchors at 1/3/5, evidence requirements, weighting for aggregate scoring.
+- **`references/category-codes.md`** — read for every audit, especially when the user's purpose is rebrand or positioning. How to find category codes, analyse code-breakers, and identify code-break opportunities for creative work.
+- **`references/vulnerability-patterns.md`** — read during the Vulnerabilities section. 10 competitor vulnerability archetypes with detection signals, creative exploitation patterns, and caveats. Also used for category-level vulnerability aggregation.
+- **`references/brain-audit-schema.md`** — read whenever writing files, running the conflict-of-interest check, or running Shift mode. Schema for `competitor-audits/{category}.md`, versioning rules, Shift mode diff logic, COI flow, source-scrape call patterns, handoff rules.
+
+## Conversation Flow
+
+### Step 1: Brain check & mode preview
+
+Run brain discovery. Check specifically:
+
+```bash
+[ -d "$HOME/.creativestack/competitor-audits" ] && echo "AUDITS_DIR_EXISTS" || echo "NO_AUDITS_DIR"
+[ -f "$HOME/.creativestack/clients.md" ] && echo "CLIENTS_EXISTS" || echo "NO_CLIENTS"
+[ -f "$HOME/.creativestack/learnings.md" ] && grep -q "## Pitching" "$HOME/.creativestack/learnings.md" && echo "PITCHING_LEARNINGS" || echo "NO_PITCHING_LEARNINGS"
+```
+
+Ask:
+1. "What brand and category are we auditing?"
+2. (If the user gave a brand but not a category) "What category should I
+   audit them in? ({brand} works in multiple — pick the most relevant.)"
+
+Slug the category. Check for existing saved audit:
+
+```bash
+[ -f "$HOME/.creativestack/competitor-audits/{category-slug}.md" ] && echo "EXISTS"
+```
+
+If a previous audit exists, default to **Shift mode**:
+
+> "I have a saved audit for {category} (v{previous}, last updated {date}, {N months} old). Should I run Shift mode to diff against it, or do a full re-audit?"
+
+[SELECT] "What do you want?"
+- Shift mode (default if previous exists) — compare to v{previous}, surface what's changed
+- Full audit — fresh research, will increment to v{next_major}
+- Just review the existing — open the saved file without re-researching
+
+If no previous audit exists, default to **Audit mode** (full audit).
+
+### Step 2: Conflict of interest check (mandatory, always runs first)
+
+Read `references/brain-audit-schema.md` § "Conflict of interest check" and
+run the flow.
+
+Read `clients.md`. Cross-reference the brand being audited and the
+expected top competitors against active and past clients.
+
+**Case 1: Brand being audited is a current client.**
+
+> "⛔ **Conflict of interest.** {brand} is a current client per clients.md (active since {date}). Running a competitive audit where they're the target raises confidentiality concerns. This audit cannot proceed.
+>
+> If you meant to audit their competitors *for them*, reframe the category: what are you trying to help {brand} understand?"
+
+Hard stop.
+
+**Case 2: A competitor is a current client.**
+
+> "⚠️ **Conflict of interest flag.** {competitor} is a current client per clients.md. Including them in this audit means their positioning and vulnerabilities will be analysed, your notes will live in the brain, and this creates a confidentiality risk if the notes leak.
+>
+> Options:
+> 1. **Proceed with redaction** — {competitor} summarised at high level only, no vulnerability analysis, no scoring beyond what's public
+> 2. **Proceed with exclusion** — {competitor} excluded from the audit entirely
+> 3. **Abort** — don't run this audit
+>
+> Which do you want?"
+
+Wait for explicit choice. Record in the audit file's `conflicts_flagged`
+frontmatter and in the Conflict of Interest Check section.
+
+**Case 3: A competitor is a recent past client (<2 years).**
+
+> "ℹ️ **Note:** {competitor} was a past client ({dates}). You may have inside knowledge that shouldn't inform this audit. The audit will proceed, but the Vulnerabilities section for {competitor} will be flagged as 'from public sources only' — don't include anything you know from the past engagement."
+
+Proceed with flagged section.
+
+**Case 4: No conflicts.**
+
+Proceed silently to Step 3.
+
+### Step 3: Brain context loading
+
+Read relevant brain files beyond clients.md:
+
+1. `profile.md` — agency positioning
+2. `learnings.md § Pitching` — filter to this category, load past pitches and outcomes
+3. `prospects/*.md` — scan for dossiers on brands in this category
+4. `projects/*-brief.md` — scan for past briefs in this category
+5. `case-studies.md` — past work to inform tactical recommendations
+6. `methodology.md` — for framing
+7. Previous `competitor-audits/{category-slug}.md` (if Shift mode)
+
+Tell the user what depth you have:
+
+> "Brain depth for this audit: Rich — I have past pitch learnings for 3
+> sport brands (1 win, 2 losses), a prospect dossier on On Running, and
+> the previous audit from {date}. The audit will apply all of it."
+
+Or if thin:
+
+> "Brain depth: Minimal — no past pitches, no prospects, no previous audits
+> in this category. This will be a first-run baseline."
+
+### Step 4: Upstream skill check
+
+Scan the conversation for output from earlier skills:
+
+| Skill run earlier | What to pull in | Where it appears |
+|---|---|---|
+| `/creativestack:source-scrape` | Annotated screenshots, scored sources, visual evidence | Primary evidence in Visual Identity and Messaging |
+| `/creativestack:trend-report` | Trend velocity, counter-trends, category shifts | Trend Adoption and Category Codes sections |
+
+### Step 5: Audit purpose and focus
+
+[SELECT multiSelect] "What's this audit for?"
+- Pitch prep (focus: vulnerabilities, positioning, agency intel)
+- Rebrand work (focus: category codes, visual identity, narrative)
+- Positioning strategy (focus: narrative, white space, cultural capital)
+- Product launch (focus: messaging, digital maturity, share of voice)
+- Ongoing surveillance (focus: shift detection, what's changing)
+
+This influences depth and emphasis — the rubrics stay the same, but the
+detail layer per section adapts. For pitch prep, go deep on vulnerabilities
+and agency attribution. For rebrand, go deep on category codes and visual
+identity. For positioning, go deep on narrative.
+
+[SELECT] "Any specific competitors I should include?"
+- I have a list (user provides)
+- Identify them for me (skill researches)
+
+### Step 6: Run source-scrape research calls
+
+Read `references/brain-audit-schema.md` § "Source-scrape call patterns" for the 4 standard calls (visual, brand activity, cultural capital, agency attribution) with their exact query templates. Run them in parallel where possible.
+
+If `## COVERAGE_GAPS` lists significant gaps, **lower the Confidence rating on the affected sections** rather than padding.
+
+### Step 7: Score all 5 rubrics
+
+Read `references/scoring-rubrics.md`. For each competitor, score:
+
+1. **Visual Identity** (5 dimensions × 1-5 = /25)
+2. **Digital Maturity** (5 dimensions × 1-5 = /25)
+3. **Narrative Strength** (5 dimensions × 1-5 = /25)
+4. **Cultural Capital** (5 dimensions × 1-5 = /25)
+5. **Share of Voice Direction** (1-5 single score)
+
+Cite evidence for every score. Don't grade on a curve.
+
+Compute the weighted aggregate per the rubrics file. Classify each
+competitor into a band (category leader / strong / capable / vulnerable /
+struggling).
+
+### Step 8: Category codes analysis
+
+Read `references/category-codes.md`. Identify:
+
+1. **Stable codes** — followed by 6+ of 8 audited competitors
+2. **Eroding codes** — still followed but actively broken by new entrants
+3. **Emerging codes** — new conventions appearing in 2-3 competitors
+4. **Code-breakers** — competitors who deliberately break codes, and whether the break is working
+
+Produce a list of **3-5 code-break opportunities** for the client brand,
+prioritised per the methodology.
+
+### Step 9: Vulnerability analysis
+
+Read `references/vulnerability-patterns.md`. For each major competitor
+(top 3-5), identify:
+
+1. Top vulnerability (from the 10 archetypes)
+2. Secondary vulnerability (if any)
+3. Evidence for each
+4. Specific creative exploitation pattern per vulnerability
+5. Caveats
+
+Don't include competitors who are in the client conflict flag list — those
+are redacted per the COI check.
+
+After per-competitor analysis, produce a **category vulnerability summary**
+showing the distribution of archetypes across competitors. This is where
+the strategic read lives.
+
+### Step 10: The "3 brands to watch"
+
+Produce a prioritised list of **3 brands the client should actively watch**
+going forward. This is NOT the top 3 competitors by size — it's the top 3
+by **priority for attention**:
+
+- Brands with accelerating share of voice
+- Brands doing distinctive creative work
+- Brands with agency shifts (vulnerability windows)
+- Brands that broke a category code successfully
+- Brands making product or partnership moves
+
+Each "brand to watch" gets a specific **watch trigger** — what to look out
+for in the next 3-6 months:
+
+> **Watch: Tracksmith**
+> *Why:* Accelerating cultural capital. Agency relationship stable. Recent
+> editorial campaigns worked.
+> *Watch for:* Expansion beyond running (rumoured via recent hires on
+> LinkedIn). Next major campaign timing (expected Q3).
+
+### Step 11: Past pitch overlay
+
+If `learnings.md § Pitching` has entries for this category, overlay them:
+
+> "**Past pitch learnings applied:** You've pitched 4 sport brands in the
+> last 18 months — 1 won (Tracksmith cultural), 3 lost (all citing 'too
+> small' as the reason). The audit flags scale considerations in the
+> vulnerability section. For any future sport pitch, address scale upfront
+> — this is the recurring loss reason."
+
+This section appears at the top of the output, not buried. It's the
+highest-value brain overlay.
+
+### Step 12: Generate output
+
+Assemble the full audit per the Output Format section below. Lead with:
+- Conflict of interest status
+- Brain depth
+- Past pitch overlay (if applicable)
+- The 3 brands to watch
+
+Then the scoring, narrative, category codes, vulnerabilities, and handoffs.
+
+### Step 13: Write or update saved audit
+
+Read `references/brain-audit-schema.md` § "Schema" and write to
+`~/.creativestack/competitor-audits/{category-slug}.md`:
+
+- If no previous version exists → create v1.0
+- If a previous version exists and this was a refresh → increment version
+  (minor: 1.1, 1.2; major: 2.0 for significant shifts)
+- Update `Version history` table
+- Update frontmatter
+- Never overwrite previous content — append to the history
+
+Confirm what was written:
+
+> "Saved to `competitor-audits/sport-running.md` as v2.1. Previous version
+> (v2.0) preserved in history. Shift summary included."
+
+### Step 14: Shift mode — diff output
+
+If Shift mode was used, read `references/brain-audit-schema.md` § "Shift
+mode diff logic" and generate the diff output **before** the standard audit
+output. The diff is the headline — what's changed since the last audit.
+
+### Step 15: Compounding loop
+
+Offer **at most one** brain enrichment. Pick the most valuable:
+
+- **Shift mode surfaced a major change (new top competitor, agency shift, significant score movement)** → "This category has shifted meaningfully since the last audit. Want me to draft a client heads-up for any active projects in this space? I can use `/creativestack:status-update` to flag the shifts."
+- **Clients.md doesn't track past clients** → "The conflict check only found active clients in your clients.md. If you want past-client checks too, add a 'Past clients' section to the file — future audits will check it automatically."
+- **No past pitch data for this category** → "When you next pitch or lose a pitch in this category, run `/creativestack:pitch-research` Log outcome mode. After 2-3 outcomes, future audits will apply past pitch learnings automatically."
+- **Audit was thin due to source coverage gaps** → "Source coverage for {specific area} was thin. If this category is strategic, consider adding dedicated sources to `sources.md` via `/creativestack:source-scrape` Manage sources mode."
+- **Code-break opportunity looks strong for a client project** → "Code-break opportunity #1 maps directly to the {project} brief. Want me to feed it into `/creativestack:creative-brief` for that project?"
+
+One offer. Don't pile on.
+
+## Output Format
+
+The full audit structure (sections in order):
+
+1. **Header** — Brand, category, date, version, purpose, brain depth, visual evidence flag
+2. **Conflict of Interest Check** — always present. "No conflicts" or specific flagged competitors with the user's decision from Step 2.
+3. **Past Pitch Overlay** (if `learnings.md § Pitching` has entries) — leads the audit; affects how everything below is read
+4. **3 Brands to Watch** — prioritised list from Step 10 with specific watch triggers (the highest-value single output)
+5. **Brand Overview** — what's being audited, plus confidence
+6. **Competitive Landscape** — competitor map table + positioning map description
+7. **Competitor Scoring Summary** — table with all 5 rubric scores and the aggregate band per competitor
+8. **Visual Identity Comparison** — per-rubric scoring with cited evidence
+9. **Digital Maturity Comparison** — per-rubric scoring with cited evidence
+10. **Narrative Strength Comparison** — per competitor, the story arc in one sentence
+11. **Cultural Capital Comparison** — press, creator adoption, meme presence
+12. **Share of Voice Direction** — accelerating / growing / stable / declining / crashing per competitor
+13. **Category Codes** — stable / eroding / emerging / code-breakers + 3-5 prioritised code-break opportunities
+14. **Messaging Themes** — table with dominant narrative + underused narratives
+15. **Trend Adoption** (if trend-report ran) — table with adoption status per competitor
+16. **Agency Attribution** — table with agency, shift detected flag, implications
+17. **Where They're Vulnerable** — per top 3-5 competitors, top + secondary vulnerabilities with evidence, creative exploitation, caveats
+18. **Category Vulnerability Summary** — archetype distribution and strategic read
+19. **Gaps & White Space** — opportunities the client could exploit
+20. **Threats** — competitive moves to watch
+21. **Sources** — all sources with links and dates
+22. **Confidence Summary** — H/M/L per section with reasoning
+23. **Brain Overlays Applied** — what was pulled from each brain source
+24. **Written to Brain** — files created/updated
+
+For full detail on each section's content, see the schema and rubric reference files.
+
+---
+
+## Shift Mode Output (only in Shift mode)
+
+{Prepended to the standard output. From `references/brain-audit-schema.md`
+§ "Shift mode diff logic".}
+
+```markdown
+## Shift Summary — {Category} — v{previous} → v{current}
+
+**Period covered:** {previous date} → {today}
+**Time elapsed:** {N months}
+
+### Most significant shifts (top 3)
+
+1. **{Shift}** — {what changed} — {why it matters}
+2. **{Shift}** — ...
+3. **{Shift}** — ...
+
+### Competitor score changes
+{Delta table showing which scores moved}
+
+### Category code shifts
+{Codes that changed state}
+
+### New competitors / exits
+{Tier changes, new entrants, exits}
+
+### New vulnerabilities / resolved
+{Per-competitor delta}
+
+### Agency activity
+{Agency shifts detected since last audit}
+
+### What to do about it
+{2-3 specific actions}
+```
+
+---
+
+## Slack Format
+
+*Competitor Audit: {Brand} / {Category} — v{version}*
+**Conflicts:** {None / {list}}
+**Top competitor:** {name} ({aggregate score}/100 — {band})
+**Category codes:** {N stable, N eroding, N emerging}
+**Top code-break opportunity:** {one-line summary}
+**3 to watch:** {comma-separated list}
+**Shift (if applicable):** {1 sentence on the biggest change since last audit}
+
+---
+
+## Skill Chains
+
+Pick the most relevant 1-2:
+
+**Upstream:**
+- **No trend-report** → "Run `/creativestack:trend-report` first to add trend adoption scoring."
+
+**Downstream:**
+- **Clear competitive gaps + rebrand context** → "Run `/creativestack:creative-brief` — Category Context and Tension auto-populate from this audit."
+- **Pitch prep context** → "Run `/creativestack:pitch-research` on the specific prospect to layer pitch-specific intelligence on top."
+
+## Edge Cases
+- **Very niche category** → be transparent about limited data, audit adjacent categories
+- **New brand with no competitors yet** → audit the category they're entering, not head-to-head
+- **Category with hundreds of competitors** → focus on top 5-8 most relevant, name the filter criteria
+- **No previous audit but user wants Shift mode** → refuse, offer full Audit instead
+- **Previous audit is >12 months old** → recommend full re-audit (Shift diff loses meaning)
+- **Conflict of interest triggers hard stop** → don't proceed, don't save, don't log. Reframe the task.
+- **Clients.md missing or minimal** → warn: "Can't do thorough conflict check — confirm manually."
+
+### What this skill can't do
+
+This audit uses public sources. With deeper integration, it could also
+track competitor ad spend, access subscription analytics (Similarweb,
+SEMrush), and pull real-time social volume data. The brain enables the
+category intelligence layer; paid data sources unlock the real-time
+dimension.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

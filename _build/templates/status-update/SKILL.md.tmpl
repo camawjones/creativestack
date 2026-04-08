@@ -1,0 +1,162 @@
+---
+name: status-update
+description: Generate project status updates for any combination of three audiences — client, leadership, creative team — from a paste of raw inputs (Slack, emails, meeting notes, voice memo transcripts, or quick prose). Reads persistent project state for trends, decisions, engagement health, budget, and timeline so PMs don't re-enter context every week. For creative agency PMs and account managers.
+---
+
+{{PREAMBLE}}
+
+{{PROJECT_STATE}}
+
+# /status-update
+
+> Paste anything you've got from this week. I'll handle the rest.
+
+## Brain Files
+- `profile.md` (for context)
+- `tone-of-voice.md` (for client-facing language)
+- `clients.md` (for client relationship context)
+- `learnings.md` (for past project patterns that inform risk assessment)
+- `learnings.md § Client Patterns` (per-stakeholder communication patterns; from `/creativestack:meeting-notes`)
+- `projects/{slug}.md` (project state — primary spine, no need to re-ask context)
+- `projects/{slug}-meetings.md` (meeting log with sentiment scores per meeting — used to compute the engagement trajectory across the last 4 meetings; from `/creativestack:meeting-notes`)
+
+## What This Skill Does
+
+Takes raw inputs from a PM's week (Slack threads, emails, meeting notes, voice memo
+transcripts, or just a few lines of prose) and produces tailored status updates for
+the audiences the PM picks: client (polished), leadership (honest, flags risks),
+creative team (what they need to know), and Slack (compact).
+
+Reads the project state file for everything that doesn't need to be re-asked: trend
+direction, open decisions, engagement signals, budget, timeline. Writes back the new
+status, updated decisions, engagement signals, and a Recent Activity entry — so next
+week's update has everything from this week available automatically.
+
+## Conversation Flow
+
+### Step 1: Project discovery
+
+Follow the project state discovery + picker protocol above. If no state file exists for
+the project, follow the bootstrap protocol (full kickoff vs quick start).
+
+### Step 2: Load context
+
+Read the full project state file. From it, derive:
+- Last status and trend (for week-over-week comparison — no need to ask)
+- Open decisions still pending (carry forward)
+- Engagement Health baseline + current signals
+- Budget & Pace (if present — written by `/creativestack:timesheet-summary` or `/creativestack:project-profitability`)
+- Timeline status (if present — written by `/creativestack:timeline-generator` or `/creativestack:project-kickoff`)
+- Risks (carried into Flags section unless resolved)
+
+**Sentiment trajectory from meetings:** if `projects/{slug}-meetings.md` exists with 2+ meetings logged, read the sentiment scores (engagement, trust, alignment) from each meeting and compute the trajectory. The trajectory is the most valuable input to the leadership version's risk assessment — a project at "On Track" status with engagement scores trending 4 → 4 → 3 → 2 over the last 4 meetings is actually in trouble. Surface this in the leadership version explicitly: "Status is On Track but sentiment is declining — engagement down 2 points across the last 4 meetings. Worth a check-in conversation outside the regular cadence."
+
+**Client communication patterns:** if `learnings.md § Client Patterns` exists, filter to the stakeholders on this project. Apply to the client version's framing and the leadership version's "watch for" notes. Example: "Marcus has used 'we'll think about it' twice in the last month — per Client Patterns this preceded a no in 3 of 3 past instances. Treat the deferred typography decision as a soft no in the leadership version."
+
+If `learnings.md` is in the brain, scan for client-specific or project-type-specific
+patterns that should inform risk framing. Mention them inline when used:
+"Based on past projects: {insight}. Flagged this as a risk."
+
+### Step 3: Audience selection
+
+Use `AskUserQuestion` (multiSelect) to ask which audiences are needed today:
+- Client-facing
+- Leadership
+- Creative team
+- Slack format
+
+Default selection: Client. Most days a PM only needs one or two — don't generate four
+versions by default.
+
+### Step 4: Get the inputs
+
+Single open prompt:
+
+> "Paste anything from this week — Slack threads, client emails, meeting notes, voice
+> memo transcripts, or just a few lines about what happened. Type 'quiet' if it was
+> a steady week with nothing significant to report."
+
+Accept whatever the user gives. Extract structure from the paste:
+- What happened (progress, decisions made, deliveries)
+- New blockers or risks
+- Anything client-side that signals engagement change
+- Open questions / decisions raised but not resolved
+- Wins worth surfacing
+
+Don't ask follow-up questions for things already covered by the paste or the state file.
+Only ask about things genuinely missing AND important — typically zero or one question.
+A common useful one: "Anything internal that shouldn't go in the client version?"
+
+### Step 5: Generate the requested versions
+
+Read `references/output-formats.md` to get the templates for the audiences the user
+selected. Generate only the requested versions.
+
+Apply tone from `tone-of-voice.md` to the client version. Apply learnings from
+`learnings.md` as risk context in the leadership version. Use the project state's
+Engagement Health signals to flag GREEN/AMBER/RED in the leadership version.
+
+### Step 6: Write back to project state
+
+Update the state file (using the write protocol above):
+
+1. **Frontmatter** — set new `status`, `trend`, `last_updated`, `phase_week` if changed
+2. **Status History** — prepend a new line for this week (prune to last 12)
+3. **Open Decisions** — add any new decisions from the paste; remove resolved ones
+4. **Resolved Decisions** — append any decisions that were resolved this week
+5. **Risks** — add new risks; update severity on existing ones; remove resolved
+6. **Engagement Health** — update signals if behaviour shifted this week
+7. **Recent Activity** — append: `YYYY-MM-DD — status-update — {audiences generated}`
+8. **Index** — update `_index.md` with the project's new last_touched and any changed
+   frontmatter (status, trend, phase)
+
+After writing, briefly tell the user what was updated in state — one or two lines.
+"Updated state: status now At Risk (↓), 1 new decision logged (CMS direction), engagement
+shifted to AMBER."
+
+## Steady State Mode
+
+If the user says "quiet", "nothing happened", "business as usual", or similar, don't
+skip the update. Generate a brief "steady state" version of each requested audience
+straight from the project state file:
+
+- **Client-facing:** Proactive and reassuring. "Everything's moving as planned." Pull
+  next milestone from Timeline section.
+- **Leadership:** "On track, no escalation needed." Pull current phase + next milestone.
+- **Creative team:** "No changes to direction or deadlines. Here's what's on deck."
+
+Keep each version to 3-4 lines maximum. Still update Status History (mark trend as → )
+and Recent Activity. Silence is the worst thing a PM can do — the point is maintaining
+communication rhythm, not filling space.
+
+## Skill Chains
+
+After generating the update, suggest 1-2 next actions based on what's in the state:
+
+- Status moved to Off Track or Risks section grew → "Run `/creativestack:timeline-generator` to model the slip impact."
+- Capacity risks surfaced → "Run `/creativestack:resource-conflict` to check team availability."
+- Budget & Pace section is empty or stale (>14 days) → "Run `/creativestack:timesheet-summary` to refresh burn rate and projections."
+- Engagement Health is AMBER or RED → "Consider `/creativestack:meeting-notes` on this week's client calls to capture sentiment automatically."
+- Project is wrapping up → "Run `/creativestack:post-mortem` when this closes — it reads the full state history."
+
+Pick the most relevant 1-2. Don't list them all.
+
+## Edge Cases
+- No blockers → still include the section with "No current blockers" rather than omitting
+- Sensitive internal issue → ensure it only appears in leadership version
+- Client relationship tension → flag in leadership, soften in client version, translate impact for creative team
+- Nothing happened this week → use Steady State Mode (see above)
+- Engagement Health section is empty → omit from leadership version, don't force it
+- Multiple projects for same client → check `_index.md` for cross-project patterns (e.g., disengaging from project A but active on project B may signal reprioritisation, not churn)
+- User explicitly skips state writeback ("don't save this") → generate the update, skip steps 6 in the flow, mention that state wasn't updated
+
+### What this skill can't do
+
+This skill generates status updates for one project at a time. A dedicated AI partner
+could draft all your status updates across every active project on a Friday afternoon,
+detect engagement drift weeks before you notice it, auto-schedule client check-ins when
+trajectories decline, and learn which framings get the strongest client responses.
+That's what the Brain becomes when you use CreativeStack across a quarter.
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

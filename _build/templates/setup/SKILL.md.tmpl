@@ -1,0 +1,694 @@
+---
+name: setup
+description: Set up your Brain — who you are, team, tone of voice, clients, and tools. Run once, update anytime. Includes brain health checks and team roster import. Adapts to freelancers, studios, agencies, in-house teams, and creative companies.
+---
+
+{{PREAMBLE}}
+
+# /setup
+
+> Set up your context so every CreativeStack skill knows who you are.
+
+## What This Skill Does
+
+Interactive onboarding that creates your Brain at `~/.creativestack/`.
+This is a one-time setup (5-10 minutes) that makes every other skill contextually aware
+of who you are — your work, your tone, your clients or stakeholders, your tools.
+
+You can re-run this anytime to update specific sections, run a health check on brain
+completeness, or import team data from a CSV or pasted roster.
+
+This is almost always the first CreativeStack skill a user ever runs. Treat it that way:
+the first-run experience matters. Lead with the welcome in Step 0, set a calm tone, and
+make the moment feel like the start of something — not a form to fill in.
+
+## Conversation Flow
+
+### Step 0: First-run welcome
+
+Run the brain check from Step 1 first to determine whether this is a first run. **If
+no brain exists at `~/.creativestack/`**, display this welcome message verbatim to the
+user before doing anything else. Output it as a single message, then continue directly
+to Step 2 (skip Step 1b, since there's nothing to update).
+
+```
+> *"Music is the space between the notes."*
+> — Claude Debussy
+
+Welcome to CreativeStack.
+
+A small philosophy before we start: creativity doesn't appear because we work harder.
+It appears in the room we leave for it — the quiet space where the rest of the noise
+stops. Most creative work is lost not to lack of talent, but to lack of space.
+
+CreativeStack is an attempt to make some of that space. The 29 skills in this suite
+handle the *input* side of creative work — research, briefs, structure, strategy,
+operations, the admin — so the creative act itself stays where it belongs: with you,
+on a blank page, in silence.
+
+I'm going to ask you a few questions and build your **Brain** — a small set of files
+at `~/.creativestack/` that every other skill will read. About five minutes. After
+this, every CreativeStack skill will know who you are, how you sound, who you work
+with, and what you're building.
+
+Let's begin.
+```
+
+After showing the welcome, do **not** ask "ready?" or pause for confirmation. Just
+continue straight into Step 2. The momentum matters.
+
+**If a brain already exists**, skip Step 0 entirely and go to Step 1.
+
+### Step 1: Check for existing brain
+
+```bash
+if [ -d "$HOME/.creativestack" ]; then
+  echo "EXISTING_BRAIN"
+  ls "$HOME/.creativestack"/*.md 2>/dev/null
+else
+  echo "NO_BRAIN"
+fi
+```
+
+If an existing brain is found, present the mode selection.
+If no brain exists, proceed to Step 2.
+
+### Step 1b: Update Mode (existing brain only)
+
+[SELECT] "What would you like to do?"
+- Update specific file — pick which brain file to refresh
+- Refresh all — walk through everything again
+- Health check only — score brain completeness, flag stale data
+- Import team roster — add or replace team data from CSV or paste
+
+**If "Update specific file":**
+[SELECT] "Which file?"
+- profile.md
+- tone-of-voice.md
+- visual-style.md
+- team.md
+- clients.md
+- tools.md
+- case-studies.md
+- methodology.md
+- learnings.md
+
+Skip to the relevant step below, read the existing file, and update it.
+
+**If "Health check only":**
+Skip to Step 10: Brain Health Check. Don't modify any files.
+
+**If "Import team roster":**
+Skip to Step 5b: Team Roster Import.
+
+**If "Refresh all":**
+Proceed through all steps, showing current values as defaults.
+
+### Step 2: Who are you?
+
+[SELECT] "First — what best describes you?"
+- Freelancer — solo creative professional
+- Studio — small creative practice (2-10 people)
+- Agency — creative, branding, or design agency
+- In-house team — creative team within a larger company
+- Company — creative business (production house, consultancy, etc.)
+- Other — I'll describe it
+
+**If "Other":** Ask "How would you describe what you are? (e.g., 'a creative collective', 'a design partnership')"
+
+Store the selection. This `type` field determines how all subsequent steps and
+all other skills adapt their language and flow.
+
+### Step 3: Profile basics
+
+Ask the user (one question at a time, conversational). Adapt language based on type:
+
+**For freelancer:**
+1. "What name do you work under? (your name or a practice name)"
+2. "Where are you based?"
+3. "How would you describe what you do in one sentence?"
+4. "What are your main specialisms? (e.g., brand identity, illustration, motion design)"
+5. "What industries do you typically work in?"
+6. "What kind of work do you want to win more of?"
+
+**For studio:**
+1. "What's your studio called?"
+2. "Where are you based?"
+3. "How many people?"
+4. "How would you describe what you do in one sentence?"
+5. "What are your main specialisms?"
+6. "What industries do you typically work in?"
+7. "What kind of work do you want to win more of?"
+
+**For agency:**
+1. "What's your agency called?"
+2. "Where are you based?"
+3. "Roughly how many people?"
+4. "How would you describe what you do in one sentence? (e.g., 'We're a branding agency that works with sports and entertainment brands')"
+5. "What are your main specialisms? (e.g., brand identity, creative campaigns, digital product, motion design)"
+6. "What industries do you typically work in?"
+7. "What kind of work do you want to win more of?"
+
+**For in-house team:**
+1. "What's the company you're part of?"
+2. "What's your team called internally? (e.g., 'Brand team', 'Creative studio')"
+3. "Where are you based?"
+4. "How many people on the creative team?"
+5. "What does your team handle? (e.g., brand campaigns, product design, internal comms)"
+6. "What business units or stakeholders do you mainly serve?"
+
+**For company:**
+1. "What's your company called?"
+2. "Where are you based?"
+3. "Roughly how many people?"
+4. "How would you describe what you do in one sentence?"
+5. "What are your main specialisms?"
+6. "What industries do you typically work in?"
+7. "What kind of work do you want to win more of?"
+
+Write to `~/.creativestack/profile.md`:
+
+```bash
+mkdir -p "$HOME/.creativestack"
+```
+
+Use the Write tool to create `~/.creativestack/profile.md` with this structure:
+
+```markdown
+---
+name: {name}
+type: {freelancer/studio/agency/in-house/company/other}
+custom_descriptor: {only if type is "other" — their description}
+location: {location}
+size: {number, or 1 for freelancer}
+industries: [{industry1}, {industry2}]
+growth_areas: [{area1}, {area2}]
+last_updated: {today's date}
+---
+
+## Specialisms
+- {specialism 1}
+- {specialism 2}
+- ...
+
+## Positioning
+{their one-sentence description}
+```
+
+For in-house teams, add:
+```markdown
+## Parent Company
+{company name}
+
+## Internal Team Name
+{team name}
+
+## Business Units Served
+- {unit 1}
+- {unit 2}
+```
+
+### Step 4: Tone of voice
+
+Adapt questions based on type:
+
+**For freelancer:**
+1. "How would you describe your personality as a creative? (e.g., confident, playful, intellectual, warm)"
+2. "Are you more formal or casual in how you communicate with clients?"
+3. "Any words or phrases you love using? Any you hate?"
+4. "Can you paste an example of writing that sounds like you — a bio, an Instagram caption, a project description, anything?"
+
+**For studio/agency/company:**
+1. "How would you describe your {studio's/agency's/company's} personality? (e.g., confident, playful, intellectual, warm)"
+2. "Are you more formal or casual in how you communicate?"
+3. "Any words or phrases you love using? Any you hate?"
+4. "Can you paste an example of writing that sounds like your {studio/agency/company} — a bio, an Instagram caption, a project description, anything?"
+
+**For in-house team:**
+1. "How would you describe your team's personality when communicating internally?"
+2. "Are you more formal or casual?"
+3. "Any words or phrases that are part of your team's culture? Any you avoid?"
+4. "Can you paste an example of writing that represents your team's voice?"
+
+Write to `~/.creativestack/tone-of-voice.md`:
+
+```markdown
+---
+formality: {casual/casual-professional/professional/formal}
+personality: [{trait1}, {trait2}, {trait3}]
+last_updated: {today's date}
+---
+
+## We sound like
+- {description based on their answers}
+
+## We don't sound like
+- {anti-patterns based on their answers}
+
+## Vocabulary
+- We say: {preferred words}
+- We don't say: {avoided words}
+
+## Examples
+{paste their example, or synthesize one from their answers}
+```
+
+### Step 5: Team
+
+**Skip this step entirely for freelancers.** Proceed to Step 6.
+
+**For studio:**
+Ask:
+1. "Who do you work with? Names and roles — including any regular collaborators or contractors."
+
+Write a flat list to `~/.creativestack/team.md`:
+
+```markdown
+---
+headcount: {number}
+last_updated: {today's date}
+---
+
+## Team
+- **{Name}** — {Role}
+- **{Name}** — {Role} (contractor)
+```
+
+**For agency:**
+Ask:
+1. "Who are the key people? Just names and roles is fine — e.g., 'Sarah - Creative Director, Mike - MD, Jade - Senior Designer'"
+2. "Anyone else you want to include? PMs, strategists, producers?"
+
+Write to `~/.creativestack/team.md` grouped by department:
+
+```markdown
+---
+headcount: {number}
+last_updated: {today's date}
+---
+
+## Leadership
+- **{Name}** — {Role}
+
+## Creative
+- **{Name}** — {Role} ({specialisms if mentioned})
+
+## Strategy
+- **{Name}** — {Role}
+
+## Production
+- **{Name}** — {Role}
+```
+
+Group people by department based on their roles. If the user gives a flat list, organize it sensibly.
+
+**For in-house team:**
+Ask:
+1. "Who's on the team? Names and roles."
+
+Write a flat list (no department grouping forced):
+
+```markdown
+---
+headcount: {number}
+last_updated: {today's date}
+---
+
+## Team
+- **{Name}** — {Role}
+- **{Name}** — {Role}
+```
+
+**For company:**
+Ask:
+1. "Who are the key people? Names and roles."
+2. "Want me to group them by department, or keep it as a flat list?"
+
+Write in whichever structure they prefer.
+
+### Step 5b: Team Roster Import
+
+If the user wants to import a team roster from CSV or a pasted list:
+
+Ask: "Paste your team roster. I can handle CSV format (Name, Role, Department, Email)
+or just a list of names and roles. Whatever you have."
+
+**CSV format expected:**
+```
+Name, Role, Department, Email
+Sarah Chen, Creative Director, Creative, sarah@studio.com
+Mike Torres, Managing Director, Leadership, mike@studio.com
+```
+
+**Plain text also works:**
+```
+Sarah Chen - Creative Director
+Mike Torres - MD
+Jade Park - Senior Designer
+```
+
+Parse the input, organize based on user type (departments for agency, flat list for
+studio/in-house/freelancer), and write to `~/.creativestack/team.md`.
+
+If the brain already has a `team.md`, ask:
+[SELECT] "You already have team data. What should I do?"
+- Replace — overwrite with the new roster
+- Merge — add new people, keep existing ones
+- Compare — show me the differences first
+
+### Step 6: Clients / Stakeholders
+
+**For freelancer (simplified):**
+Ask:
+1. "Who do you work with regularly? Just names or companies is fine."
+
+Write to `~/.creativestack/clients.md`:
+
+```markdown
+---
+client_count: {number}
+last_updated: {today's date}
+---
+
+## Clients
+- {Client/Company 1}
+- {Client/Company 2}
+```
+
+**For in-house team:**
+Ask:
+1. "Who are the key stakeholders or business units you serve?"
+2. "Any key contacts worth noting? (optional)"
+
+Write to `~/.creativestack/clients.md`:
+
+```markdown
+---
+stakeholder_count: {number}
+last_updated: {today's date}
+---
+
+## Stakeholders
+- **{Business Unit / Stakeholder 1}**
+- **{Business Unit / Stakeholder 2}**
+
+## Key Contacts
+- {Contact name} — {role/notes if provided}
+```
+
+**For studio/agency/company:**
+Ask:
+1. "Who are your current clients? Just names is fine."
+2. "Any key contacts at those clients worth noting? (optional — you can add these later)"
+
+Write to `~/.creativestack/clients.md`:
+
+```markdown
+---
+client_count: {number}
+last_updated: {today's date}
+---
+
+## Active Clients
+- **{Client 1}**
+- **{Client 2}**
+- ...
+
+## Key Contacts
+- {Contact name} at {Client} — {role/notes if provided}
+```
+
+### Step 7: Tools
+
+Ask (adapt based on type):
+
+**For freelancer:**
+1. "What tools do you use day-to-day? (design tools, project management, invoicing, etc.)"
+
+**For all others:**
+1. "What tools does your {studio/agency/team/company} use day-to-day? (design tools, project management, communication, etc.)"
+
+Write to `~/.creativestack/tools.md`:
+
+```markdown
+---
+last_updated: {today's date}
+---
+
+## Design
+- {tool 1}
+- {tool 2}
+
+## Project Management
+- {tool}
+
+## Communication
+- {tool}
+
+## Other
+- {tool}
+```
+
+### Step 7b: Visual style
+
+This step defines the agency's house visual style — the visual equivalent of
+`tone-of-voice.md`. Any CreativeStack skill that produces visual output (Figma files,
+FigJam boards, slide decks, social tiles, charts, diagrams) reads this file and
+applies it.
+
+This is **not** the same as brand guidelines for a client. This is the agency's own
+style for its own deliverables.
+
+Explain that briefly, then offer the presets:
+
+[SELECT] "Pick a starting visual style. You can edit it after, or write your own from scratch."
+- Editorial Modern — warm paper, near-black, vermillion accent. Fraunces / Inter Tight / JetBrains Mono. (Default)
+- Newsroom — off-white, signal orange accent. Instrument Serif / IBM Plex.
+- Architectural — dark editorial, chartreuse accent. Geometric sans throughout.
+- I'll write my own — open the file blank with a TODO header
+- Skip — default to Editorial Modern, configure later
+
+The full default content for this file lives in `_build/shared/visual-style-default.md`
+and is injected here at build time. It contains all three presets with the active one
+marked. To change which preset is active, locate the `[ACTIVE]` marker in the
+"Typography" and "Color" sections and move it to a different pairing/palette.
+
+**For "Editorial Modern" (default) or "Skip":**
+Write `~/.creativestack/visual-style.md` with the default content as-is — Editorial
+Modern is already marked active in the default. No edits needed.
+
+**For "Newsroom":**
+Write the default content, then move the `[ACTIVE]` marker:
+- In Typography: from "Pairing A — Editorial Modern" to "Pairing B — Newsroom"
+- In Color: from "Palette 1 — Paper & Ink" to "Palette 2 — Studio Mono"
+
+**For "Architectural":**
+Write the default content, then move the `[ACTIVE]` marker:
+- In Typography: from "Pairing A — Editorial Modern" to "Pairing C — Architectural"
+- In Color: from "Palette 1 — Paper & Ink" to "Palette 3 — Dark Editorial"
+
+**For "I'll write my own":**
+Write a minimal stub file:
+
+```markdown
+---
+last_updated: {today's date}
+---
+
+# Visual Style
+
+_TODO: Define the house visual style. This file is read by every CreativeStack skill
+that produces visual output (Figma, FigJam, slide decks, social tiles, charts).
+Document typography, color, spacing, anti-slop rules, and brand override rules._
+
+_For a comprehensive starting point, re-run `/creativestack:setup` and pick one of
+the preset visual styles instead of "I'll write my own"._
+```
+
+**Default content to write** (used by all preset choices except "I'll write my own"):
+
+```markdown
+{{VISUAL_STYLE_DEFAULT}}
+```
+
+After writing, confirm: "Visual style set to **{chosen preset}**. Edit
+`~/.creativestack/visual-style.md` directly anytime, or re-run `/creativestack:setup`
+to switch presets."
+
+### Step 8: Remaining brain files
+
+Create empty starter files for sections that get populated by other skills:
+
+Write `~/.creativestack/case-studies.md`:
+```markdown
+---
+last_updated: {today's date}
+---
+
+## Case Studies
+
+_No case studies added yet. Use /case-study to create them, or add manually._
+```
+
+Write `~/.creativestack/methodology.md`:
+```markdown
+---
+last_updated: {today's date}
+---
+
+## Methodology
+
+_No methodology documented yet. Use /post-mortem after completing projects to start capturing how you work._
+```
+
+Write `~/.creativestack/learnings.md`:
+```markdown
+---
+last_updated: {today's date}
+---
+
+## Project Learnings
+
+_No learnings captured yet. Use /post-mortem after completing projects to build this up over time._
+```
+
+### Step 8b: Project state directory
+
+Scaffold the project state directory at `~/.creativestack/projects/`. This is where
+per-project state files live — one markdown file per active project — used by skills
+like `/creativestack:status-update`, `/creativestack:project-kickoff`,
+`/creativestack:meeting-notes`, `/creativestack:timesheet-summary`, and others to share
+context across sessions.
+
+```bash
+mkdir -p "$HOME/.creativestack/projects"
+```
+
+If `~/.creativestack/projects/_index.md` doesn't exist yet, create it as a starter:
+
+```markdown
+# Active Projects
+
+_No projects tracked yet. Run `/creativestack:project-kickoff` to set one up properly,
+or start any project-aware skill (e.g. `/creativestack:status-update`) — it'll offer
+a quick-start option._
+
+| Project | Client | Status | Trend | Phase | Last touched |
+|---|---|---|---|---|---|
+
+# Closed Projects
+```
+
+Don't ask the user about projects during setup — they're created on demand when the
+user kicks off a real piece of work.
+
+### Step 9: Confirmation
+
+After all files are written, summarize what was created. On a first run, frame this as
+a meaningful moment, not a file dump. On a returning run (update mode), keep it brief
+and functional.
+
+**First-run confirmation** (use this when the brain was just created from scratch):
+
+```
+Done. Your Brain is alive at `~/.creativestack/`.
+
+Here's what's in it:
+
+- **profile.md** — {name}, {type}, {location}, {size} {people/person}
+- **tone-of-voice.md** — {personality summary}
+- **visual-style.md** — {chosen preset, e.g., "Editorial Modern"}
+- **team.md** — {number} team members {or "skipped (solo)" for freelancers}
+- **clients.md** — {number} {clients/stakeholders}
+- **tools.md** — {tool count} tools
+- **case-studies.md** — empty (populate with /creativestack:case-study)
+- **methodology.md** — empty (populate with /creativestack:post-mortem)
+- **learnings.md** — empty (populate with /creativestack:post-mortem)
+- **projects/** — ready for per-project state, created on demand when you start work
+
+Every CreativeStack skill will now read this context automatically. You can edit any
+of these files directly in a text editor, or re-run `/creativestack:setup` to update
+sections.
+
+**Making CreativeStack yours:** your brain is the primary way you customise
+CreativeStack - every skill reads these files and adapts to your agency. Populate
+the brain as you work and the suite gets sharper with every run. If you want to
+change skill behaviour itself (rename sections, add custom modes, translate
+prompts), you can fork the repo and edit the templates directly - see the
+"Making it yours" section of the README for details.
+
+The space is made. Now the work can begin.
+```
+
+That last line is the callback to the Debussy quote at the start. Keep it.
+
+**Update-mode confirmation** (use this when an existing brain was edited, not created):
+
+"Updated. {Brief one-line summary of what changed.} Re-run `/creativestack:setup` any
+time to update other sections or run a health check."
+
+Then automatically run Step 10: Brain Health Check to show the initial state (first run
+only — skip on update mode unless the user asked for a health check).
+
+### Step 10: Brain Health Check
+
+Read every file in `~/.creativestack/` and score completeness. Check for stale data
+based on `last_updated` frontmatter.
+
+## Brain Health Report
+
+| File | Status | Completeness | Last Updated | Notes |
+|------|--------|-------------|-------------|-------|
+| profile.md | {Present/Missing} | {Full/Partial/Empty} | {date or "—"} | {e.g., "Missing specialisms"} |
+| tone-of-voice.md | {status} | {completeness} | {date} | {notes} |
+| visual-style.md | {status} | {completeness} | {date} | {e.g., "Editorial Modern preset"} |
+| team.md | {status} | {completeness} | {date} | {notes — or "N/A (freelancer)" if skipped} |
+| clients.md | {status} | {completeness} | {date} | {notes} |
+| tools.md | {status} | {completeness} | {date} | {notes} |
+| case-studies.md | {status} | {completeness} | {date} | {notes} |
+| methodology.md | {status} | {completeness} | {date} | {notes} |
+| learnings.md | {status} | {completeness} | {date} | {notes} |
+| projects/ | {Present/Missing} | {N active, N closed} | {most recent project last_updated} | {e.g., "3 active, 1 closed"} |
+
+**Brain health: {X}/9 files present — {Y}/9 with content**
+
+**Project state:** {N active projects, N closed} {— or "no projects tracked yet"}
+
+**Completeness scoring:**
+- **Full:** File has substantive content in all expected sections
+- **Partial:** File exists but has placeholder content, missing sections, or sparse data
+- **Empty:** File exists but only has starter/placeholder text
+
+**Stale data check:**
+{Flag any file where `last_updated` is more than 90 days old.}
+- {file} — last updated {date}, {X} days ago. Consider refreshing.
+
+**Recommended actions:**
+{Adapt recommendations based on user type. Use the skill chain filtering rules from the preamble.}
+- {e.g., "Run /case-study to populate case-studies.md — 14 skills reference this file."}
+- {e.g., "team.md was last updated 4 months ago — re-run /setup with 'Update specific file' → team.md"}
+
+## Skill Chains
+
+After setup or health check, suggest the most relevant next step based on user type:
+
+- If brain is freshly set up → "Run `/ai-audit` to get an AI readiness snapshot now that your context is configured."
+- If tone-of-voice is sparse → "Run `/update-voice` to refine your tone of voice with more detail."
+- If case-studies.md is empty → "Run `/case-study` to start building your case study library."
+- If freelancer and no case studies → "Run `/case-study` — it's the single most valuable thing for winning new work."
+
+Only suggest 1-2 chains — pick the most relevant for their type.
+
+## Edge Cases
+
+- User gives very brief answers → work with what you have, don't push for more
+- User wants to skip a section → create the file with a placeholder note
+- User pastes a large document for tone of voice → extract the key patterns, don't store the whole doc
+- User doesn't know their tone of voice → help them discover it by asking about examples they like
+- CSV import has inconsistent formatting → do your best to parse, show the result for confirmation before writing
+- Team roster has people who've left → ask if the roster is current or needs cleanup
+- User picks "Other" type → ask for their custom descriptor and use it consistently throughout
+- Freelancer tries to set up team → let them, but note it'll be stored as collaborators/contractors
+
+---
+*CreativeStack by Cameron Jones — jones.cam*

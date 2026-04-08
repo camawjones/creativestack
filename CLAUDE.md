@@ -4,7 +4,7 @@ AI skill suite for creative professionals. 29 skills across 10 categories, plus 
 
 ## Project structure
 
-This is a Claude Code **plugin**. The `name` field in `.claude-plugin/plugin.json` provides the `/creativestack:` namespace.
+This is a flat Claude Code skill stack installed at `~/.claude/skills/creativestack`. Skills are invoked flat as `/skill-name` (the parent directory is just a grouping — it does not create a namespace). The `setup` skill is named `setup-cs` to avoid collision with other stacks.
 
 - Skills live in `skills/*/SKILL.md` (generated — do not edit directly)
 - Source templates live in `_build/templates/*/SKILL.md.tmpl`
@@ -24,7 +24,7 @@ This regenerates all `skills/*/SKILL.md` files. Commit both `.tmpl` and `.md` fi
 
 ## Skill template
 
-Every skill follows the pattern in `_build/shared/preamble.md`. See any existing skill's `.tmpl` file for the structure. Cross-skill references use the `/creativestack:skill-name` namespace.
+Every skill follows the pattern in `_build/shared/preamble.md`. See any existing skill's `.tmpl` file for the structure. Cross-skill references use flat `/skill-name` invocation.
 
 ## Philosophy
 

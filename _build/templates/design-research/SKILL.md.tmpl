@@ -54,7 +54,7 @@ the right output, and the right depth.
    vs what they consume.
 
 The skill reads project state to build on prior research rounds, calls
-`/creativestack:source-scrape` for visual evidence, leans on serious designer
+`/source-scrape` for visual evidence, leans on serious designer
 sources (Are.na, Brand New, Fonts in Use, Mobbin, museum collections) instead of
 the same five pages everyone uses, and surfaces counter-references — what to *avoid*
 — alongside inspiration. Optional FigJam board styled with the agency's house
@@ -92,14 +92,14 @@ Scan the current conversation for output from other CreativeStack skills:
 
 | Skill run earlier | What to pull in | Where it appears |
 |---|---|---|
-| `/creativestack:source-scrape` | Annotated visual captures, scored sources | Visual evidence, board references |
-| `/creativestack:trend-report` | Visual trends, velocity scores, brand examples | Cultural territories, design movements |
-| `/creativestack:competitor-audit` | Visual identity scores, category conventions | Visual landscape mode, adjacent examples |
-| `/creativestack:creative-brief` | Objectives, audience, success criteria | Brief context — sharpens the research focus |
-| `/creativestack:brief-sharpener` | Sharpened brief, deal-breaker questions | Brief context — surfaces what's still vague |
+| `/source-scrape` | Annotated visual captures, scored sources | Visual evidence, board references |
+| `/trend-report` | Visual trends, velocity scores, brand examples | Cultural territories, design movements |
+| `/competitor-audit` | Visual identity scores, category conventions | Visual landscape mode, adjacent examples |
+| `/creative-brief` | Objectives, audience, success criteria | Brief context — sharpens the research focus |
+| `/brief-sharpener` | Sharpened brief, deal-breaker questions | Brief context — surfaces what's still vague |
 
 When upstream data is available, tell the user what you're pulling in:
-*"I can see you ran `/creativestack:source-scrape` and `/creativestack:trend-report`
+*"I can see you ran `/source-scrape` and `/trend-report`
 earlier — building on those captures and trend signals."*
 
 ### Step 4: Mode picker
@@ -149,7 +149,7 @@ likely it is to produce useful research. Surface this as a short report:
 
 If the answer is "Tighten the brief first", offer:
 > *"I'd push back and tighten the brief before researching — see above. Continue
-> anyway, or run `/creativestack:brief-sharpener` first?"*
+> anyway, or run `/brief-sharpener` first?"*
 
 Use `AskUserQuestion`. Respect the user's call.
 
@@ -170,10 +170,10 @@ opinion, that's fine — the mode + brief will carry the weight.
 
 ### Step 7: Research and synthesise
 
-**Call `/creativestack:source-scrape` in visual mode** (any mode except Pattern
+**Call `/source-scrape` in visual mode** (any mode except Pattern
 research, where Mobbin etc. are richer than scrape coverage):
 
-> *"I'll call `/creativestack:source-scrape` with query='{key terms from the brief
+> *"I'll call `/source-scrape` with query='{key terms from the brief
 > + mode-specific framing}', mode='visual', output='data', target_sources=8,
 > max_per_source=4."*
 
@@ -185,7 +185,7 @@ descriptions.
 For **Deep dive** depth, also call source-scrape in landscape mode to widen
 context:
 
-> *"I'll call `/creativestack:source-scrape` with query='{topic} cultural context
+> *"I'll call `/source-scrape` with query='{topic} cultural context
 > design movement', mode='landscape', output='data'."*
 
 Then complement with **WebSearch** for references that fall outside design press —
@@ -241,7 +241,7 @@ If yes, **before building anything**, read `~/.creativestack/visual-style.md` �
 the agency's house visual style. Apply its typography, colour palette, spacing
 rules, and anti-slop checklist to every frame. If `visual-style.md` doesn't
 exist, fall back to the Editorial Modern defaults and tell the user at the end:
-*"Run `/creativestack:setup` to configure your house visual style for sharper
+*"Run `/setup-cs` to configure your house visual style for sharper
 research board layouts."*
 
 Use the per-mode FigJam layout in `references/output-formats.md`. After
@@ -324,7 +324,7 @@ hits the wall.
   the first.
 - **Researching aesthetics before understanding the problem.** If you don't know
   what the brief is actually trying to solve, the research will be decorative.
-  Run `/creativestack:brief-sharpener` first when the brief is vague.
+  Run `/brief-sharpener` first when the brief is vague.
 - **No counter-references.** The work that doesn't get made is shaped by what you
   decided to *avoid*. Researchers who only surface "good" examples leave the
   designer to discover the failure modes alone, on the job. Counter-references
@@ -356,23 +356,23 @@ hits the wall.
 
 ### Upstream
 
-- No clear brief → "Run `/creativestack:brief-sharpener` first — the research will be 5x sharper with a tightened brief."
-- No category context → "Run `/creativestack:competitor-audit` before this — the visual landscape mode will build on it."
-- No trend signal → "Run `/creativestack:trend-report` first if you want to weight the research toward what's emerging."
-- No visual evidence yet → "This skill calls `/creativestack:source-scrape` automatically, but you can run it standalone first if you want to inspect the captures."
+- No clear brief → "Run `/brief-sharpener` first — the research will be 5x sharper with a tightened brief."
+- No category context → "Run `/competitor-audit` before this — the visual landscape mode will build on it."
+- No trend signal → "Run `/trend-report` first if you want to weight the research toward what's emerging."
+- No visual evidence yet → "This skill calls `/source-scrape` automatically, but you can run it standalone first if you want to inspect the captures."
 
 ### Downstream
 
-- Strategic direction emerging → "Run `/creativestack:creative-strategy` to formalise the strategic territory these references point toward."
-- Brief still feels off → "Run `/creativestack:brief-sharpener` to pressure-test the brief against this research context."
-- Ready to brief the team → "Run `/creativestack:creative-brief` to translate the research into a brief the creative team can actually work from."
-- Pitching this work → "Run `/creativestack:pitch-research` to pull in case studies that match the territories this research surfaced."
+- Strategic direction emerging → "Run `/creative-strategy` to formalise the strategic territory these references point toward."
+- Brief still feels off → "Run `/brief-sharpener` to pressure-test the brief against this research context."
+- Ready to brief the team → "Run `/creative-brief` to translate the research into a brief the creative team can actually work from."
+- Pitching this work → "Run `/pitch-research` to pull in case studies that match the territories this research surfaced."
 
 Pick the most relevant 1-2.
 
 ## Edge Cases
 
-- **Very vague brief** — push back via the pre-flight check, surface the gaps, offer to run `/creativestack:brief-sharpener` first. Don't paper over a vague brief with broad research.
+- **Very vague brief** — push back via the pre-flight check, surface the gaps, offer to run `/brief-sharpener` first. Don't paper over a vague brief with broad research.
 - **Highly regulated industry (pharma, finance, alcohol, gambling)** — flag compliance considerations alongside inspiration. A great identity that can't legally ship is wasted research.
 - **Brief contradicts itself** — call out the tension and research both directions. Then flag it in the summary so the next conversation resolves it instead of carrying it forward.
 - **Niche audience** — go deeper on cultural specificity (Mode F) rather than broader. The narrower the audience, the riskier generic research becomes.

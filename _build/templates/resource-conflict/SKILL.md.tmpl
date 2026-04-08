@@ -70,7 +70,7 @@ the skill can extract.
 - Calibrate — capture what actually happened on a recent project
 
 **Routing:**
-- If user picks Analyse but `team.md` is missing entirely → run `/creativestack:setup` first, then return
+- If user picks Analyse but `team.md` is missing entirely → run `/setup-cs` first, then return
 - If user picks Analyse and `team.md` is minimal (no extended fields) → proceed but warn: "Your team brain is minimal — I can find rough conflicts but can't recommend substitutions. Want to run **Setup team** first? Takes 5 minutes."
 - If user picks Analyse and `team.md` is rich → proceed straight to Step 2
 
@@ -90,7 +90,7 @@ Check whether `~/.creativestack/projects/_index.md` exists. If it does:
    - Timeline → next milestone date and slip scenarios
    - Status + trend (At Risk projects often need disproportionate attention)
    - Budget & Pace → burn rate (a useful proxy for actual hours per project if
-     `/creativestack:timesheet-summary` has been run)
+     `/timesheet-summary` has been run)
 3. Tell the user what you found: "I can see {N} active projects in your project
    state: {project A} (phase, status), {project B} (phase, status). I'll factor
    allocation and timeline pressure across all of them."
@@ -104,8 +104,8 @@ Scan the current conversation for skills run this session:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:timesheet-summary` | Actual hours per team member, burn rate | Compare planned allocation vs. actual — reveals true utilisation |
-| `/creativestack:timeline-generator` | Upcoming milestones, phase transitions, crunch periods | Predict future pressure points |
+| `/timesheet-summary` | Actual hours per team member, burn rate | Compare planned allocation vs. actual — reveals true utilisation |
+| `/timeline-generator` | Upcoming milestones, phase transitions, crunch periods | Predict future pressure points |
 
 ### Step 4: MCP context enrichment
 
@@ -230,17 +230,17 @@ Read `references/team-brain-schema.md` § "Calibrate mode". Walk through 5 quest
 Pick the most relevant 1-2:
 
 **Upstream:**
-- **No actual hours data** → "Run `/creativestack:timesheet-summary` first to compare allocations against reality."
+- **No actual hours data** → "Run `/timesheet-summary` first to compare allocations against reality."
 
 **Downstream:**
-- **Capacity issues affect timelines** → "Run `/creativestack:timeline-generator` to model the impact on project deadlines."
-- **Consistently over-utilised** → "Flag this in your next `/creativestack:status-update` for leadership visibility."
+- **Capacity issues affect timelines** → "Run `/timeline-generator` to model the impact on project deadlines."
+- **Consistently over-utilised** → "Flag this in your next `/status-update` for leadership visibility."
 
 ## Edge Cases
-- **No `team.md`** → Route to `/creativestack:setup` first
+- **No `team.md`** → Route to `/setup-cs` first
 - **Very small team (under 5)** → Everyone is a single point of failure. Focus on prioritisation. Skip the "Available" table.
 - **Pitch work not yet won** → Default to Scenario mode for "win" and "lose" cases
-- **Project state file is stale (>14 days)** → Use it but note the staleness, suggest a `/creativestack:status-update` to refresh
+- **Project state file is stale (>14 days)** → Use it but note the staleness, suggest a `/status-update` to refresh
 - **Many concurrent projects** → Normal. Only flag when allocations actually clash.
 - **`learnings.md` has contradictory entries** → Trust the most recent. Note the contradiction in confidence.
 

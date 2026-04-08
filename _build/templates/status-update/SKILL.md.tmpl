@@ -16,9 +16,9 @@ description: Generate project status updates for any combination of three audien
 - `tone-of-voice.md` (for client-facing language)
 - `clients.md` (for client relationship context)
 - `learnings.md` (for past project patterns that inform risk assessment)
-- `learnings.md § Client Patterns` (per-stakeholder communication patterns; from `/creativestack:meeting-notes`)
+- `learnings.md § Client Patterns` (per-stakeholder communication patterns; from `/meeting-notes`)
 - `projects/{slug}.md` (project state — primary spine, no need to re-ask context)
-- `projects/{slug}-meetings.md` (meeting log with sentiment scores per meeting — used to compute the engagement trajectory across the last 4 meetings; from `/creativestack:meeting-notes`)
+- `projects/{slug}-meetings.md` (meeting log with sentiment scores per meeting — used to compute the engagement trajectory across the last 4 meetings; from `/meeting-notes`)
 
 ## What This Skill Does
 
@@ -45,8 +45,8 @@ Read the full project state file. From it, derive:
 - Last status and trend (for week-over-week comparison — no need to ask)
 - Open decisions still pending (carry forward)
 - Engagement Health baseline + current signals
-- Budget & Pace (if present — written by `/creativestack:timesheet-summary` or `/creativestack:project-profitability`)
-- Timeline status (if present — written by `/creativestack:timeline-generator` or `/creativestack:project-kickoff`)
+- Budget & Pace (if present — written by `/timesheet-summary` or `/project-profitability`)
+- Timeline status (if present — written by `/timeline-generator` or `/project-kickoff`)
 - Risks (carried into Flags section unless resolved)
 
 **Sentiment trajectory from meetings:** if `projects/{slug}-meetings.md` exists with 2+ meetings logged, read the sentiment scores (engagement, trust, alignment) from each meeting and compute the trajectory. The trajectory is the most valuable input to the leadership version's risk assessment — a project at "On Track" status with engagement scores trending 4 → 4 → 3 → 2 over the last 4 meetings is actually in trouble. Surface this in the leadership version explicitly: "Status is On Track but sentiment is declining — engagement down 2 points across the last 4 meetings. Worth a check-in conversation outside the regular cadence."
@@ -133,11 +133,11 @@ communication rhythm, not filling space.
 
 After generating the update, suggest 1-2 next actions based on what's in the state:
 
-- Status moved to Off Track or Risks section grew → "Run `/creativestack:timeline-generator` to model the slip impact."
-- Capacity risks surfaced → "Run `/creativestack:resource-conflict` to check team availability."
-- Budget & Pace section is empty or stale (>14 days) → "Run `/creativestack:timesheet-summary` to refresh burn rate and projections."
-- Engagement Health is AMBER or RED → "Consider `/creativestack:meeting-notes` on this week's client calls to capture sentiment automatically."
-- Project is wrapping up → "Run `/creativestack:post-mortem` when this closes — it reads the full state history."
+- Status moved to Off Track or Risks section grew → "Run `/timeline-generator` to model the slip impact."
+- Capacity risks surfaced → "Run `/resource-conflict` to check team availability."
+- Budget & Pace section is empty or stale (>14 days) → "Run `/timesheet-summary` to refresh burn rate and projections."
+- Engagement Health is AMBER or RED → "Consider `/meeting-notes` on this week's client calls to capture sentiment automatically."
+- Project is wrapping up → "Run `/post-mortem` when this closes — it reads the full state history."
 
 Pick the most relevant 1-2. Don't list them all.
 

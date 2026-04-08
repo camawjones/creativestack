@@ -262,7 +262,7 @@ For each section of the saved audit:
 
 ### Shift mode is the default for re-audits
 
-Whenever a user runs `/creativestack:competitor-audit` on a category that
+Whenever a user runs `/competitor-audit` on a category that
 already has a saved version in `competitor-audits/`, default to Shift mode.
 Only run a full Audit if the user explicitly asks for it, or the previous
 version is older than 12 months (at which point a full re-audit is worth
@@ -361,7 +361,7 @@ and surfaces uncertainty:
 
 ## 5. Source-scrape call patterns
 
-The audit is built on `/creativestack:source-scrape` output. These are the
+The audit is built on `/source-scrape` output. These are the
 standard call patterns:
 
 ### Visual identity research
@@ -433,19 +433,19 @@ honest and more useful than a fabricated assessment.
 
 If these skills weren't run but would have strengthened the audit, suggest:
 
-- **No trend-report** → "Run `/creativestack:trend-report` first to add trend adoption scoring to each competitor."
+- **No trend-report** → "Run `/trend-report` first to add trend adoption scoring to each competitor."
 - **No source-scrape output yet** → not a suggestion — the audit calls source-scrape itself
 
 ### Downstream
 
 Based on the audit's findings, suggest the most relevant next step:
 
-- **Clear competitive gaps identified** → "Run `/creativestack:creative-strategy` to turn these gaps into strategic territory."
-- **Preparing for a pitch** → "Run `/creativestack:pitch-research` on the specific prospect to layer pitch-specific intelligence on top of this category audit."
-- **Rebrand brief in progress** → "Run `/creativestack:creative-brief` — this audit will automatically inform the Category Context and Tension sections."
-- **Brand tension visible** → "Run `/creativestack:creative-brief` or `/creativestack:brief-sharpener` to articulate the tension explicitly."
-- **Code-break opportunity clear** → "Run `/creativestack:design-research` to build visual references for the code-break approach."
-- **Audit is stale / Shift mode surfaced major changes** → "The category has shifted significantly. Consider flagging in `/creativestack:status-update` for client-relevant projects."
+- **Clear competitive gaps identified** → "Run `/creative-strategy` to turn these gaps into strategic territory."
+- **Preparing for a pitch** → "Run `/pitch-research` on the specific prospect to layer pitch-specific intelligence on top of this category audit."
+- **Rebrand brief in progress** → "Run `/creative-brief` — this audit will automatically inform the Category Context and Tension sections."
+- **Brand tension visible** → "Run `/creative-brief` or `/brief-sharpener` to articulate the tension explicitly."
+- **Code-break opportunity clear** → "Run `/design-research` to build visual references for the code-break approach."
+- **Audit is stale / Shift mode surfaced major changes** → "The category has shifted significantly. Consider flagging in `/status-update` for client-relevant projects."
 
 Suggest 1-2 chains at most. Pick the most urgent.
 

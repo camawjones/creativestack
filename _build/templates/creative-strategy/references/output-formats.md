@@ -44,7 +44,7 @@ rather than restating.}
 trends reward early movers and punish late ones.}
 
 ## Competitor landscape
-{How competitors are positioning. If `/creativestack:competitor-audit` ran
+{How competitors are positioning. If `/competitor-audit` ran
 earlier, summarise its findings and build — don't re-list.}
 
 | Competitor | Positioning | Visual / verbal codes | Tone | Gap they're leaving |

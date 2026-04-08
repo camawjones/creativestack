@@ -225,7 +225,7 @@ space is open.
 |---|---|---|
 | 8.0+ | No | **Ready for creative** |
 | 6.5-7.9 | No | **Ready with one follow-up** — identify the weakest dimension and address |
-| 5.0-6.4 | No | **Needs tightening** — run `/creativestack:brief-sharpener` before briefing the team |
+| 5.0-6.4 | No | **Needs tightening** — run `/brief-sharpener` before briefing the team |
 | Any | Yes (Red) | **Blocked** — specific dimension must be resolved before creative begins |
 | <5.0 | Any | **Not a brief yet** — schedule an alignment conversation with the client |
 
@@ -262,7 +262,7 @@ If the brief input is very sparse (a few sentences only), the skill can't
 score confidently. In that case:
 
 > **Confidence:** Low — brief inputs are sparse. Scores are directional
-> only. Recommend running `/creativestack:creative-brief` again with more
+> only. Recommend running `/creative-brief` again with more
 > input, or using **From scratch** mode to walk through the questions.
 
 Don't score confidently off thin inputs.

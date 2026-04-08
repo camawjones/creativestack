@@ -4,11 +4,9 @@
 
 # CreativeStack
 
-**A Claude Code plugin for creative agencies, studios, freelancers, in-house teams, and creative companies.** 29 brain-first skills and 4 workflow agents that handle the operational and analytical work around creative projects - research, briefs, strategy, pitches, copy decks, retros, profitability, resourcing - without ever generating creative output.
+**A Claude Code skill suite for creative agencies, studios, freelancers, in-house teams, and creative companies.** 29 brain-first skills and 4 workflow agents that handle the operational and analytical work around creative projects - research, briefs, strategy, pitches, copy decks, retros, profitability, resourcing - without ever generating creative output.
 
-The creative step stays human. Everything around it is what this plugin does for you.
-
-Works in **Claude Code** and **Claude Cowork**.
+The creative step stays human. Everything around it is what CreativeStack does for you.
 
 ---
 
@@ -36,52 +34,35 @@ The skills adapt their language and flow based on what you are. A freelancer doe
 
 ## Installation
 
-CreativeStack is a Claude Code plugin. The same plugin works in Claude Code (CLI) and Claude Cowork (the web/team experience) - plugins are universal.
-
-### Claude Code (CLI)
-
 ```bash
-/plugin install camawjones/creativestack
+git clone https://github.com/camawjones/creativestack.git ~/.claude/skills/creativestack
 ```
 
-Or from the command line:
+That's the whole install. Restart Claude Code and all 29 skills are discovered automatically under the `~/.claude/skills/` directory — invoked flat as `/creative-brief`, `/meeting-notes`, `/competitor-audit`, and so on. Nothing to compile, no manifest, no setup script.
 
-```bash
-claude plugin install github:camawjones/creativestack
-```
-
-### Claude Cowork
-
-In any Cowork session, run:
-
-```
-/plugin install camawjones/creativestack
-```
-
-The plugin and all 29 skills become immediately available across the workspace.
-
-### Local development (for contributors)
-
-Clone the repo and point Claude Code at the local directory:
-
-```bash
-git clone https://github.com/camawjones/creativestack.git
-cd creativestack
-```
-
-Then in Claude Code:
-
-```
-/plugin install /absolute/path/to/creativestack
-```
+The one skill with a non-obvious name is `/setup-cs` (renamed from `/setup` to avoid colliding with other skill stacks). Everything else matches its directory name.
 
 ### Updates
 
-The plugin's session-start hook checks for updates automatically. When a new version is available, you'll see:
+```bash
+cd ~/.claude/skills/creativestack && git pull
+```
 
+### Optional: SessionStart hook
+
+If you want a brain-status line at the start of every Claude Code session, add this to `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "bash $HOME/.claude/skills/creativestack/scripts/check-brain.sh" }] }
+    ]
+  }
+}
 ```
-CREATIVESTACK UPDATE AVAILABLE: run 'git -C <plugin path> pull' to update
-```
+
+Skip this and everything still works — each skill does its own brain-freshness checks.
 
 ---
 
@@ -90,23 +71,23 @@ CREATIVESTACK UPDATE AVAILABLE: run 'git -C <plugin path> pull' to update
 **1. Set up your brain (5 minutes - optional but transformative)**
 
 ```
-/creativestack:setup
+/setup-cs
 ```
 
-Walks you through who you are, your team, your tone of voice, and your standard methodology. Creates your Context Vault at `~/.creativestack/`. Every other skill reads from this and gets sharper because of it.
+This is an onboarding flow, not an installer — the skills are already installed by the `git clone`. `/setup-cs` walks you through who you are, your team, your tone of voice, and your standard methodology, and creates your Context Vault at `~/.creativestack/`. Every other skill reads from this vault and gets sharper because of it.
 
-You can skip this and use the skills immediately - they'll work, just generically.
+You can skip this entirely and use any skill immediately — they'll work, just generically.
 
 **2. Try a skill on real work**
 
 Pick whichever maps to what you're doing right now:
 
 ```
-/creativestack:meeting-notes              # paste a transcript, get structured notes + brain cross-reference
-/creativestack:creative-brief             # turn messy intake into a proper brief with tension + SMT + 10-dim score
-/creativestack:competitor-audit           # category audit with conflict-of-interest check
-/creativestack:case-study                 # auto-extract a case study from project state, no manual gathering
-/creativestack:project-profitability      # margin analysis with rate card and scenario modelling
+/meeting-notes              # paste a transcript, get structured notes + brain cross-reference
+/creative-brief             # turn messy intake into a proper brief with tension + SMT + 10-dim score
+/competitor-audit           # category audit with conflict-of-interest check
+/case-study                 # auto-extract a case study from project state, no manual gathering
+/project-profitability      # margin analysis with rate card and scenario modelling
 ```
 
 **3. Try a workflow agent for end-to-end flows**
@@ -130,7 +111,7 @@ Every CreativeStack skill reads from and (with permission) writes to `~/.creativ
 
 ### Foundation files
 
-Created by `/creativestack:setup` - the baseline:
+Created by `/setup-cs` - the baseline:
 
 | File | What it holds |
 |---|---|
@@ -169,7 +150,7 @@ Every skill checks the freshness of the brain files it reads. If anything is sta
 
 ### Privacy
 
-Your brain lives **only on your machine** at `~/.creativestack/`. Nothing in this directory is ever uploaded, transmitted, or shared with anyone. The plugin reads and writes these files locally; everything in the brain is yours.
+Your brain lives **only on your machine** at `~/.creativestack/`. Nothing in this directory is ever uploaded, transmitted, or shared with anyone. CreativeStack reads and writes these files locally; everything in the brain is yours.
 
 ---
 
@@ -179,7 +160,7 @@ CreativeStack is designed to fit your agency, not the other way around. There ar
 
 ### 1. Configure via the brain (recommended for everyone)
 
-The Context Vault at `~/.creativestack/` **is** the customisation layer. Every skill reads from it and adapts to what you've put there. You don't need to edit the plugin itself - you populate your brain and the skills respect it automatically.
+The Context Vault at `~/.creativestack/` **is** the customisation layer. Every skill reads from it and adapts to what you've put there. You don't need to edit the skill templates themselves - you populate your brain and the skills respect it automatically.
 
 Things that change when you populate the brain:
 - **Voice and writing style** - every client-facing output matches your `tone-of-voice.md`
@@ -198,16 +179,10 @@ Three to five runs in and the skills produce output that's specific to your agen
 If you want to change skill **behaviour** - rename sections, add custom modes, remove sections you don't use, add agency-specific language to the shared preamble, write new reference files - fork the repo and edit the templates.
 
 ```bash
-git clone https://github.com/camawjones/creativestack.git
-cd creativestack
+git clone https://github.com/your-fork/creativestack.git ~/.claude/skills/creativestack
+cd ~/.claude/skills/creativestack
 # Edit _build/templates/{skill}/SKILL.md.tmpl or _build/shared/preamble.md
 bash _build/build-skills.sh
-```
-
-Then install the local version:
-
-```bash
-/plugin install /absolute/path/to/your/fork
 ```
 
 See [CLAUDE.md](./CLAUDE.md) for the build system, template conventions, and contributing back upstream if your change would help others.
@@ -225,7 +200,7 @@ Things to avoid forking for:
 - Changing fee defaults (use `rate-card.md`)
 - Adding methodology steps (use `methodology.md`)
 
-These all live in the brain precisely so you don't have to touch the plugin code for them.
+These all live in the brain precisely so you don't have to touch the skill templates for them.
 
 ---
 
@@ -237,85 +212,85 @@ These all live in the brain precisely so you don't have to touch the plugin code
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:setup` | Initialise or refresh your brain - profile, tone of voice, team, clients, methodology |
-| `/creativestack:update-voice` | Refine your tone-of-voice guidelines with examples and do/don't rules |
+| `/setup-cs` | Initialise or refresh your brain - profile, tone of voice, team, clients, methodology |
+| `/update-voice` | Refine your tone-of-voice guidelines with examples and do/don't rules |
 
 ### Daily operations
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:meeting-notes` | **3 modes** - Notes (transcript + brain cross-reference panel surfacing what no recording tool can see), Pre-meeting (1-page brief from project state, no transcript needed), Patterns (sentiment trajectory + recurring scope items + action completion across meetings) |
-| `/creativestack:status-update` | Multi-audience project updates (client / leadership / creative team / Slack) with sentiment trajectory from the meeting log |
-| `/creativestack:copy-deck` | **3 modes** - Deck (messy input → atom-level scored copy deck with brand voice from the brief), Check (audit existing copy without rewriting), Microcopy (UX microcopy patterns for buttons/errors/empty states/loading/success/forms) |
-| `/creativestack:feedback-consolidator` | **3 modes** - Translate (vague feedback → creative direction using client vocabulary), Consolidate (multi-round → deduplicated action list with 8-archetype detection and priced rounds), Respond (draft client reply in agency tone) |
+| `/meeting-notes` | **3 modes** - Notes (transcript + brain cross-reference panel surfacing what no recording tool can see), Pre-meeting (1-page brief from project state, no transcript needed), Patterns (sentiment trajectory + recurring scope items + action completion across meetings) |
+| `/status-update` | Multi-audience project updates (client / leadership / creative team / Slack) with sentiment trajectory from the meeting log |
+| `/copy-deck` | **3 modes** - Deck (messy input → atom-level scored copy deck with brand voice from the brief), Check (audit existing copy without rewriting), Microcopy (UX microcopy patterns for buttons/errors/empty states/loading/success/forms) |
+| `/feedback-consolidator` | **3 modes** - Translate (vague feedback → creative direction using client vocabulary), Consolidate (multi-round → deduplicated action list with 8-archetype detection and priced rounds), Respond (draft client reply in agency tone) |
 
 ### Project kickoff
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:creative-brief` | **3 modes** - From inputs (messy content → structured brief), From scratch (blank-page interview), From pitch (auto-populate from a won prospect dossier). Industry-standard structure with tension, real objective, 4-layer audience, insight, single-minded thought. 10-dimension rubric blocks weak briefs from going to the team. Creates project state files. |
-| `/creativestack:brief-sharpener` | **4 modes** - Audit, Triage, Question-ladder, Re-write. Pressure-tests existing briefs against client patterns and red flag library |
-| `/creativestack:timeline-generator` | Project scope → realistic timeline with critical path, slip scenarios, freelance backstops, optional Figma/Mermaid output |
-| `/creativestack:project-kickoff` | Project type → roles, RACI, kickoff pack, risk register |
-| `/creativestack:sow-generator` | **5 modes** - Setup style (learns your SOW format once), Ingest (extract style from a pasted SOW), Generate (60-second SOWs in your saved format), Manage clauses, Edit style |
+| `/creative-brief` | **3 modes** - From inputs (messy content → structured brief), From scratch (blank-page interview), From pitch (auto-populate from a won prospect dossier). Industry-standard structure with tension, real objective, 4-layer audience, insight, single-minded thought. 10-dimension rubric blocks weak briefs from going to the team. Creates project state files. |
+| `/brief-sharpener` | **4 modes** - Audit, Triage, Question-ladder, Re-write. Pressure-tests existing briefs against client patterns and red flag library |
+| `/timeline-generator` | Project scope → realistic timeline with critical path, slip scenarios, freelance backstops, optional Figma/Mermaid output |
+| `/project-kickoff` | Project type → roles, RACI, kickoff pack, risk register |
+| `/sow-generator` | **5 modes** - Setup style (learns your SOW format once), Ingest (extract style from a pasted SOW), Generate (60-second SOWs in your saved format), Manage clauses, Edit style |
 
 ### Strategic & creative
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:creative-strategy` | Brief → cultural research, competitor analysis, strategic territories, structured provocations |
-| `/creativestack:design-research` | **6 modes**: visual / landscape / brands / trends / evidence / people. Cultural references, themed research boards, dual audience output, optional FigJam export |
-| `/creativestack:trend-report` | Category → trend report with velocity scoring, counter-trends, brand examples |
+| `/creative-strategy` | Brief → cultural research, competitor analysis, strategic territories, structured provocations |
+| `/design-research` | **6 modes**: visual / landscape / brands / trends / evidence / people. Cultural references, themed research boards, dual audience output, optional FigJam export |
+| `/trend-report` | Category → trend report with velocity scoring, counter-trends, brand examples |
 
 ### Business development
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:pitch-research` | **4 modes** - Research (deep prospect dossier with fit score, decision-maker profiles, killer hook, warm path in), Refresh (update an existing dossier), Pitch prep (1-page in-the-room brief), Log outcome (win/loss capture that compounds via `learnings.md § Pitching`) |
-| `/creativestack:competitor-audit` | **2 modes** - Audit (full category landscape with mandatory conflict-of-interest check against `clients.md`, scoring on 5 rubrics, category codes analysis, agency attribution, 10 vulnerability archetypes), Shift (diff against previously-saved audit to surface what's changed). Persistent category intelligence in `competitor-audits/{category}.md` |
-| `/creativestack:case-study` | **3 modes** - Write (auto-extracts material from `projects/{slug}-brief.md`, meeting log, copy decks, post-mortem; solves the "gathering" pain), Awards (craft-focused for award submissions), Update (add new results/awards/press without rewriting). Multi-length output (1-line / 1-paragraph / 1-page / long-form), client approval package with draft email |
-| `/creativestack:rfi-response` | RFI/EOI → drafted responses pulled from existing case studies, bios, methodology |
-| `/creativestack:proposal-generator` | Brief or RFP → structured proposal with pre-flight gut check, brain-anchored pricing, pitch learnings overlay, optional Figma layout |
+| `/pitch-research` | **4 modes** - Research (deep prospect dossier with fit score, decision-maker profiles, killer hook, warm path in), Refresh (update an existing dossier), Pitch prep (1-page in-the-room brief), Log outcome (win/loss capture that compounds via `learnings.md § Pitching`) |
+| `/competitor-audit` | **2 modes** - Audit (full category landscape with mandatory conflict-of-interest check against `clients.md`, scoring on 5 rubrics, category codes analysis, agency attribution, 10 vulnerability archetypes), Shift (diff against previously-saved audit to surface what's changed). Persistent category intelligence in `competitor-audits/{category}.md` |
+| `/case-study` | **3 modes** - Write (auto-extracts material from `projects/{slug}-brief.md`, meeting log, copy decks, post-mortem; solves the "gathering" pain), Awards (craft-focused for award submissions), Update (add new results/awards/press without rewriting). Multi-length output (1-line / 1-paragraph / 1-page / long-form), client approval package with draft email |
+| `/rfi-response` | RFI/EOI → drafted responses pulled from existing case studies, bios, methodology |
+| `/proposal-generator` | Brief or RFP → structured proposal with pre-flight gut check, brain-anchored pricing, pitch learnings overlay, optional Figma layout |
 
 ### Document production
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:asset-spec` | Campaign concept → full deliverable specification (dimensions, formats, platform requirements, naming, version control, handoff checklists) |
-| `/creativestack:brand-guidelines` | Scattered brand assets → structured brand guidelines with completeness scoring and gap identification |
-| `/creativestack:social-calendar` | Brand voice + campaigns → content calendar grounded in the brief's tone and approved copy decks |
+| `/asset-spec` | Campaign concept → full deliverable specification (dimensions, formats, platform requirements, naming, version control, handoff checklists) |
+| `/brand-guidelines` | Scattered brand assets → structured brand guidelines with completeness scoring and gap identification |
+| `/social-calendar` | Brand voice + campaigns → content calendar grounded in the brief's tone and approved copy decks |
 
 ### Research & intelligence
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:source-scrape` | Browse-powered research utility called by other skills. Hits curated creative industry sources with formal modes (visual, brands, trends, landscape, evidence, people) and returns structured evidence |
+| `/source-scrape` | Browse-powered research utility called by other skills. Hits curated creative industry sources with formal modes (visual, brands, trends, landscape, evidence, people) and returns structured evidence |
 
 ### Financial
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:project-profitability` | **4 modes** - Analyse (project or retainer with margin, scenarios, benchmarks), Setup rates (build a reusable rate card), Aggregate (cross-project patterns by client/type/team/trend), Backfill (bootstrap project history) |
-| `/creativestack:timesheet-summary` | Raw time data → narrative project health report with burn projections, revision tax, scope creep, planned-vs-actual |
+| `/project-profitability` | **4 modes** - Analyse (project or retainer with margin, scenarios, benchmarks), Setup rates (build a reusable rate card), Aggregate (cross-project patterns by client/type/team/trend), Backfill (bootstrap project history) |
+| `/timesheet-summary` | Raw time data → narrative project health report with burn projections, revision tax, scope creep, planned-vs-actual |
 
 ### People & resources
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:resource-conflict` | **5 modes** - Analyse (find conflicts, score creative quality risk, recommend specific moves), Setup team (enrich `team.md` with seniority/rates/substitutability), Setup bench (build trusted freelance roster), Scenario (model pitch wins, person leaves, new projects), Calibrate (capture planned-vs-actual to compound future runs) |
-| `/creativestack:job-description` | Vague role brief → inclusive, well-structured creative job description |
+| `/resource-conflict` | **5 modes** - Analyse (find conflicts, score creative quality risk, recommend specific moves), Setup team (enrich `team.md` with seniority/rates/substitutability), Setup bench (build trusted freelance roster), Scenario (model pitch wins, person leaves, new projects), Calibrate (capture planned-vs-actual to compound future runs) |
+| `/job-description` | Vague role brief → inclusive, well-structured creative job description |
 
 ### Knowledge & retros
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:post-mortem` | Project state files (brief, meetings, copy decks, profitability) → structured retrospective with categorised learnings written back to `learnings.md`, client notes to `clients.md`, process changes to `methodology.md` |
+| `/post-mortem` | Project state files (brief, meetings, copy decks, profitability) → structured retrospective with categorised learnings written back to `learnings.md`, client notes to `clients.md`, process changes to `methodology.md` |
 
 ### Audits & assessments
 
 | Skill | What it does |
 |---|---|
-| `/creativestack:ai-audit` | **4 modes** - Quick / Deep / Targeted / Refresh. Interactive AI-readiness assessment for creative practices, scored across 5 maturity dimensions with prioritised quick wins |
+| `/ai-audit` | **4 modes** - Quick / Deep / Targeted / Refresh. Interactive AI-readiness assessment for creative practices, scored across 5 maturity dimensions with prioritised quick wins |
 
 ---
 
@@ -369,7 +344,6 @@ For contributors. Read [CLAUDE.md](./CLAUDE.md) for the build system and editing
 
 ```
 creativestack/
-├── .claude-plugin/plugin.json      # Plugin manifest - name, version, namespace
 ├── _build/
 │   ├── build-skills.sh             # Build script - generates skills/* from templates
 │   ├── shared/
@@ -382,9 +356,7 @@ creativestack/
 │           └── references/         # Per-skill reference files loaded on demand
 ├── skills/                         # Generated SKILL.md files - DO NOT edit directly
 ├── agents/                         # Workflow agent definitions (Markdown with YAML frontmatter)
-├── hooks/hooks.json                # Session-start hook for brain status + update check
-├── scripts/check-brain.sh          # Brain status script invoked by the session hook
-├── CLAUDE.md                       # Project instructions for editing the plugin
+├── CLAUDE.md                       # Project instructions for editing CreativeStack
 └── LICENSE                         # MIT
 ```
 
@@ -416,7 +388,7 @@ CreativeStack is built on a few firm beliefs:
 
 Built by **me, Cam** - AI partner for creative agencies, studios, and creative companies.
 
-I build custom AI workflows, embedded tooling, and AI strategy for creative practices. If you want CreativeStack tailored to your agency, or you need a deeper AI partnership beyond the plugin, get in touch:
+I build custom AI workflows, embedded tooling, and AI strategy for creative practices. If you want CreativeStack tailored to your agency, or you need a deeper AI partnership beyond the stack, get in touch:
 
 **[jones.cam](https://jones.cam)**
 

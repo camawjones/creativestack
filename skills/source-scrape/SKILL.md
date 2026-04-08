@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:source-scrape
+# /source-scrape
 
 > Utility skill. Gets called by other skills for research. Returns scored, annotated, deduplicated evidence in either human or skill-parseable format.
 
@@ -217,18 +217,18 @@ When calling skills don't pass parameters explicitly, infer them from context.
 
 | Mode | What it returns | Common callers |
 |---|---|---|
-| `trends` | Pattern signals, "rise of / shift toward / decline of" language, dated for velocity scoring | `/creativestack:trend-report` |
-| `brands` | Specific brand campaigns, visual identity examples, dated activity | `/creativestack:competitor-audit`, `/creativestack:pitch-research` |
-| `landscape` | Broad sweep across categories, theme grouping, white-space identification | `/creativestack:creative-strategy`, `/creativestack:brief-sharpener` |
-| `visual` | Heavy on screenshots, grouped by visual pattern, colour/typography/composition described | `/creativestack:design-research`, `/creativestack:competitor-audit` |
-| `evidence` | Stats, data points, quotes, attributable findings — for backing up claims | `/creativestack:trend-report` (velocity scoring), `/creativestack:creative-strategy` |
-| `people` | Creative directors, founders, decision-makers, public quotes, recent moves | `/creativestack:pitch-research` |
+| `trends` | Pattern signals, "rise of / shift toward / decline of" language, dated for velocity scoring | `/trend-report` |
+| `brands` | Specific brand campaigns, visual identity examples, dated activity | `/competitor-audit`, `/pitch-research` |
+| `landscape` | Broad sweep across categories, theme grouping, white-space identification | `/creative-strategy`, `/brief-sharpener` |
+| `visual` | Heavy on screenshots, grouped by visual pattern, colour/typography/composition described | `/design-research`, `/competitor-audit` |
+| `evidence` | Stats, data points, quotes, attributable findings — for backing up claims | `/trend-report` (velocity scoring), `/creative-strategy` |
+| `people` | Creative directors, founders, decision-makers, public quotes, recent moves | `/pitch-research` |
 
 ## Conversation Flow
 
 ### Step 0: Session cache check
 
-**Before scraping anything**, scan the current conversation for prior `/creativestack:source-scrape` runs. If one exists with the same query (or a strict superset of the current query) and the same mode, **reuse it** and tell the caller:
+**Before scraping anything**, scan the current conversation for prior `/source-scrape` runs. If one exists with the same query (or a strict superset of the current query) and the same mode, **reuse it** and tell the caller:
 
 > "Reusing source-scrape results from earlier in this session: query='{query}', mode='{mode}', {n} sources scanned. Skipping fresh scrape."
 
@@ -252,7 +252,7 @@ Check for `~/.creativestack/sources.md`:
 ```
 
 - **If `sources.md` exists**: read it. Use the user's prioritised sources first. Respect their blocklist. Add category-specific sources if the query matches a category they've defined.
-- **If not**: read `references/source-library.md` and use the default curated list. After the scrape finishes, mention once: "Tip: I'm using the default source library. Run `/creativestack:source-scrape` and pick 'Manage sources' to save your own trusted sources to the Brain."
+- **If not**: read `references/source-library.md` and use the default curated list. After the scrape finishes, mention once: "Tip: I'm using the default source library. Run `/source-scrape` and pick 'Manage sources' to save your own trusted sources to the Brain."
 
 ### Step 3: Dependency check
 
@@ -516,42 +516,42 @@ last_updated: {date}
 - Look for pattern language: "rise of", "shift toward", "growing", "emerging", "decline of"
 - Capture before/after visual comparisons where available
 - Recency matters extra — bias toward Current/Recent freshness
-- **Suggest next:** `/creativestack:trend-report` — synthesise into a structured report with velocity scoring
+- **Suggest next:** `/trend-report` — synthesise into a structured report with velocity scoring
 
 ### `brands` mode
 - Prioritise brand/campaign trackers + industry press
 - Search for the specific brand name across sources
 - Capture campaign screenshots and visual identity examples
 - Note campaign dates and context
-- **Suggest next:** `/creativestack:competitor-audit` — place findings in competitive context
+- **Suggest next:** `/competitor-audit` — place findings in competitive context
 
 ### `landscape` mode
 - Broad sweep across all source categories
 - Aim for breadth — more sources, lighter touch (cap `max_per_source` at 2)
 - Group findings by theme rather than source
 - Useful for category overviews and white-space identification
-- **Suggest next:** `/creativestack:creative-strategy` — turn landscape into strategic provocations
+- **Suggest next:** `/creative-strategy` — turn landscape into strategic provocations
 
 ### `visual` mode
 - Prioritise award sites + portfolios + Dezeen/Brand New tier
 - Screenshot-heavy — capture 3-5 visual references per source
 - Describe visual qualities explicitly (colour, typography, composition, style)
 - Group by visual pattern in the reference sheet
-- **Suggest next:** `/creativestack:design-research` — build structured research boards
+- **Suggest next:** `/design-research` — build structured research boards
 
 ### `evidence` mode
 - Prioritise sources with data, stats, named quotes
 - Capture: stats, attributed quotes, named expert opinions, dated industry reports
 - Each finding must have an attributable source — no anonymous claims
 - Flag any stat without a primary source
-- **Suggest next:** caller skill (usually `/creativestack:trend-report` or `/creativestack:creative-strategy`)
+- **Suggest next:** caller skill (usually `/trend-report` or `/creative-strategy`)
 
 ### `people` mode
 - Hit industry press + LinkedIn-adjacent coverage + interview/podcast sources
 - Capture: name, current role, recent moves, public quotes, notable work
 - Distinguish between "about them" coverage and "by them" content (interviews, talks)
 - Explicitly note when info is dated (people change roles often)
-- **Suggest next:** `/creativestack:pitch-research` — use as decision-maker profiles
+- **Suggest next:** `/pitch-research` — use as decision-maker profiles
 
 ## Edge Cases
 

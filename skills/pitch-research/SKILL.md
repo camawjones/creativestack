@@ -1,6 +1,6 @@
 ---
 name: pitch-research
-description: Brain-first pitch intelligence for creative agencies. Four modes — Research (deep prospect dossier with fit score, decision-maker profiles, brain-backed angles, killer hook, warm path in), Refresh (update an existing dossier with what's changed), Pitch prep (1-page in-the-room brief for the meeting itself), Log outcome (capture meeting notes and win/loss with reasons). Persists prospects/{slug}.md dossiers and learnings.md § Pitching so every future pitch gets sharper. Aggregates win/loss patterns across past pitches automatically. Calls /creativestack:source-scrape for live evidence.
+description: Brain-first pitch intelligence for creative agencies. Four modes — Research (deep prospect dossier with fit score, decision-maker profiles, brain-backed angles, killer hook, warm path in), Refresh (update an existing dossier with what's changed), Pitch prep (1-page in-the-room brief for the meeting itself), Log outcome (capture meeting notes and win/loss with reasons). Persists prospects/{slug}.md dossiers and learnings.md § Pitching so every future pitch gets sharper. Aggregates win/loss patterns across past pitches automatically. Calls /source-scrape for live evidence.
 ---
 
 ## CreativeStack Preamble
@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:pitch-research
+# /pitch-research
 
 > Know everything about a prospect before you walk in the room. Get sharper with every pitch.
 
@@ -250,9 +250,9 @@ Scan the conversation for output from earlier skills run this session:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:source-scrape` | Live brand and people evidence | Pre-fills brand activity and decision-maker sources |
-| `/creativestack:trend-report` | Category trends | Trend Position section + pitch angles |
-| `/creativestack:competitor-audit` | Competitive landscape | Competitor section + positioning context |
+| `/source-scrape` | Live brand and people evidence | Pre-fills brand activity and decision-maker sources |
+| `/trend-report` | Category trends | Trend Position section + pitch angles |
+| `/competitor-audit` | Competitive landscape | Competitor section + positioning context |
 
 ### Step 4: Research mode — Initial questions
 
@@ -264,15 +264,15 @@ Ask only what isn't already known:
 
 ### Step 5: Research mode — Live research via source-scrape
 
-Call `/creativestack:source-scrape` for prospect brand activity and
+Call `/source-scrape` for prospect brand activity and
 decision-makers (session cache will reuse if already run):
 
-> "I'll call `/creativestack:source-scrape` with query='{prospect} recent
+> "I'll call `/source-scrape` with query='{prospect} recent
 > campaigns {last 18 months}', mode='brands', output='data', time_window='last_year'."
 
 In parallel, call again for leadership profiles:
 
-> "I'll call `/creativestack:source-scrape` with query='{prospect} creative
+> "I'll call `/source-scrape` with query='{prospect} creative
 > leadership marketing director', mode='people', output='data'."
 
 Parse `## VISUAL_CAPTURES` and `## FINDINGS` for brand evidence; parse
@@ -378,7 +378,7 @@ output mirrors that schema, with one addition at the very top:
 # Pitch Research: {Prospect Name}
 **Researched:** {date}
 **Confidence:** {High/Medium/Low — based on public info found}
-**Visual evidence:** {Yes — via /creativestack:source-scrape / Limited — text descriptions only}
+**Visual evidence:** {Yes — via /source-scrape / Limited — text descriptions only}
 **Fit score:** {N}/5 — {Strong / Good / Marginal / Weak / Bad pursue}
 
 {Then everything from references/dossier-schema.md § "prospects/{slug}.md — Full dossier"}
@@ -458,7 +458,7 @@ For Pitch prep mode:
 
 Pick the most relevant 1-2:
 
-- **Research just ran, strong fit** → "Run /creativestack:pitch-research in **Pitch prep** mode the day before the meeting."
+- **Research just ran, strong fit** → "Run /pitch-research in **Pitch prep** mode the day before the meeting."
 - **Pitch closed (won or lost)** → "Run **Log outcome** mode. Outcomes here will sharpen every future pitch in this category combination."
 
 ## Edge Cases

@@ -43,8 +43,8 @@ match the seniority? Could a contractor or restructure get the same outcome at
 lower risk? Saying *no* or *not yet* protects the studio from a bad hire — which is
 the most expensive mistake in any creative business.
 
-Persists planned hires to `team.md` so future runs of `/creativestack:resource-conflict`,
-`/creativestack:project-profitability`, and `/creativestack:status-update` know
+Persists planned hires to `team.md` so future runs of `/resource-conflict`,
+`/project-profitability`, and `/status-update` know
 about open roles without having to be told twice.
 
 ## Conversation Flow
@@ -60,7 +60,7 @@ particular attention to `team.md`:
 - Are there obvious gaps that the user *isn't* asking about — but should be?
 
 If `team.md` has rich data, use it. If it's sparse, ask the user to fill the gap
-verbally — don't block on it, but flag at the end: *"Run `/creativestack:setup-agency`
+verbally — don't block on it, but flag at the end: *"Run `/setup-agency`
 to capture your team properly. Future hires will be better informed."*
 
 ### Step 2: User provides the brief
@@ -239,8 +239,8 @@ the schema in `references/output-formats.md`. If the role is already in there as
 draft, update it. If it's not, append it with `Status: Drafted JD`.
 
 Confirm to the user: *"Added to team.md under Planned Hires. Update the status as
-the role progresses — it's read by `/creativestack:resource-conflict` and
-`/creativestack:project-profitability` so they know about open capacity."*
+the role progresses — it's read by `/resource-conflict` and
+`/project-profitability` so they know about open capacity."*
 
 ## Gotchas
 
@@ -326,17 +326,17 @@ producing a hire who doesn't last six months. Read these every time.
 
 If these would have helped but weren't run, suggest 1–2:
 
-- No `team.md` populated → "Run `/creativestack:setup-agency` to capture your team properly. Future hires will be better informed."
-- No `tone-of-voice.md` → "Run `/creativestack:update-voice` to nail down the studio's voice. The 'About Us' section will stop sounding generic."
-- Driven by capacity pressure → "Run `/creativestack:resource-conflict` first to confirm a hire is the right answer rather than a freelance bridge."
-- Driven by a specific client engagement → "Run `/creativestack:project-profitability` on the engagement first — the JD changes if the role is being funded by client work."
+- No `team.md` populated → "Run `/setup-agency` to capture your team properly. Future hires will be better informed."
+- No `tone-of-voice.md` → "Run `/update-voice` to nail down the studio's voice. The 'About Us' section will stop sounding generic."
+- Driven by capacity pressure → "Run `/resource-conflict` first to confirm a hire is the right answer rather than a freelance bridge."
+- Driven by a specific client engagement → "Run `/project-profitability` on the engagement first — the JD changes if the role is being funded by client work."
 
 ### Downstream
 
 After generating, suggest 1–2:
 
-- "Run `/creativestack:resource-conflict` to model how this hire (or its absence) affects your capacity over the next quarter."
-- "Once the role is filled, update `team.md` directly or re-run `/creativestack:setup-agency` to refresh your team data."
+- "Run `/resource-conflict` to model how this hire (or its absence) affects your capacity over the next quarter."
+- "Once the role is filled, update `team.md` directly or re-run `/setup-agency` to refresh your team data."
 - "If you're hiring multiple roles together, re-run this skill for each — they should all reference the same `team.md` so capacity stays coherent."
 
 Pick the most relevant 1–2.

@@ -185,9 +185,9 @@ ranked. Hero quote at the top, secondary quotes below.}
 
 ## Handoff readiness
 
-- ✓ Ready for `/creativestack:pitch-research` — portfolio index updated
-- ✓ Ready for `/creativestack:proposal-generator` — case study available as brain evidence
-- ✓ Ready for `/creativestack:rfi-response` — relevant for sport/brand_refresh RFIs
+- ✓ Ready for `/pitch-research` — portfolio index updated
+- ✓ Ready for `/proposal-generator` — case study available as brain evidence
+- ✓ Ready for `/rfi-response` — relevant for sport/brand_refresh RFIs
 ```
 
 ### Frontmatter field reference
@@ -440,19 +440,19 @@ preserve both in a note so old cross-references don't break.
 If these skills weren't run but would have strengthened the case study,
 suggest them at the beginning (before extraction):
 
-- **No creative-brief run for this project** → "Run `/creativestack:creative-brief` retrospectively if the project info is still fresh. The brief is the #1 source for the Challenge section."
-- **No meeting-notes run** → "If you have meeting recordings, run `/creativestack:meeting-notes` on them. Meeting logs are the #1 source for client quotes."
-- **No post-mortem** → "Run `/creativestack:post-mortem` to capture what was hard and what was learned. Makes the case study more honest and compelling."
-- **No competitor audit in this category** → "Run `/creativestack:competitor-audit` for {category} if the category context would strengthen the Challenge framing."
+- **No creative-brief run for this project** → "Run `/creative-brief` retrospectively if the project info is still fresh. The brief is the #1 source for the Challenge section."
+- **No meeting-notes run** → "If you have meeting recordings, run `/meeting-notes` on them. Meeting logs are the #1 source for client quotes."
+- **No post-mortem** → "Run `/post-mortem` to capture what was hard and what was learned. Makes the case study more honest and compelling."
+- **No competitor audit in this category** → "Run `/competitor-audit` for {category} if the category context would strengthen the Challenge framing."
 - **No profitability data** → not typically needed for public case studies, don't suggest unless user wants commercial metrics
 
 ### Downstream
 
-- **Case study just written** → "Run `/creativestack:pitch-research` on any prospects in this industry — the new case study is now in the brain and will be referenced automatically."
-- **Portfolio has strong coverage in this area now** → "Worth updating your agency's positioning materials. Consider `/creativestack:update-voice` or running `/creativestack:proposal-generator` on recent RFIs to leverage the fresh coverage."
+- **Case study just written** → "Run `/pitch-research` on any prospects in this industry — the new case study is now in the brain and will be referenced automatically."
+- **Portfolio has strong coverage in this area now** → "Worth updating your agency's positioning materials. Consider `/update-voice` or running `/proposal-generator` on recent RFIs to leverage the fresh coverage."
 - **Case study surfaced an unexpected learning** → "Worth capturing in `learnings.md` via a team retro. The insight might apply to future work."
 - **Case study still needs client approval** → "Use the approval package. Follow up in 2 weeks if no response — the draft follow-up is in the package."
-- **Multiple case studies written in a session** → "Run `/creativestack:portfolio-review` when you're done." (Note: portfolio-review is a nice future skill but may not exist. If not, suggest manual review.)
+- **Multiple case studies written in a session** → "Run `/portfolio-review` when you're done." (Note: portfolio-review is a nice future skill but may not exist. If not, suggest manual review.)
 
 Only suggest 1-2 chains. Pick the most relevant.
 

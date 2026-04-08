@@ -31,7 +31,7 @@ Score each competitor 1-5 on five dimensions. Total 5-25.
 **Scoring discipline:**
 
 - **Don't grade on a curve.** Most brands score 2-3 on most dimensions. A 5 is rare. If most competitors in your audit score 4+, the bar is wrong.
-- **Cite evidence for every score.** Reference annotated screenshots from `/creativestack:source-scrape` where possible. Quote the `visual_qualities` field verbatim.
+- **Cite evidence for every score.** Reference annotated screenshots from `/source-scrape` where possible. Quote the `visual_qualities` field verbatim.
 - **Score what you can see, not what you assume.** If you only have a website to look at, your score is about the website — say so.
 
 **Special note on typography:**

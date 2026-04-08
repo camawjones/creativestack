@@ -26,7 +26,7 @@ also the champion. Profile them deeply and skip the rest.
 6. **Twitter/X (where active)** — public posts, what they reshare
 7. **Acquired or notable past companies** — context for their reference points
 
-If `/creativestack:source-scrape` was called in `people` mode earlier in the
+If `/source-scrape` was called in `people` mode earlier in the
 session, that data is already available — use it as primary evidence.
 
 ## What to look for

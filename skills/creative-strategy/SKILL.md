@@ -1,6 +1,6 @@
 ---
 name: creative-strategy
-description: Research-driven creative strategy tool for creatives and creative companies. Distinguishes the five strategy types most agencies conflate (brand / comms / creative platform / campaign / category), routes to the right framework from a curated set of nine (tension-based, cultural, challenger, jobs to be done, category entry points, behavioural, purpose, platform-led, distinctive brand assets) plus an Open mode that picks the framework from the evidence. Reads project state to build on prior strategy rounds, runs a pre-flight check on whether strategy is even the right answer, calls /creativestack:source-scrape for landscape and evidence, generates a research pack with cited evidence plus a one-page framework-shaped Strategy on a Page, and runs a strict anti-slop check before showing the work. Generates research, tensions, and provocations — never the creative answer.
+description: Research-driven creative strategy tool for creatives and creative companies. Distinguishes the five strategy types most agencies conflate (brand / comms / creative platform / campaign / category), routes to the right framework from a curated set of nine (tension-based, cultural, challenger, jobs to be done, category entry points, behavioural, purpose, platform-led, distinctive brand assets) plus an Open mode that picks the framework from the evidence. Reads project state to build on prior strategy rounds, runs a pre-flight check on whether strategy is even the right answer, calls /source-scrape for landscape and evidence, generates a research pack with cited evidence plus a one-page framework-shaped Strategy on a Page, and runs a strict anti-slop check before showing the work. Generates research, tensions, and provocations — never the creative answer.
 ---
 
 ## CreativeStack Preamble
@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:creative-strategy
+# /creative-strategy
 
 > Research and provocations for strategists. The creative answer stays human. The slop stays out.
 
@@ -432,12 +432,12 @@ Scan the conversation for output from other CreativeStack skills:
 
 | Skill run earlier | What to pull in | Where it appears |
 |---|---|---|
-| `/creativestack:trend-report` | Trend names, velocity scores, counter-trends | Cultural context — don't re-research |
-| `/creativestack:competitor-audit` | Positioning map, visual / verbal codes, gaps | Competitor landscape — reference directly |
-| `/creativestack:design-research` | Cultural references, design movements | Cultural context + creative platform shape |
-| `/creativestack:source-scrape` | Scored sources, themes, evidence | Evidence base throughout — cite quality scores |
-| `/creativestack:brief-sharpener` | Sharpened brief, deal-breaker questions | Brief context — surfaces what's still vague |
-| `/creativestack:creative-brief` | Objectives, audience, success criteria | Brief context — drives strategy type choice |
+| `/trend-report` | Trend names, velocity scores, counter-trends | Cultural context — don't re-research |
+| `/competitor-audit` | Positioning map, visual / verbal codes, gaps | Competitor landscape — reference directly |
+| `/design-research` | Cultural references, design movements | Cultural context + creative platform shape |
+| `/source-scrape` | Scored sources, themes, evidence | Evidence base throughout — cite quality scores |
+| `/brief-sharpener` | Sharpened brief, deal-breaker questions | Brief context — surfaces what's still vague |
+| `/creative-brief` | Objectives, audience, success criteria | Brief context — drives strategy type choice |
 
 When upstream data is available, tell the user what you're pulling in.
 
@@ -488,7 +488,7 @@ it.
 
   Common cases where the answer is No:
   - "The brief is a craft problem dressed up as a strategy problem. Skip
-    strategy, run `/creativestack:design-research` instead."
+    strategy, run `/design-research` instead."
   - "The brief is a brand identity problem. Strategy can't fix what only a
     proper rebrand can."
   - "The brief is a distribution / pricing / product problem. No amount of
@@ -543,10 +543,10 @@ permission to occupy a territory die at the executive review.
 
 ### Step 8: Research
 
-**Call `/creativestack:source-scrape` in landscape mode** for category and
+**Call `/source-scrape` in landscape mode** for category and
 cultural context (session cache reuses if already run):
 
-> *"I'll call `/creativestack:source-scrape` with query='{category} {strategic
+> *"I'll call `/source-scrape` with query='{category} {strategic
 > angle from framework}', mode='landscape', output='data', target_sources=10,
 > max_per_source=2."*
 
@@ -555,7 +555,7 @@ Parse `## THEMES` to seed Cultural Context and the strategic territories. Parse
 
 **In parallel, call source-scrape in evidence mode** for hard data points:
 
-> *"I'll call `/creativestack:source-scrape` with query='{category} {audience
+> *"I'll call `/source-scrape` with query='{category} {audience
 > behaviour} statistics report', mode='evidence', output='data'."*
 
 Parse `## FINDINGS` for attributable stats and quotes — every strategic claim
@@ -738,26 +738,26 @@ helps and strategy that wastes everyone's afternoon.
 
 If these would have helped but weren't run, suggest 1-2:
 
-- No clear brief → "Run `/creativestack:brief-sharpener` first — strategy on a vague brief is theatre."
-- No category context → "Run `/creativestack:competitor-audit` before this — the competitor landscape will be richer."
-- No cultural signal → "Run `/creativestack:trend-report` first if you want to weight the strategy toward what's emerging."
-- No design / aesthetic context (and the strategy is a creative platform) → "Run `/creativestack:design-research` first — platform strategies need visual permission as much as verbal."
+- No clear brief → "Run `/brief-sharpener` first — strategy on a vague brief is theatre."
+- No category context → "Run `/competitor-audit` before this — the competitor landscape will be richer."
+- No cultural signal → "Run `/trend-report` first if you want to weight the strategy toward what's emerging."
+- No design / aesthetic context (and the strategy is a creative platform) → "Run `/design-research` first — platform strategies need visual permission as much as verbal."
 - No customer reality → "If you have customer reviews, sales call notes, or user research, paste it now. Strategy without audience reality is opinion."
 
 ### Downstream
 
 After generating, suggest 1-2:
 
-- Strategy lands → "Run `/creativestack:creative-brief` to translate this strategy into a brief the creative team can actually work from."
-- Strategy needs sense-checking → "Run `/creativestack:brief-sharpener` to pressure-test the chosen territory against the brief."
-- Strategy is for a pitch → "Run `/creativestack:pitch-research` to pull supporting case studies from the studio's archive for the pitch deck."
-- Multiple territories surfaced → "Once the team picks a territory, update `chosen_territory` in Skill Memory and re-run `/creativestack:creative-brief` against that territory specifically."
+- Strategy lands → "Run `/creative-brief` to translate this strategy into a brief the creative team can actually work from."
+- Strategy needs sense-checking → "Run `/brief-sharpener` to pressure-test the chosen territory against the brief."
+- Strategy is for a pitch → "Run `/pitch-research` to pull supporting case studies from the studio's archive for the pitch deck."
+- Multiple territories surfaced → "Once the team picks a territory, update `chosen_territory` in Skill Memory and re-run `/creative-brief` against that territory specifically."
 
 Pick the most relevant 1-2.
 
 ## Edge Cases
 
-- **Very vague brief** — push back via the pre-flight check, surface gaps loudly, offer `/creativestack:brief-sharpener`. Don't paper over a vague brief with fancy strategy language.
+- **Very vague brief** — push back via the pre-flight check, surface gaps loudly, offer `/brief-sharpener`. Don't paper over a vague brief with fancy strategy language.
 - **Highly regulated industry (pharma, finance, alcohol, gambling)** — flag compliance constraints alongside strategic opportunities. Strategy that can't legally be executed is worse than no strategy.
 - **Brief contradicts itself** — surface the contradiction, research both directions, and let the user resolve. Don't quietly pick one side.
 - **Niche category with thin public data** — be honest about thin evidence. Don't fabricate confidence. Say what you'd need to test before committing.

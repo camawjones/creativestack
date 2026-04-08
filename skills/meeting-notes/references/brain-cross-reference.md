@@ -85,14 +85,14 @@ cost using `rate-card.md`.
 > would normally bill at £1,500-2,250. Quote the client before agreeing.
 
 If `rate-card.md` doesn't exist, skip the £ figure but still flag the scope
-change with hours estimate and a note: "Run /creativestack:project-profitability
+change with hours estimate and a note: "Run /project-profitability
 in Setup rates mode to enable cost estimation."
 
 ### 4. Action capacity check
 
 For each action with an owner, check `team.md` (with `seniority` and
 `contracted_hours` fields if available) and any recent
-`/creativestack:resource-conflict` output for capacity warnings.
+`/resource-conflict` output for capacity warnings.
 
 **Trigger:** Action assigned to someone who is at >85% utilisation per recent
 data, OR on leave during the action's deadline period.

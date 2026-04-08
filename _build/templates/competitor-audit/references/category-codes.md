@@ -84,7 +84,7 @@ they claim to do differently.
 
 Run source-scrape in visual mode across 8-10 competitors:
 
-> `/creativestack:source-scrape query='{category} brand identity' mode='visual' output='data' target_sources=10`
+> `/source-scrape query='{category} brand identity' mode='visual' output='data' target_sources=10`
 
 ### Step 2: List what's shared
 

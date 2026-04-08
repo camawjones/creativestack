@@ -47,7 +47,7 @@ and Approach sections of the case study are 70% written.
 
 **If no brief file exists:** flag it as the biggest gap. The case study
 Challenge section will need manual input. Suggest running
-`/creativestack:creative-brief` retrospectively if the project is recent
+`/creative-brief` retrospectively if the project is recent
 enough that the info is still fresh.
 
 ### 2. `projects/{slug}.md` — project state
@@ -151,7 +151,7 @@ compelling than a case study that describes the work in isolation.
 
 **Primary source for: What was hard, what the team learned, unexpected outcomes**
 
-If `/creativestack:post-mortem` was run for this project, the material is
+If `/post-mortem` was run for this project, the material is
 in the session or in `learnings.md`. Pull:
 
 | Post-mortem element | Feeds case study section |
@@ -162,7 +162,7 @@ in the session or in `learnings.md`. Pull:
 | Lessons | Context for the narrative |
 | Client relationship assessment | Tone of the case study (warm vs formal) |
 
-### 7. `/creativestack:project-profitability` output (if available)
+### 7. `/project-profitability` output (if available)
 
 **Primary source for: Commercial metrics (for internal case studies or
 investor-facing work; usually excluded from public case studies)**
@@ -299,7 +299,7 @@ description of the work), the skill should pause and ask before proceeding:
 > - No copy deck → I don't know what the work looks like
 >
 > Two options:
-> 1. Run `/creativestack:creative-brief` and `/creativestack:meeting-notes` retrospectively for this project to populate the brain
+> 1. Run `/creative-brief` and `/meeting-notes` retrospectively for this project to populate the brain
 > 2. Paste what you have (rough brief, client quotes, description of the work) and I'll work from that — but the case study will be shorter and less rich
 >
 > Which do you want?"

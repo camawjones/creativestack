@@ -40,7 +40,7 @@ gets sharper as the project log and client patterns accumulate.
 - `learnings.md § Client Patterns` — accumulated communication patterns per client/person (this skill appends to a Client Patterns section, never overwrites)
 - `projects/{slug}.md` — project state, brief, open decisions, risks, engagement health
 - `methodology.md` — for flagging decisions that skip required process steps
-- `rate-card.md` — for pricing scope changes in £ (requires `/creativestack:project-profitability` Setup rates first)
+- `rate-card.md` — for pricing scope changes in £ (requires `/project-profitability` Setup rates first)
 - `team.md` — for flagging actions assigned to overbooked or absent people
 - `clients.md` — client relationship history
 - `tone-of-voice.md` — for client-facing output language
@@ -90,11 +90,11 @@ Scan the conversation for output from earlier skills run this session:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:creative-brief` | Deliverables, objectives, constraints | Brief contradiction check |
-| `/creativestack:timeline-generator` | Milestones, critical path, current phase | Timeline impact detection |
-| `/creativestack:feedback-consolidator` | Outstanding actions, contradictions | Cross-reference new feedback |
-| `/creativestack:resource-conflict` | Capacity per person, overbooked flags | Capacity flag for action assignments |
-| `/creativestack:project-profitability` | Rate card, current margin status | Cost the scope changes |
+| `/creative-brief` | Deliverables, objectives, constraints | Brief contradiction check |
+| `/timeline-generator` | Milestones, critical path, current phase | Timeline impact detection |
+| `/feedback-consolidator` | Outstanding actions, contradictions | Cross-reference new feedback |
+| `/resource-conflict` | Capacity per person, overbooked flags | Capacity flag for action assignments |
+| `/project-profitability` | Rate card, current margin status | Cost the scope changes |
 
 ### Step 3: Notes mode — MCP context enrichment
 
@@ -206,7 +206,7 @@ Offer **at most one** brain enrichment based on what's most valuable:
 - **Action overdue from a past meeting** → "Sarah's action from 2026-03-15 is 14 days overdue. Want me to flag it in the project state risks?"
 - **Sentiment trajectory turned DECLINING** → "Engagement is down 2 points across 3 meetings. Want me to flag this in engagement health?"
 - **Recurring scope item just hit 3 instances** → "The social rollout has come up 3 times now without a formal scope change. Want me to add a high-severity risk to the project state?"
-- **No rate card and scope changes were detected** → "I couldn't price the scope changes — no rate card. Want to set one up via /creativestack:project-profitability Setup rates? Future meetings will price scope changes automatically."
+- **No rate card and scope changes were detected** → "I couldn't price the scope changes — no rate card. Want to set one up via /project-profitability Setup rates? Future meetings will price scope changes automatically."
 
 Don't pile on. One offer.
 
@@ -297,11 +297,11 @@ If not available, skip silently.
 Pick the most relevant 1-2:
 
 **Upstream:**
-- **No brief or rate card** → "Run `/creativestack:creative-brief` and `/creativestack:project-profitability` Setup rates to enable brief contradiction checks and scope cost pricing."
+- **No brief or rate card** → "Run `/creative-brief` and `/project-profitability` Setup rates to enable brief contradiction checks and scope cost pricing."
 
 **Downstream:**
-- **Sentiment declining or capacity flag triggered** → "Run `/creativestack:status-update` to prepare a leadership-visible flag, or `/creativestack:resource-conflict` Scenario mode to model the impact."
-- **Pre-meeting mode just ran** → "Run /creativestack:meeting-notes Notes mode after the meeting to log it."
+- **Sentiment declining or capacity flag triggered** → "Run `/status-update` to prepare a leadership-visible flag, or `/resource-conflict` Scenario mode to model the impact."
+- **Pre-meeting mode just ran** → "Run /meeting-notes Notes mode after the meeting to log it."
 
 ## Edge Cases
 - **Very short transcript** → ask for more context, lower confidence

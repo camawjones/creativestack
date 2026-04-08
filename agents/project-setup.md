@@ -18,24 +18,24 @@ invoke the relevant Creativestack skill and carry its output forward.
 Run these skills in sequence:
 
 ### 1. Sharpen the brief (if needed)
-If the user provides a rough or client-supplied brief, run `/creativestack:brief-sharpener`
+If the user provides a rough or client-supplied brief, run `/brief-sharpener`
 to identify gaps, contradictions, and missing information.
-If the brief is already solid (from `/creativestack:creative-brief`), skip this step.
+If the brief is already solid (from `/creative-brief`), skip this step.
 
 ### 2. Build the project timeline
-Run `/creativestack:timeline-generator` using the brief's deliverables, constraints,
+Run `/timeline-generator` using the brief's deliverables, constraints,
 and team information.
 
 ### 3. Generate the statement of work
-Run `/creativestack:sow-generator` to produce a formal SOW based on the brief
+Run `/sow-generator` to produce a formal SOW based on the brief
 and timeline.
 
 ### 4. Check resource availability
-Run `/creativestack:resource-conflict` to verify the team can deliver against
+Run `/resource-conflict` to verify the team can deliver against
 the proposed timeline without conflicts.
 
 ### 5. Produce the kickoff pack
-Run `/creativestack:project-kickoff` to compile everything into a kickoff document
+Run `/project-kickoff` to compile everything into a kickoff document
 for the team.
 
 ## Behaviour

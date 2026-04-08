@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:case-study
+# /case-study
 
 > Creatives don't hate writing case studies — they hate gathering the material. This skill does the gathering.
 
@@ -327,10 +327,10 @@ Create or update `case-studies/{slug}.md` per the schema, append the portfolio i
 
 Offer **at most one** brain enrichment based on what's most valuable:
 
-- **Portfolio has strong coverage in this area now** → "You now have 4 case studies in the Sport industry. Worth updating positioning materials to lean into this specialism? Consider `/creativestack:update-voice` or refreshing your agency bio."
+- **Portfolio has strong coverage in this area now** → "You now have 4 case studies in the Sport industry. Worth updating positioning materials to lean into this specialism? Consider `/update-voice` or refreshing your agency bio."
 - **Case study surfaced an unexpected learning** → "The 'what we didn't expect' section captured something useful. Want me to save it to `learnings.md` for future projects in this category?"
 - **Client approval cycle likely to be slow (based on learnings.md § Client Patterns)** → "This client has taken an average of 3 weeks to approve past case studies. Build that into your timeline."
-- **No post-mortem for this project** → "The 'what was hard' section is thin. If the project is still fresh, running `/creativestack:post-mortem` would strengthen this case study materially."
+- **No post-mortem for this project** → "The 'what was hard' section is thin. If the project is still fresh, running `/post-mortem` would strengthen this case study materially."
 - **Awards mode ran** → "The awards version is saved separately. Remember: {award deadline} is in {N days}. Want me to generate the submission checklist?"
 
 One offer. Don't pile on.
@@ -475,10 +475,10 @@ the user can keep or cut.}
 Pick the most relevant 1-2:
 
 **Upstream:**
-- **No brief or meeting log for this project** → "Run `/creativestack:creative-brief` and `/creativestack:meeting-notes` retrospectively if the info is still fresh — they're the #1 sources for the Challenge and client quotes."
+- **No brief or meeting log for this project** → "Run `/creative-brief` and `/meeting-notes` retrospectively if the info is still fresh — they're the #1 sources for the Challenge and client quotes."
 
 **Downstream:**
-- **Case study fills an industry gap** → "Run `/creativestack:pitch-research` on prospects in {industry} — the new case study is now in the brain and gets referenced automatically."
+- **Case study fills an industry gap** → "Run `/pitch-research` on prospects in {industry} — the new case study is now in the brain and gets referenced automatically."
 - **Case study published** → "Run case-study Update mode when external results come in (press, awards, performance data) to keep it current."
 
 ## Edge Cases

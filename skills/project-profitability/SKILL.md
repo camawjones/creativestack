@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:project-profitability
+# /project-profitability
 
 > Hours + rates + fee in, margin truth out. Saves your rate card once. Learns every project.
 
@@ -371,7 +371,7 @@ after that takes 60 seconds and gets sharper as the history grows.
 - `project-history.md` — append-only log of every analysed project (this skill creates and maintains it)
 - `retainer-history.md` — monthly data points per retainer for trajectory analysis (this skill creates and maintains it)
 - `team.md` — fallback source for person-level day rates if not in rate-card
-- `freelance-bench.md` — trusted freelance roster with day rates and lead times (used in scenario modelling and cost-out comparisons; from `/creativestack:resource-conflict` Setup bench)
+- `freelance-bench.md` — trusted freelance roster with day rates and lead times (used in scenario modelling and cost-out comparisons; from `/resource-conflict` Setup bench)
 - `profile.md` — agency name, currency, default target margin
 - `learnings.md` — prose lessons (this skill appends to a § Profitability section, never overwrites)
 
@@ -415,9 +415,9 @@ Before asking the user anything, scan the conversation for upstream skill output
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:timesheet-summary` | Logged hours, burn rate, revision tax, scope creep | Pre-fills hours data — skip the question |
-| `/creativestack:timeline-generator` | Phase structure, planned durations | Maps phases to budget allocation |
-| `/creativestack:sow-generator` | Fee, payment milestones, revision limits | Pre-fills fee and contractual terms |
+| `/timesheet-summary` | Logged hours, burn rate, revision tax, scope creep | Pre-fills hours data — skip the question |
+| `/timeline-generator` | Phase structure, planned durations | Maps phases to budget allocation |
+| `/sow-generator` | Fee, payment milestones, revision limits | Pre-fills fee and contractual terms |
 
 When upstream data is available:
 "I have the timesheet data from earlier — {X hours} across {Y team members},
@@ -434,8 +434,8 @@ Auto-detect from the input:
 
 Ask only what isn't already known:
 
-- **Fee:** ask if not pre-filled from `/creativestack:sow-generator` or upstream
-- **Hours:** ask if not pre-filled from `/creativestack:timesheet-summary`
+- **Fee:** ask if not pre-filled from `/sow-generator` or upstream
+- **Hours:** ask if not pre-filled from `/timesheet-summary`
 - **Rates:** if `rate-card.md` exists, use it. Otherwise ask once and offer to save to rate card at the end.
 - **OOP costs:** ask once. "Any out-of-pocket costs? (freelance, stock, print, travel)" — if freelance is mentioned and `freelance-bench.md` exists, look up the bench rates rather than asking again.
 - **Target margin:** if `default_target_margin` in rate-card.md frontmatter, skip. Otherwise ask, or fall back to industry benchmark for the project type.
@@ -669,8 +669,8 @@ For retainer:
 
 Pick the most relevant 1-2:
 
-- **Project mode, low margin or structural pricing issue** → "Run `/creativestack:post-mortem` to capture what drove the margin loss, then reference these scenarios in your next `/creativestack:proposal-generator` to price differently."
-- **Retainer mode, declining or at-risk trajectory** → "Run `/creativestack:status-update` to prepare the next QBR conversation."
+- **Project mode, low margin or structural pricing issue** → "Run `/post-mortem` to capture what drove the margin loss, then reference these scenarios in your next `/proposal-generator` to price differently."
+- **Retainer mode, declining or at-risk trajectory** → "Run `/status-update` to prepare the next QBR conversation."
 
 ## Project State Participation
 
@@ -679,7 +679,7 @@ above), update the state file:
 
 - **Budget & Pace** — update the `Margin: {healthy | thinning | at-risk}` line and the
   `Updated: YYYY-MM-DD` line. Don't overwrite hours/burn rate fields owned by
-  `/creativestack:timesheet-summary` unless they're empty.
+  `/timesheet-summary` unless they're empty.
 - **Recent Activity** — append `YYYY-MM-DD — project-profitability — margin {%}, {verdict}`
 - **Frontmatter** — update `last_updated`
 - Update `_index.md`

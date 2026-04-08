@@ -63,7 +63,7 @@ Each win has this schema:
 - **What it looks like:** {one sentence}
 - **Time to value:** {First value this week / This month / This quarter}
 - **Effort:** L / M / H
-- **Skill:** `/creativestack:{skill-name}`
+- **Skill:** `/{skill-name}`
 - **User types:** {list or "all"}
 - **Disciplines:** {list or "all"}
 - **Tier:** beginner / intermediate / advanced / beginner-only
@@ -78,7 +78,7 @@ Each win has this schema:
 - **What it looks like:** Turn a sharpened brief into a SOW with your standard terms, scope, and milestones in under 10 minutes
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:sow-generator`
+- **Skill:** `/sow-generator`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** all
 - **Tier:** beginner
@@ -88,7 +88,7 @@ Each win has this schema:
 - **What it looks like:** Feed logged hours and get margin, burn rate, scope creep flags, and budget projection
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:timesheet-summary`
+- **Skill:** `/timesheet-summary`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** all
 - **Tier:** beginner
@@ -98,7 +98,7 @@ Each win has this schema:
 - **What it looks like:** Run a resource conflict check against your roster and upcoming work to catch overbooking before it bites
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:resource-conflict`
+- **Skill:** `/resource-conflict`
 - **User types:** studio, agency, in-house, company
 - **Disciplines:** all
 - **Tier:** beginner
@@ -108,7 +108,7 @@ Each win has this schema:
 - **What it looks like:** Produce a timeline with milestones, dependencies, parallel workstreams, and slip scenarios from a brief
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:timeline-generator`
+- **Skill:** `/timeline-generator`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner
@@ -118,7 +118,7 @@ Each win has this schema:
 - **What it looks like:** Generate a kickoff pack with RACI, timeline, risks, internal brief, workshop agenda, and Slack announcement
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:project-kickoff`
+- **Skill:** `/project-kickoff`
 - **User types:** studio, agency, in-house, company
 - **Disciplines:** all
 - **Tier:** beginner
@@ -132,7 +132,7 @@ Each win has this schema:
 - **What it looks like:** Audit a client brief for gaps, assumptions, contradictions, and red flags; get a client clarification message drafted ready to send
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:brief-sharpener`
+- **Skill:** `/brief-sharpener`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner
@@ -142,7 +142,7 @@ Each win has this schema:
 - **What it looks like:** Turn emails, Slack threads, and meeting notes into a properly structured creative brief with tension, real objective, audience depth, and a single-minded thought
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:creative-brief`
+- **Skill:** `/creative-brief`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner
@@ -152,7 +152,7 @@ Each win has this schema:
 - **What it looks like:** Turn scattered feedback from multiple stakeholders into a deduplicated, ranked action list — with contradictions flagged
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:feedback-consolidator`
+- **Skill:** `/feedback-consolidator`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner
@@ -162,7 +162,7 @@ Each win has this schema:
 - **What it looks like:** Structured design research across six modes — brand deep-dive, visual landscape, cultural territories, craft deep-dive, pattern research, audience visual diet
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:design-research`
+- **Skill:** `/design-research`
 - **User types:** all
 - **Disciplines:** brand, digital, motion, illustration, multi-disciplinary
 - **Tier:** intermediate
@@ -172,7 +172,7 @@ Each win has this schema:
 - **What it looks like:** Pick a strategy framework, build a strategy on a page, run the anti-slop checklist
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:creative-strategy`
+- **Skill:** `/creative-strategy`
 - **User types:** all
 - **Disciplines:** brand, strategy, multi-disciplinary
 - **Tier:** intermediate
@@ -186,7 +186,7 @@ Each win has this schema:
 - **What it looks like:** Generate client-ready, leadership-ready, and creative-team status updates with engagement health signals and trend tracking
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:status-update`
+- **Skill:** `/status-update`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner
@@ -196,7 +196,7 @@ Each win has this schema:
 - **What it looks like:** Transform recordings into structured notes with actions, owners, scope change flags, tone detection, and timeline impact
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:meeting-notes`
+- **Skill:** `/meeting-notes`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner
@@ -206,7 +206,7 @@ Each win has this schema:
 - **What it looks like:** Turn a brief into a proposal with scope, approach, timeline, budget framework, and case study integration
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:proposal-generator`
+- **Skill:** `/proposal-generator`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** all
 - **Tier:** beginner
@@ -216,7 +216,7 @@ Each win has this schema:
 - **What it looks like:** Draft RFI/EOI responses from case studies, bios, and methodology with word count tracking and compliance scoring
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:rfi-response`
+- **Skill:** `/rfi-response`
 - **User types:** studio, agency, company
 - **Disciplines:** all
 - **Tier:** intermediate
@@ -230,7 +230,7 @@ Each win has this schema:
 - **What it looks like:** Turn raw project data into a structured case study with Challenge/Approach/Solution/Results and an SEO version
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:case-study`
+- **Skill:** `/case-study`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** all
 - **Tier:** beginner
@@ -240,7 +240,7 @@ Each win has this schema:
 - **What it looks like:** Structured retrospective — what worked, what didn't, what to carry forward — written to the brain for future projects to inherit
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:post-mortem`
+- **Skill:** `/post-mortem`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** intermediate
@@ -250,7 +250,7 @@ Each win has this schema:
 - **What it looks like:** Sharpen your tone of voice guidelines with consistency checking, voice spectrum positioning, and channel-specific examples
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:update-voice`
+- **Skill:** `/update-voice`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** all
 - **Tier:** intermediate
@@ -260,7 +260,7 @@ Each win has this schema:
 - **What it looks like:** Configure your CreativeStack Brain — profile, team, tone of voice, clients, and tools — so every skill produces personalised output
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:setup`
+- **Skill:** `/setup-cs`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner-only
@@ -270,7 +270,7 @@ Each win has this schema:
 - **What it looks like:** Structured brand guidelines with completeness scoring, digital-first sections, and accessibility checks
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:brand-guidelines`
+- **Skill:** `/brand-guidelines`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** brand, multi-disciplinary
 - **Tier:** intermediate
@@ -284,7 +284,7 @@ Each win has this schema:
 - **What it looks like:** Analyse project and retainer profitability from logged hours, rates, and fees with margin analysis and scenario modelling
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:project-profitability`
+- **Skill:** `/project-profitability`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** all
 - **Tier:** intermediate
@@ -294,7 +294,7 @@ Each win has this schema:
 - **What it looks like:** Generate research packs on prospects — positioning, campaigns, decision-makers, pain points, fit-ranked angles
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:pitch-research`
+- **Skill:** `/pitch-research`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** all
 - **Tier:** beginner
@@ -304,7 +304,7 @@ Each win has this schema:
 - **What it looks like:** Analyse team roster and upcoming commitments to flag overbooking, capacity gaps, and burnout indicators
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:resource-conflict`
+- **Skill:** `/resource-conflict`
 - **User types:** studio, agency, in-house, company
 - **Disciplines:** all
 - **Tier:** intermediate
@@ -314,7 +314,7 @@ Each win has this schema:
 - **What it looks like:** Re-run this skill every 3-6 months and compare delta against the last audit — measurable progress you can show leadership
 - **Time to value:** First value this quarter
 - **Effort:** L
-- **Skill:** `/creativestack:ai-audit`
+- **Skill:** `/ai-audit`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** intermediate
@@ -328,7 +328,7 @@ Each win has this schema:
 - **What it looks like:** Make your tone of voice explicit enough that AI-drafted client comms actually sound like you
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:update-voice`
+- **Skill:** `/update-voice`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** all
 - **Tier:** advanced
@@ -338,7 +338,7 @@ Each win has this schema:
 - **What it looks like:** Turn 3 rounds of conflicting feedback into a single deduplicated action list with stakeholder influence mapping
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/creativestack:feedback-consolidator`
+- **Skill:** `/feedback-consolidator`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner
@@ -348,7 +348,7 @@ Each win has this schema:
 - **What it looks like:** Positioning map, visual identity scoring, digital maturity assessment, messaging themes, and white space analysis
 - **Time to value:** First value this week
 - **Effort:** M
-- **Skill:** `/creativestack:competitor-audit`
+- **Skill:** `/competitor-audit`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** brand, strategy, multi-disciplinary
 - **Tier:** beginner
@@ -358,7 +358,7 @@ Each win has this schema:
 - **What it looks like:** Research a category with visual evidence, velocity scoring, capability matching, and counter-trend analysis
 - **Time to value:** First value this month
 - **Effort:** M
-- **Skill:** `/creativestack:trend-report`
+- **Skill:** `/trend-report`
 - **User types:** freelancer, studio, agency, company
 - **Disciplines:** brand, strategy, multi-disciplinary
 - **Tier:** intermediate
@@ -377,7 +377,7 @@ When writing the quick wins into the audit output, use this shape
 
 {Before/after one-liner}
 
-**Run it now:** `/creativestack:{skill-name}`
+**Run it now:** `/{skill-name}`
 ```
 
 Don't cite the tier label in output (it's for selection only).

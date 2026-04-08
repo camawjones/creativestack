@@ -1,6 +1,6 @@
 ---
 name: pitch-research
-description: Brain-first pitch intelligence for creative agencies. Four modes — Research (deep prospect dossier with fit score, decision-maker profiles, brain-backed angles, killer hook, warm path in), Refresh (update an existing dossier with what's changed), Pitch prep (1-page in-the-room brief for the meeting itself), Log outcome (capture meeting notes and win/loss with reasons). Persists prospects/{slug}.md dossiers and learnings.md § Pitching so every future pitch gets sharper. Aggregates win/loss patterns across past pitches automatically. Calls /creativestack:source-scrape for live evidence.
+description: Brain-first pitch intelligence for creative agencies. Four modes — Research (deep prospect dossier with fit score, decision-maker profiles, brain-backed angles, killer hook, warm path in), Refresh (update an existing dossier with what's changed), Pitch prep (1-page in-the-room brief for the meeting itself), Log outcome (capture meeting notes and win/loss with reasons). Persists prospects/{slug}.md dossiers and learnings.md § Pitching so every future pitch gets sharper. Aggregates win/loss patterns across past pitches automatically. Calls /source-scrape for live evidence.
 ---
 
 {{PREAMBLE}}
@@ -94,9 +94,9 @@ Scan the conversation for output from earlier skills run this session:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:source-scrape` | Live brand and people evidence | Pre-fills brand activity and decision-maker sources |
-| `/creativestack:trend-report` | Category trends | Trend Position section + pitch angles |
-| `/creativestack:competitor-audit` | Competitive landscape | Competitor section + positioning context |
+| `/source-scrape` | Live brand and people evidence | Pre-fills brand activity and decision-maker sources |
+| `/trend-report` | Category trends | Trend Position section + pitch angles |
+| `/competitor-audit` | Competitive landscape | Competitor section + positioning context |
 
 ### Step 4: Research mode — Initial questions
 
@@ -108,15 +108,15 @@ Ask only what isn't already known:
 
 ### Step 5: Research mode — Live research via source-scrape
 
-Call `/creativestack:source-scrape` for prospect brand activity and
+Call `/source-scrape` for prospect brand activity and
 decision-makers (session cache will reuse if already run):
 
-> "I'll call `/creativestack:source-scrape` with query='{prospect} recent
+> "I'll call `/source-scrape` with query='{prospect} recent
 > campaigns {last 18 months}', mode='brands', output='data', time_window='last_year'."
 
 In parallel, call again for leadership profiles:
 
-> "I'll call `/creativestack:source-scrape` with query='{prospect} creative
+> "I'll call `/source-scrape` with query='{prospect} creative
 > leadership marketing director', mode='people', output='data'."
 
 Parse `## VISUAL_CAPTURES` and `## FINDINGS` for brand evidence; parse
@@ -302,7 +302,7 @@ For Pitch prep mode:
 
 Pick the most relevant 1-2:
 
-- **Research just ran, strong fit** → "Run /creativestack:pitch-research in **Pitch prep** mode the day before the meeting."
+- **Research just ran, strong fit** → "Run /pitch-research in **Pitch prep** mode the day before the meeting."
 - **Pitch closed (won or lost)** → "Run **Log outcome** mode. Outcomes here will sharpen every future pitch in this category combination."
 
 ## Edge Cases

@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:trend-report
+# /trend-report
 
 > Name a space, get the trends shaping it — researched in parallel, fact-checked, and ranked by confidence.
 
@@ -227,17 +227,17 @@ This is the most important step. Don't do sequential search. Use the Agent tool
 to spawn 4+ parallel research streams, each focused on a different angle. This
 catches different signals and avoids one-source bias.
 
-**Before launching streams**, check if `/creativestack:source-scrape` already ran in this session
+**Before launching streams**, check if `/source-scrape` already ran in this session
 for this category. If so, reuse it (the session cache will handle this automatically
-on the second call). If not, kick off a `/creativestack:source-scrape` call **in parallel** with
+on the second call). If not, kick off a `/source-scrape` call **in parallel** with
 the agent streams to gather curated industry-press evidence:
 
-> "I'll call `/creativestack:source-scrape` with query='{category} trends {timeframe}',
+> "I'll call `/source-scrape` with query='{category} trends {timeframe}',
 > mode='trends', output='data', time_window='{matches the user's selection}'."
 
 And a second parallel call for hard evidence (stats, named quotes, attributable claims):
 
-> "I'll call `/creativestack:source-scrape` with query='{category} {trend topic} statistics
+> "I'll call `/source-scrape` with query='{category} {trend topic} statistics
 > reports', mode='evidence', output='data'."
 
 The `data` output format gives you stable fields (`headline`, `freshness`, `source`,
@@ -419,7 +419,7 @@ existing case-study evidence — these are pitch-ready.}
 
 **Visual evidence:**
 {Specific visual examples — campaigns, designs, interfaces, packaging — that
-demonstrate this trend. If /creativestack:source-scrape was called in Step 2, parse the
+demonstrate this trend. If /source-scrape was called in Step 2, parse the
 `## VISUAL_CAPTURES` block from its data output and reference annotated screenshots
 by `subject` and `visual_qualities`. Group by `visual_pattern` where multiple
 captures share an aesthetic.}
@@ -514,11 +514,11 @@ If yes, write to that path.
 These trends are inputs to other skills. Suggest 1-2 next steps based on what
 the user seems to be working toward:
 
-- **Building a strategy?** → "Run `/creativestack:creative-strategy` — these trends will be referenced as cultural context."
-- **Preparing a pitch?** → "Run `/creativestack:pitch-research {prospect}` — trend adoption gaps become pitch angles."
-- **Auditing a competitor?** → "Run `/creativestack:competitor-audit {brand}` — trend positioning adds a dimension."
-- **Sharpening a brief?** → "Run `/creativestack:brief-sharpener` — trend-blind assumptions will be flagged."
-- **Writing a brief?** → "Run `/creativestack:creative-brief` — trend context will be woven into the background."
+- **Building a strategy?** → "Run `/creative-strategy` — these trends will be referenced as cultural context."
+- **Preparing a pitch?** → "Run `/pitch-research {prospect}` — trend adoption gaps become pitch angles."
+- **Auditing a competitor?** → "Run `/competitor-audit {brand}` — trend positioning adds a dimension."
+- **Sharpening a brief?** → "Run `/brief-sharpener` — trend-blind assumptions will be flagged."
+- **Writing a brief?** → "Run `/creative-brief` — trend context will be woven into the background."
 
 ## Capability Boundaries
 

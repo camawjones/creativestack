@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:creative-brief
+# /creative-brief
 
 > The creative team deserves a brief, not a spec. Tension in, work-ready brief out.
 
@@ -384,13 +384,13 @@ the rate card sharpens the fee check, the meeting log feeds kickoff decisions.
 - `tone-of-voice.md` — for the brief's writing voice (not the brand's voice)
 - `clients.md` — client relationship history and context
 - `case-studies.md` — relevant past work for inspiration or reference
-- `learnings.md § Feedback` — client vocabulary, archetypes, stakeholder memory (from `/creativestack:feedback-consolidator`)
-- `learnings.md § Pitching` — past pitch learnings if the brief came from a pitch (from `/creativestack:pitch-research`)
-- `prospects/{slug}.md` — prospect dossier for From pitch mode (from `/creativestack:pitch-research`)
+- `learnings.md § Feedback` — client vocabulary, archetypes, stakeholder memory (from `/feedback-consolidator`)
+- `learnings.md § Pitching` — past pitch learnings if the brief came from a pitch (from `/pitch-research`)
+- `prospects/{slug}.md` — prospect dossier for From pitch mode (from `/pitch-research`)
 - `projects/{slug}.md` + `projects/{slug}-meetings.md` — existing project state and kickoff meeting decisions
-- `rate-card.md` — for the fee sanity check (from `/creativestack:project-profitability`)
-- `team.md` — for the team sanity check with extended schema (from `/creativestack:resource-conflict`)
-- `sow-style.md` — if a SOW exists, pull scope from it (from `/creativestack:sow-generator`)
+- `rate-card.md` — for the fee sanity check (from `/project-profitability`)
+- `team.md` — for the team sanity check with extended schema (from `/resource-conflict`)
+- `sow-style.md` — if a SOW exists, pull scope from it (from `/sow-generator`)
 
 **This skill creates and writes:**
 - `projects/{slug}.md` — project state file (created if missing, updated if existing)
@@ -425,7 +425,7 @@ Run brain discovery. Check specifically:
 **Routing:**
 - **From inputs** → Step 2
 - **From scratch** → Step 5 (Interview mode)
-- **From pitch** → Check that `prospects/{slug}.md` exists for the named prospect. If not, "No dossier found. Run `/creativestack:pitch-research` first to create one." If yes, continue to Step 4 (pre-populated).
+- **From pitch** → Check that `prospects/{slug}.md` exists for the named prospect. If not, "No dossier found. Run `/pitch-research` first to create one." If yes, continue to Step 4 (pre-populated).
 
 ### Step 2: Upstream skill check
 
@@ -433,14 +433,14 @@ Scan the conversation for output from earlier skills:
 
 | Skill run earlier | What to pull in | Where it lands in the brief |
 |---|---|---|
-| `/creativestack:source-scrape` | Brand positioning, messaging, visual style | Background, Constraints |
-| `/creativestack:competitor-audit` | Competitive landscape, white space | Category Context, Tension |
-| `/creativestack:trend-report` | Category trends, cultural shifts | Category Context, Tension |
-| `/creativestack:pitch-research` | Prospect dossier | Full From pitch mode handoff |
-| `/creativestack:brief-sharpener` | Prior brief analysis for an earlier draft | Gap identification |
-| `/creativestack:meeting-notes` | Kickoff decisions | Objectives, stakeholders, decisions |
-| `/creativestack:sow-generator` | SOW scope, deliverables, fee, timeline | Deliverables, Constraints |
-| `/creativestack:feedback-consolidator` | Round-1 feedback if this is a rebrief | Open Questions, contradictions |
+| `/source-scrape` | Brand positioning, messaging, visual style | Background, Constraints |
+| `/competitor-audit` | Competitive landscape, white space | Category Context, Tension |
+| `/trend-report` | Category trends, cultural shifts | Category Context, Tension |
+| `/pitch-research` | Prospect dossier | Full From pitch mode handoff |
+| `/brief-sharpener` | Prior brief analysis for an earlier draft | Gap identification |
+| `/meeting-notes` | Kickoff decisions | Objectives, stakeholders, decisions |
+| `/sow-generator` | SOW scope, deliverables, fee, timeline | Deliverables, Constraints |
+| `/feedback-consolidator` | Round-1 feedback if this is a rebrief | Open Questions, contradictions |
 
 When upstream data is available, tell the user what's being pulled in.
 
@@ -469,8 +469,8 @@ Or if thin:
 
 > "Brain depth: Minimal — no past projects with this client, no rate card
 > yet. The brief will work but without client-specific overlays or fee
-> sanity checks. Consider running `/creativestack:setup` or
-> `/creativestack:project-profitability` Setup rates for future briefs."
+> sanity checks. Consider running `/setup-cs` or
+> `/project-profitability` Setup rates for future briefs."
 
 ### Step 4: Project type selection
 
@@ -594,7 +594,7 @@ Read `references/brief-schema.md` § "Project state write flow" and:
 Offer **at most one** brain enrichment. Pick the most valuable:
 
 - **From pitch mode just ran AND the killer hook made it into the brief** → "The killer hook carried into the brief as the candidate single-minded thought. Once the client validates it, want me to save that as a win pattern in `learnings.md § Pitching`?"
-- **Score is below 6.5** → "This brief scored {X} — want me to hand off to `/creativestack:brief-sharpener` automatically to tighten the weak dimensions before the team sees it?"
+- **Score is below 6.5** → "This brief scored {X} — want me to hand off to `/brief-sharpener` automatically to tighten the weak dimensions before the team sees it?"
 - **Any Red dimension** → "Blocker on {dimension}. The brief isn't ready for the team. Want me to draft the specific questions to ask the client to unblock it?"
 - **First brief for this client and the vocabulary / archetype / stakeholder data captured something new** → "I noticed {specific observation}. Want me to save this to `learnings.md § Feedback` for future briefs with this client?"
 - **Fee sanity check showed a gap** → "The fee implied by scope is £{X}, vs stated budget £{Y}. Worth a conversation before the team starts. Want me to draft talking points?"
@@ -686,18 +686,18 @@ The full brief structure (sections in order) lives in `references/brief-schema.m
 Pick the most relevant 1-2. Full handoff rules in `references/brief-schema.md` § "Handoff rules".
 
 **Upstream:**
-- **No competitor context or trend data** → "Run `/creativestack:competitor-audit` and/or `/creativestack:trend-report` to strengthen Category Context and Tension."
-- **From a transcript** → "Run `/creativestack:meeting-notes` first to extract decisions, then feed the structured notes in here."
+- **No competitor context or trend data** → "Run `/competitor-audit` and/or `/trend-report` to strengthen Category Context and Tension."
+- **From a transcript** → "Run `/meeting-notes` first to extract decisions, then feed the structured notes in here."
 
 **Downstream (score-driven):**
-- **Score 8.0+** → "Run `/creativestack:timeline-generator` to build the project timeline from this brief's deliverables."
-- **Score 5.0-7.9 or any Red dimension** → "Run `/creativestack:brief-sharpener` before briefing the team — Red dimensions need a client conversation first."
+- **Score 8.0+** → "Run `/timeline-generator` to build the project timeline from this brief's deliverables."
+- **Score 5.0-7.9 or any Red dimension** → "Run `/brief-sharpener` before briefing the team — Red dimensions need a client conversation first."
 
 ## Edge Cases
 - **Very short input** → ask for more context OR offer From scratch mode. Flag Low confidence on the rubric.
-- **Input is a transcript** → route to `/creativestack:meeting-notes` first; this skill isn't for parsing raw transcripts.
-- **Client has sent an existing brief** → route to `/creativestack:brief-sharpener` — that skill is built for improving existing briefs.
-- **From pitch mode but dossier is stale** (>90 days) → refuse, route to `/creativestack:pitch-research` Refresh mode first.
+- **Input is a transcript** → route to `/meeting-notes` first; this skill isn't for parsing raw transcripts.
+- **Client has sent an existing brief** → route to `/brief-sharpener` — that skill is built for improving existing briefs.
+- **From pitch mode but dossier is stale** (>90 days) → refuse, route to `/pitch-research` Refresh mode first.
 - **Client vocab from `learnings.md § Feedback` contradicts the brief input** → flag the discrepancy explicitly. Never silently override.
 - **No brain at all** → degraded output, flag what's missing and suggest next-time moves.
 

@@ -1,6 +1,6 @@
 # Contributing to CreativeStack
 
-Thanks for your interest in contributing. CreativeStack is a Claude Code plugin that provides AI skills for creative professionals. This guide explains how to add or improve a skill.
+Thanks for your interest in contributing. CreativeStack is a Claude Code skill stack that provides AI skills for creative professionals. This guide explains how to add or improve a skill.
 
 ## Ground rules
 
@@ -17,8 +17,6 @@ If you are unsure whether an idea fits, open an issue before writing code.
 
 ```
 creativestack/
-├── .claude-plugin/
-│   └── plugin.json           # Plugin manifest (name, version, author)
 ├── _build/
 │   ├── build-skills.sh       # Template build script
 │   ├── shared/               # Shared content injected into every skill
@@ -33,10 +31,8 @@ creativestack/
 │   └── {skill-name}/
 │       └── SKILL.md          # Built from the .tmpl
 ├── agents/                   # Workflow agents that chain skills
-├── hooks/
-│   └── hooks.json            # SessionStart brain check
 └── scripts/
-    └── check-brain.sh        # Hook script
+    └── check-brain.sh        # Optional SessionStart brain check (install via ~/.claude/settings.json)
 ```
 
 **Important:** `skills/*/SKILL.md` files are generated. Always edit the matching `.tmpl` in `_build/templates/` and rebuild.
@@ -49,7 +45,7 @@ After editing any `.tmpl` file or any file in `_build/shared/`:
 bash _build/build-skills.sh
 ```
 
-This regenerates every `skills/*/SKILL.md` by resolving `{{PREAMBLE}}`, `{{PROJECT_STATE}}`, and `{{VISUAL_STYLE_DEFAULT}}` placeholders and rewriting bare skill references to the `/creativestack:` namespace.
+This regenerates every `skills/*/SKILL.md` by resolving `{{PREAMBLE}}`, `{{PROJECT_STATE}}`, and `{{VISUAL_STYLE_DEFAULT}}` placeholders.
 
 Commit both the `.tmpl` and the generated `.md` file in the same commit.
 
@@ -69,9 +65,8 @@ Commit both the `.tmpl` and the generated `.md` file in the same commit.
    - "Brain Files" listing which files in `~/.creativestack/` the skill reads and writes
    - Numbered workflow steps
    - An output section showing exact format
-4. **Add the skill name** to the `SKILLS=(...)` array in `_build/build-skills.sh` so namespace rewriting picks it up.
-5. **Run the build:** `bash _build/build-skills.sh`
-6. **Test the skill locally** by installing the plugin and invoking it in Claude Code. Verify it handles the no-brain case gracefully.
+4. **Run the build:** `bash _build/build-skills.sh`
+5. **Test the skill locally** by installing the stack and invoking it in Claude Code. Verify it handles the no-brain case gracefully.
 7. **Open a pull request.**
 
 ## Editing an existing skill

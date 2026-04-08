@@ -52,10 +52,10 @@ Plus:
   pattern library and a coverage checklist.
 
 ## Brain Files
-- `projects/{slug}-brief.md` — **primary voice source**: Brand Tone & Personality, Single-Minded Thought, Desired Response, Reasons to Believe, Audience (from `/creativestack:creative-brief`)
+- `projects/{slug}-brief.md` — **primary voice source**: Brand Tone & Personality, Single-Minded Thought, Desired Response, Reasons to Believe, Audience (from `/creative-brief`)
 - `projects/{slug}.md` — project state, open decisions
 - `projects/{slug}-copy-deck-v*.md` — previous versions of this project's decks (this skill creates and maintains them)
-- `learnings.md § Feedback` — client vocabulary (from `/creativestack:feedback-consolidator`)
+- `learnings.md § Feedback` — client vocabulary (from `/feedback-consolidator`)
 - `clients.md` — client relationship context and any logged brand voice notes
 - `case-studies.md` — previous copy work for reference (optional)
 - `tone-of-voice.md` — **fallback only**: used when no brief-based brand voice exists. Also used for the skill's OWN writing voice (headers, commentary, rationale) — distinct from the brand voice of the copy itself.
@@ -120,7 +120,7 @@ Check for **churn detection**: if current version is v1.4+ without sign-off:
 
 > "⚠️ **Copy deck churn detected.** This deck is on v{N} without sign-off.
 > Usually means brief-level ambiguity, not copy-level issues. Want me to
-> pause and run `/creativestack:brief-sharpener` on the underlying brief
+> pause and run `/brief-sharpener` on the underlying brief
 > first? Or proceed anyway?"
 
 ### Step 3: Brand voice source hierarchy
@@ -145,7 +145,7 @@ Or, if the fallback is used:
 > "⚠️ No brand voice source found — no brief, no previous deck, no client
 > voice notes. Using the agency's default tone-of-voice.md as a fallback.
 > The deck will be on the agency's voice but may not be distinctive to
-> this client. Consider running /creativestack:creative-brief first to
+> this client. Consider running /creative-brief first to
 > establish the brand voice."
 
 ### Step 4: Upstream skill check
@@ -154,12 +154,12 @@ Scan the conversation for output from earlier skills:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:creative-brief` | SMT, audience, tone, desired response, reasons to believe | Primary voice and content source |
-| `/creativestack:brief-sharpener` | Refined brief output | Same as creative-brief |
-| `/creativestack:creative-strategy` | Strategic territories, positioning | Voice and messaging direction |
-| `/creativestack:feedback-consolidator` | Round feedback on previous copy version | Direct input for revisions |
-| `/creativestack:competitor-audit` | Competitive messaging context | Sharpness calibration |
-| `/creativestack:source-scrape` evidence mode | Hard data for proof points | Claim/proof pairing |
+| `/creative-brief` | SMT, audience, tone, desired response, reasons to believe | Primary voice and content source |
+| `/brief-sharpener` | Refined brief output | Same as creative-brief |
+| `/creative-strategy` | Strategic territories, positioning | Voice and messaging direction |
+| `/feedback-consolidator` | Round feedback on previous copy version | Direct input for revisions |
+| `/competitor-audit` | Competitive messaging context | Sharpness calibration |
+| `/source-scrape` evidence mode | Hard data for proof points | Claim/proof pairing |
 
 ### Step 5: Receive inputs (Deck mode) or copy to audit (Check mode)
 
@@ -284,10 +284,10 @@ For Check mode:
 Offer **at most one** brain enrichment. Pick the most valuable:
 
 - **New client vocabulary term surfaced during generation** → "I noticed this client uses '{term}' to mean {meaning}. Want me to save it to `learnings.md § Feedback`? Future decks will apply it automatically."
-- **Copy deck churn detected (v1.4+)** → "This deck is on v{N} without sign-off. Want me to run `/creativestack:brief-sharpener` on the brief to identify what's blocking?"
-- **Fallback voice source used** → "No brief-based brand voice for this project. Want to run `/creativestack:creative-brief` to establish one? Future decks for this project will get sharper voice scoring."
+- **Copy deck churn detected (v1.4+)** → "This deck is on v{N} without sign-off. Want me to run `/brief-sharpener` on the brief to identify what's blocking?"
+- **Fallback voice source used** → "No brief-based brand voice for this project. Want to run `/creative-brief` to establish one? Future decks for this project will get sharper voice scoring."
 - **Red flags persist across versions** → "The same atoms have been red-flagged in v1.0 and v1.1. The issue isn't the copy — it's probably the brief. Want me to pause and review?"
-- **Check mode passed with ≥4.5 score** → "This copy is ready to ship. Want me to run `/creativestack:asset-spec` for production specs?"
+- **Check mode passed with ≥4.5 score** → "This copy is ready to ship. Want me to run `/asset-spec` for production specs?"
 
 One offer. Don't pile on.
 
@@ -390,18 +390,18 @@ For Check mode:
 Pick the most relevant 1-2:
 
 **Upstream:**
-- **No brief for this project** → "Run `/creativestack:creative-brief` first — the deck sources brand voice from the brief instead of falling back to the agency default."
+- **No brief for this project** → "Run `/creative-brief` first — the deck sources brand voice from the brief instead of falling back to the agency default."
 
 **Downstream:**
-- **Score ≥ 4.5, ready to ship** → "Run `/creativestack:asset-spec` for production specs if deliverables are defined."
-- **Churn detected (v1.4+) or score < 3.5** → "The issue is usually the brief, not the copy. Run `/creativestack:brief-sharpener` on the underlying brief."
+- **Score ≥ 4.5, ready to ship** → "Run `/asset-spec` for production specs if deliverables are defined."
+- **Churn detected (v1.4+) or score < 3.5** → "The issue is usually the brief, not the copy. Run `/brief-sharpener` on the underlying brief."
 
 ## Edge Cases
 - **Very short input** → ask for more context. Don't pad a deck from a few bullets.
 - **No `projects/{slug}-brief.md`** → fall back to previous deck or tone-of-voice.md. Flag the fallback explicitly.
 - **No brain at all** → scoring runs against generic standards, flag this as degraded.
 - **Client vocab contradicts the brief** → flag the discrepancy and ask which to trust. Never silently override.
-- **The brief has no SMT** → SMT ladder check skipped with a note; suggest `/creativestack:creative-brief`.
+- **The brief has no SMT** → SMT ladder check skipped with a note; suggest `/creative-brief`.
 - **Copy exceeds character limits** → rewrite in-deck before finalising. Never ship variants that exceed hard limits.
 
 ### What this skill can't do

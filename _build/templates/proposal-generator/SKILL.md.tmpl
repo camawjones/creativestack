@@ -17,10 +17,10 @@ description: Turn a brief, RFP, or rough notes into a structured proposal — fu
 - `visual-style.md` (applied to any Figma proposal layout — see Visual Output below)
 - `methodology.md` (for default phase structure)
 - `case-studies.md` (portfolio index — for discovery and tagging)
-- `case-studies/{slug}.md` (full case study files for the strongest 2-3 matches — long-form content, hero quote, metrics framings; from `/creativestack:case-study`)
-- `learnings.md § Pitching` (per-sector win/loss patterns from past pitches; from `/creativestack:pitch-research` Log outcome mode)
+- `case-studies/{slug}.md` (full case study files for the strongest 2-3 matches — long-form content, hero quote, metrics framings; from `/case-study`)
+- `learnings.md § Pitching` (per-sector win/loss patterns from past pitches; from `/pitch-research` Log outcome mode)
 - `team.md` (for team expertise, bios, and rates)
-- `freelance-bench.md` (trusted freelance roster — used to credibly fill capacity gaps in scope/team sections; from `/creativestack:resource-conflict` Setup bench)
+- `freelance-bench.md` (trusted freelance roster — used to credibly fill capacity gaps in scope/team sections; from `/resource-conflict` Setup bench)
 - `clients.md` (for client relationship history)
 - `learnings.md` (for what's worked or backfired in past pitches)
 
@@ -194,7 +194,7 @@ If yes, **before building anything**, read `~/.creativestack/visual-style.md` �
 agency's house visual style. Apply its typography, color palette, spacing rules, and
 anti-slop checklist to every frame. If `visual-style.md` doesn't exist, fall back to
 the Editorial Modern defaults and tell the user at the end: "Run
-`/creativestack:setup` to configure your house visual style for sharper proposal
+`/setup-cs` to configure your house visual style for sharper proposal
 layouts."
 
 Build the layout with these spreads:
@@ -311,16 +311,16 @@ these every time — most are silent until they bite.
 
 ### Upstream
 
-- No project state for a returning client → "Run `/creativestack:project-kickoff` to formalise the relationship history first."
-- No timeline → "Run `/creativestack:timeline-generator` to build phase structure with dependencies — proposals reference it directly."
-- No competitive context → "Run `/creativestack:pitch-research` to strengthen the 'why us' section."
-- No creative brief signal → "Run `/creativestack:creative-brief` to nail down objectives — proposals are stronger when the brief is solid."
+- No project state for a returning client → "Run `/project-kickoff` to formalise the relationship history first."
+- No timeline → "Run `/timeline-generator` to build phase structure with dependencies — proposals reference it directly."
+- No competitive context → "Run `/pitch-research` to strengthen the 'why us' section."
+- No creative brief signal → "Run `/creative-brief` to nail down objectives — proposals are stronger when the brief is solid."
 
 ### Downstream
 
-- Client accepts → "Run `/creativestack:sow-generator` to formalise this into a Statement of Work, then `/creativestack:project-kickoff` to start delivery."
-- Need a more detailed timeline before sending → "Run `/creativestack:timeline-generator` to build the full timeline with slip scenarios."
-- Pitch lost or won → "Update `pitch_outcome` in Skill Memory and run `/creativestack:post-mortem` on the pitch — losses teach more than wins."
+- Client accepts → "Run `/sow-generator` to formalise this into a Statement of Work, then `/project-kickoff` to start delivery."
+- Need a more detailed timeline before sending → "Run `/timeline-generator` to build the full timeline with slip scenarios."
+- Pitch lost or won → "Update `pitch_outcome` in Skill Memory and run `/post-mortem` on the pitch — losses teach more than wins."
 
 Pick the most relevant 1-2.
 

@@ -9,7 +9,7 @@ scan first, read second.
 
 ```markdown
 # Brand Deep-Dive: {Brand Name}
-**Researched by:** /creativestack:design-research — {date}
+**Researched by:** /design-research — {date}
 **Depth:** {Quick / Standard / Deep}
 
 ## Snapshot
@@ -77,7 +77,7 @@ each one shows. Group by visual element if many.}
 
 ```markdown
 # Visual Landscape: {Category / Brief}
-**Researched by:** /creativestack:design-research — {date}
+**Researched by:** /design-research — {date}
 
 ## Field map
 
@@ -245,7 +245,7 @@ problem. Best references rarely come from the same category.}
 ```markdown
 # Craft Deep-Dive: {Craft area — e.g., "Variable Type in Motion"}
 **For project:** {project name}
-**Researched by:** /creativestack:design-research — {date}
+**Researched by:** /design-research — {date}
 
 ## What this craft is *(when it's contested)*
 {1 paragraph. Define the boundaries of the craft and what it isn't. Useful when
@@ -289,7 +289,7 @@ brief. Tools, processes, references to revisit at execution stage.}
 ```markdown
 # Pattern Research: {Pattern type — e.g., "Onboarding flows for B2B SaaS"}
 **For project:** {project name}
-**Researched by:** /creativestack:design-research — {date}
+**Researched by:** /design-research — {date}
 
 ## Pattern type
 {1-2 sentences. What kind of pattern this is, where it sits in a typical user
@@ -340,7 +340,7 @@ this without good reason makes the product feel broken, not innovative.}
 ```markdown
 # Audience Visual Diet: {Audience — narrowly defined}
 **For project:** {project name}
-**Researched by:** /creativestack:design-research — {date}
+**Researched by:** /design-research — {date}
 
 ## The audience *(precisely defined)*
 {1 short paragraph. Narrower is better. Not "Gen Z" — "UK Gen Z women into
@@ -391,7 +391,7 @@ If Figma MCP is available, offer the FigJam board.
 exists. Apply its typography, colour palette, spacing rules, and anti-slop
 checklist to every frame. If it doesn't exist, fall back to the Editorial Modern
 defaults and tell the user at the end:
-> "Run `/creativestack:setup` to configure your house visual style for sharper
+> "Run `/setup-cs` to configure your house visual style for sharper
 > research board layouts."
 
 ### Layout per mode

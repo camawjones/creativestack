@@ -210,7 +210,7 @@ surface them as questions for the client.
 
 | Average | Blocker? | State | Next step |
 |---|---|---|---|
-| 8.0+ | No | **Ready for creative** | Brief is strong. Run `/creativestack:creative-brief` From inputs mode to format it, then timeline-generator |
+| 8.0+ | No | **Ready for creative** | Brief is strong. Run `/creative-brief` From inputs mode to format it, then timeline-generator |
 | 6.5-7.9 | No | **Ready with one follow-up** | Identify the weakest dimension and ask the single sharpest question |
 | 5.0-6.4 | No | **Needs tightening** | Send the Tier 1 questions back to the client before the team starts |
 | Any | Yes (Red) | **Blocked** | The Red dimension must be resolved before creative work begins |

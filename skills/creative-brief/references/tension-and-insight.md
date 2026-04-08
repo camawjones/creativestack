@@ -249,7 +249,7 @@ Insights come from:
 - Listening to real customers (quotes, reviews, support tickets)
 - Ethnography and observation
 - `source-scrape` in evidence mode for behavioural data
-- `/creativestack:trend-report` for cultural shifts
+- `/trend-report` for cultural shifts
 - Counter-intuitive findings in research
 
 **If there's no insight in the brief inputs**, the skill should flag it:
@@ -257,7 +257,7 @@ Insights come from:
 > "This brief has no audience insight — just demographics. The creative
 > team needs at least one non-obvious truth about this audience before
 > they start. Suggested next step: a quick ethnographic conversation or a
-> `/creativestack:source-scrape` evidence-mode query on this audience's
+> `/source-scrape` evidence-mode query on this audience's
 > behaviour."
 
 ### Multiple audiences

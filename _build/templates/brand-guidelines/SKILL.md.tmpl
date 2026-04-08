@@ -113,12 +113,12 @@ Scan the conversation for output from other CreativeStack skills:
 
 | Skill run earlier | What to pull in | Where it appears |
 |---|---|---|
-| `/creativestack:creative-strategy` | Positioning, territory, brand belief | Brand strategy section |
-| `/creativestack:creative-brief` | Audience, objectives, success criteria | Brand strategy + how-to-use |
-| `/creativestack:design-research` | Visual references, design movements, counter-references | Imagery, illustration, layout sections (as rationale) |
-| `/creativestack:update-voice` | Voice principles, do/don't, examples | Tone of voice section *(often the strongest input)* |
-| `/creativestack:copy-deck` | Headline patterns, microcopy, terminology | Writing rules + tone of voice |
-| `/creativestack:competitor-audit` | Category visual codes | Imagery + colour rationale (what *not* to look like) |
+| `/creative-strategy` | Positioning, territory, brand belief | Brand strategy section |
+| `/creative-brief` | Audience, objectives, success criteria | Brand strategy + how-to-use |
+| `/design-research` | Visual references, design movements, counter-references | Imagery, illustration, layout sections (as rationale) |
+| `/update-voice` | Voice principles, do/don't, examples | Tone of voice section *(often the strongest input)* |
+| `/copy-deck` | Headline patterns, microcopy, terminology | Writing rules + tone of voice |
+| `/competitor-audit` | Category visual codes | Imagery + colour rationale (what *not* to look like) |
 
 When upstream data is available, tell the user what you're pulling in. Don't
 re-ask for information already on the table.
@@ -448,20 +448,20 @@ every time.
 
 If these would have helped but weren't run, suggest 1-2:
 
-- No clear positioning → "Run `/creativestack:creative-strategy` first — the brand strategy section will be much sharper with a defined territory."
-- No tone of voice → "Run `/creativestack:update-voice` first — the voice section is usually the weakest part of brand guidelines documents that haven't been through a voice exercise."
-- No competitor context → "Run `/creativestack:competitor-audit` first — the imagery and colour sections benefit from knowing the category visual codes you're trying to differ from."
-- No design research → "Run `/creativestack:design-research` in Brand deep-dive mode if you're documenting an existing brand from the outside."
-- No copy patterns → "Run `/creativestack:copy-deck` if you need terminology and writing rules that match real product copy."
+- No clear positioning → "Run `/creative-strategy` first — the brand strategy section will be much sharper with a defined territory."
+- No tone of voice → "Run `/update-voice` first — the voice section is usually the weakest part of brand guidelines documents that haven't been through a voice exercise."
+- No competitor context → "Run `/competitor-audit` first — the imagery and colour sections benefit from knowing the category visual codes you're trying to differ from."
+- No design research → "Run `/design-research` in Brand deep-dive mode if you're documenting an existing brand from the outside."
+- No copy patterns → "Run `/copy-deck` if you need terminology and writing rules that match real product copy."
 
 ### Downstream
 
 After generating, suggest 1-2:
 
-- "Run `/creativestack:asset-spec` to generate production specifications for any assets that need to be made to accompany the guidelines."
-- "Run `/creativestack:project-kickoff` if these guidelines are being handed off to a new agency partner — the kickoff pack will reference them."
+- "Run `/asset-spec` to generate production specifications for any assets that need to be made to accompany the guidelines."
+- "Run `/project-kickoff` if these guidelines are being handed off to a new agency partner — the kickoff pack will reference them."
 - "Once gaps are closed, re-run this skill against the same project state to bump the version and update in place."
-- "Run `/creativestack:status-update` if guidelines delivery is a milestone in a wider engagement — it'll get logged automatically."
+- "Run `/status-update` if guidelines delivery is a milestone in a wider engagement — it'll get logged automatically."
 
 Pick the most relevant 1-2.
 
@@ -484,10 +484,10 @@ This skill structures and writes brand guidelines documents. It can't:
 
 - **Make brand decisions for you.** If the brand doesn't have a tone of voice
   yet, this skill will not invent one. It will surface the gap. Use
-  `/creativestack:update-voice` to make the decision.
+  `/update-voice` to make the decision.
 - **Replace a brand strategist.** Brand strategy is a creative judgment. This
   skill documents the decisions; it doesn't make them. Pair it with
-  `/creativestack:creative-strategy` if strategic foundation is missing.
+  `/creative-strategy` if strategic foundation is missing.
 - **Audit the brand in the wild.** This skill produces the document, not the
   audit of where the brand is being followed and where it's drifting. That's
   a different problem.

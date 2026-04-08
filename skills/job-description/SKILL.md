@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -161,7 +161,7 @@ and making decisions that require human judgment and taste.
 All outputs end with:
 *CreativeStack by Cameron Jones — jones.cam*
 
-# /creativestack:job-description
+# /job-description
 
 > Vague brief in, inclusive JD out. With a pre-flight check that asks the harder question first: should this hire even happen?
 
@@ -199,8 +199,8 @@ match the seniority? Could a contractor or restructure get the same outcome at
 lower risk? Saying *no* or *not yet* protects the studio from a bad hire — which is
 the most expensive mistake in any creative business.
 
-Persists planned hires to `team.md` so future runs of `/creativestack:resource-conflict`,
-`/creativestack:project-profitability`, and `/creativestack:status-update` know
+Persists planned hires to `team.md` so future runs of `/resource-conflict`,
+`/project-profitability`, and `/status-update` know
 about open roles without having to be told twice.
 
 ## Conversation Flow
@@ -216,7 +216,7 @@ particular attention to `team.md`:
 - Are there obvious gaps that the user *isn't* asking about — but should be?
 
 If `team.md` has rich data, use it. If it's sparse, ask the user to fill the gap
-verbally — don't block on it, but flag at the end: *"Run `/creativestack:setup-agency`
+verbally — don't block on it, but flag at the end: *"Run `/setup-agency`
 to capture your team properly. Future hires will be better informed."*
 
 ### Step 2: User provides the brief
@@ -395,8 +395,8 @@ the schema in `references/output-formats.md`. If the role is already in there as
 draft, update it. If it's not, append it with `Status: Drafted JD`.
 
 Confirm to the user: *"Added to team.md under Planned Hires. Update the status as
-the role progresses — it's read by `/creativestack:resource-conflict` and
-`/creativestack:project-profitability` so they know about open capacity."*
+the role progresses — it's read by `/resource-conflict` and
+`/project-profitability` so they know about open capacity."*
 
 ## Gotchas
 
@@ -482,17 +482,17 @@ producing a hire who doesn't last six months. Read these every time.
 
 If these would have helped but weren't run, suggest 1–2:
 
-- No `team.md` populated → "Run `/creativestack:setup-agency` to capture your team properly. Future hires will be better informed."
-- No `tone-of-voice.md` → "Run `/creativestack:update-voice` to nail down the studio's voice. The 'About Us' section will stop sounding generic."
-- Driven by capacity pressure → "Run `/creativestack:resource-conflict` first to confirm a hire is the right answer rather than a freelance bridge."
-- Driven by a specific client engagement → "Run `/creativestack:project-profitability` on the engagement first — the JD changes if the role is being funded by client work."
+- No `team.md` populated → "Run `/setup-agency` to capture your team properly. Future hires will be better informed."
+- No `tone-of-voice.md` → "Run `/update-voice` to nail down the studio's voice. The 'About Us' section will stop sounding generic."
+- Driven by capacity pressure → "Run `/resource-conflict` first to confirm a hire is the right answer rather than a freelance bridge."
+- Driven by a specific client engagement → "Run `/project-profitability` on the engagement first — the JD changes if the role is being funded by client work."
 
 ### Downstream
 
 After generating, suggest 1–2:
 
-- "Run `/creativestack:resource-conflict` to model how this hire (or its absence) affects your capacity over the next quarter."
-- "Once the role is filled, update `team.md` directly or re-run `/creativestack:setup-agency` to refresh your team data."
+- "Run `/resource-conflict` to model how this hire (or its absence) affects your capacity over the next quarter."
+- "Once the role is filled, update `team.md` directly or re-run `/setup-agency` to refresh your team data."
 - "If you're hiring multiple roles together, re-run this skill for each — they should all reference the same `team.md` so capacity stays coherent."
 
 Pick the most relevant 1–2.

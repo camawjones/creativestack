@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:brief-sharpener
+# /brief-sharpener
 
 > A brief arrives. Tell me what's missing, what to ask, and what to send back.
 
@@ -406,12 +406,12 @@ client). Skips the client-facing clarification message; instead produces
 - `profile.md` — your practice context
 - `tone-of-voice.md` — for the clarification message voice
 - `clients.md` — relationship history, past stakeholder memory, known communication preferences
-- `learnings.md § Feedback` — this client's vocabulary, archetypes, stakeholder patterns (from `/creativestack:feedback-consolidator`)
+- `learnings.md § Feedback` — this client's vocabulary, archetypes, stakeholder patterns (from `/feedback-consolidator`)
 - `learnings.md § Client Patterns` — recurring brief failure modes across clients (written by this skill)
-- `learnings.md § Pitching` — if the brief is pitch-related (from `/creativestack:pitch-research`)
+- `learnings.md § Pitching` — if the brief is pitch-related (from `/pitch-research`)
 - `methodology.md` — for structural framing expectations
-- `rate-card.md` — for the fee sanity check (from `/creativestack:project-profitability`)
-- `team.md` — for the team sanity check (from `/creativestack:resource-conflict`)
+- `rate-card.md` — for the fee sanity check (from `/project-profitability`)
+- `team.md` — for the team sanity check (from `/resource-conflict`)
 - `projects/{slug}.md` + `projects/{slug}-brief.md` — existing project state and prior brief versions
 - `prospects/{slug}.md` — if the brief arrived with a prospect dossier
 
@@ -460,16 +460,16 @@ Scan the conversation for output from earlier skills:
 
 | Skill run earlier | What to pull in | Where it lands |
 |---|---|---|
-| `/creativestack:source-scrape` | Category evidence, freshness-scored sources | Evidence for gap and assumption flags |
-| `/creativestack:competitor-audit` | Competitive gaps, positioning map, visual identity scores | Dimension 9 (Category & Competitive), cross-reference with brief's positioning claims |
-| `/creativestack:trend-report` | Trend velocity, counter-trends, fading trends | Dimension 9, flag trend-blind assumptions |
-| `/creativestack:pitch-research` | Prospect dossier, killer hook, past pitch learnings | Dimensions 1 (Tension), 2 (Real Ask), 7 (Stakeholders) |
-| `/creativestack:meeting-notes` | Kickoff decisions, stated vs real asks, stakeholder dynamics | Dimensions 2, 7, contradictions |
-| `/creativestack:sow-generator` | SOW scope, deliverables, fee, timeline | Dimensions 5 (Deliverables), 6 (Constraints), fee sanity check |
-| `/creativestack:feedback-consolidator` | Prior feedback patterns for this client | Per-client rubric weighting |
+| `/source-scrape` | Category evidence, freshness-scored sources | Evidence for gap and assumption flags |
+| `/competitor-audit` | Competitive gaps, positioning map, visual identity scores | Dimension 9 (Category & Competitive), cross-reference with brief's positioning claims |
+| `/trend-report` | Trend velocity, counter-trends, fading trends | Dimension 9, flag trend-blind assumptions |
+| `/pitch-research` | Prospect dossier, killer hook, past pitch learnings | Dimensions 1 (Tension), 2 (Real Ask), 7 (Stakeholders) |
+| `/meeting-notes` | Kickoff decisions, stated vs real asks, stakeholder dynamics | Dimensions 2, 7, contradictions |
+| `/sow-generator` | SOW scope, deliverables, fee, timeline | Dimensions 5 (Deliverables), 6 (Constraints), fee sanity check |
+| `/feedback-consolidator` | Prior feedback patterns for this client | Per-client rubric weighting |
 
 When upstream data is available, tell the user what's being pulled in:
-> "I can see `/creativestack:competitor-audit` and `/creativestack:trend-report` ran earlier — I'll cross-reference the brief's positioning claims against the competitive reality and flag any trend-blind assumptions."
+> "I can see `/competitor-audit` and `/trend-report` ran earlier — I'll cross-reference the brief's positioning claims against the competitive reality and flag any trend-blind assumptions."
 
 ### Step 3: Brain context loading
 
@@ -497,7 +497,7 @@ Or thin:
 
 > "Brain depth: Minimal — no past projects with this client, no tone
 > of voice on file. I'll sharpen generically. Consider
-> `/creativestack:setup` or `/creativestack:update-voice` to get more
+> `/setup-cs` or `/update-voice` to get more
 > personalised output next time."
 
 ### Step 4: Prior brief load (Re-brief diff only)
@@ -537,7 +537,7 @@ Don't force structure.
 If the user picks "Not sure — it might be an RFP", check for RFP
 markers (deadline, "response required", team/case study requests,
 pricing section). If RFP-shaped, redirect to
-`/creativestack:rfi-response` or `/creativestack:proposal-generator`
+`/rfi-response` or `/proposal-generator`
 before going further.
 
 ### Step 6: Score against the rubric
@@ -716,7 +716,7 @@ priority.
 1. **[CONTRADICTION]** {contradiction description} — {how to resolve via question}
 
 ## Trend-Blind / Competitive-Blind Spots
-{Only if `/creativestack:trend-report` or `/creativestack:competitor-audit` ran earlier}
+{Only if `/trend-report` or `/competitor-audit` ran earlier}
 
 1. **{Blind spot}** — {cite the upstream finding that contradicts the brief}
 
@@ -841,9 +841,9 @@ damage the client relationship. Read every time.
   and recommend a longer input or From scratch mode in `creative-brief`.
 - **Don't mistake an RFP for a brief.** RFPs have deadlines, response
   requirements, team/case study requests, and pricing sections. They
-  belong to `/creativestack:rfi-response`, not here.
+  belong to `/rfi-response`, not here.
 - **Don't treat a transcript as a brief.** Meeting transcripts need
-  `/creativestack:meeting-notes` first to extract decisions; raw
+  `/meeting-notes` first to extract decisions; raw
   transcripts aren't briefable.
 - **Don't skip the red flag library.** It's not optional — the patterns
   you don't notice are the ones that cause problems.
@@ -911,12 +911,12 @@ damage the client relationship. Read every time.
 ## Edge Cases
 
 - **Very short brief (1-2 sentences)** → Don't score confidently.
-  Add Low confidence label and recommend `/creativestack:creative-brief`
+  Add Low confidence label and recommend `/creative-brief`
   From scratch mode to walk through the questions instead.
-- **Brief is an RFP** → Redirect to `/creativestack:rfi-response` or
-  `/creativestack:proposal-generator`. Don't sharpen — the rubric
+- **Brief is an RFP** → Redirect to `/rfi-response` or
+  `/proposal-generator`. Don't sharpen — the rubric
   doesn't fit.
-- **Brief is a transcript** → Redirect to `/creativestack:meeting-notes`
+- **Brief is a transcript** → Redirect to `/meeting-notes`
   first to extract decisions, then come back with the structured notes.
 - **Brief scores very high (8.5+)** → Acknowledge it's strong.
   Focus output on the one or two weak areas only. Don't invent
@@ -949,25 +949,25 @@ damage the client relationship. Read every time.
 
 ### Upstream (what feeds brief-sharpener)
 
-- **No prospect context and the brief is from a pitch** → "Run `/creativestack:pitch-research` for context on the prospect first — it'll help identify the real ask and decision-maker dynamics."
-- **No competitive context and Dimension 9 scored low** → "Run `/creativestack:competitor-audit` before sharpening next time — category blind spots are harder to catch without it."
-- **No category awareness** → "Run `/creativestack:trend-report` for a fast read on what's shifting in the category."
-- **Working from a transcript** → "Run `/creativestack:meeting-notes` to extract structured decisions, then bring them here."
-- **No rate card** → "Run `/creativestack:project-profitability` Setup rates to enable fee sanity checks on future briefs."
-- **No tone of voice on file** → "Run `/creativestack:update-voice` to get client clarification messages drafted in your actual voice."
+- **No prospect context and the brief is from a pitch** → "Run `/pitch-research` for context on the prospect first — it'll help identify the real ask and decision-maker dynamics."
+- **No competitive context and Dimension 9 scored low** → "Run `/competitor-audit` before sharpening next time — category blind spots are harder to catch without it."
+- **No category awareness** → "Run `/trend-report` for a fast read on what's shifting in the category."
+- **Working from a transcript** → "Run `/meeting-notes` to extract structured decisions, then bring them here."
+- **No rate card** → "Run `/project-profitability` Setup rates to enable fee sanity checks on future briefs."
+- **No tone of voice on file** → "Run `/update-voice` to get client clarification messages drafted in your actual voice."
 
 ### Downstream (what brief-sharpener triggers)
 
 Score + mode-based suggestions:
 
-- **Score 8.0+, no blockers** → "Brief is strong. Run `/creativestack:creative-brief` From inputs mode to format it, then `/creativestack:timeline-generator`."
-- **Score 6.5-7.9** → "Send the Tier 1 questions back to the client first, then run `/creativestack:creative-brief` once answers land."
+- **Score 8.0+, no blockers** → "Brief is strong. Run `/creative-brief` From inputs mode to format it, then `/timeline-generator`."
+- **Score 6.5-7.9** → "Send the Tier 1 questions back to the client first, then run `/creative-brief` once answers land."
 - **Score 5.0-6.4** → "Brief needs real tightening. Send the clarification message, then come back for Re-brief diff mode once you have answers."
-- **Score <5.0** → "This isn't a brief yet — it needs a discovery conversation. Run `/creativestack:project-kickoff` or schedule a workshop rather than another brief round."
+- **Score <5.0** → "This isn't a brief yet — it needs a discovery conversation. Run `/project-kickoff` or schedule a workshop rather than another brief round."
 - **Any Red dimension** → "Blocker on {dimension}. Resolve with the client conversation first — another skill run won't fix this."
-- **Fee sanity check surfaced a gap** → "Run `/creativestack:project-profitability` Scenario mode to model the implications before committing."
-- **Brief needs a SOW** → "Run `/creativestack:sow-generator` using the sharpened brief as input."
-- **Brief needs a proposal** → "Run `/creativestack:proposal-generator` wrapping the sharpened brief."
+- **Fee sanity check surfaced a gap** → "Run `/project-profitability` Scenario mode to model the implications before committing."
+- **Brief needs a SOW** → "Run `/sow-generator` using the sharpened brief as input."
+- **Brief needs a proposal** → "Run `/proposal-generator` wrapping the sharpened brief."
 - **Triage verdict = No-Go** → "Draft a polite decline / redirect — want me to do that now?"
 
 Only suggest 1-2 chains. Pick the most urgent.

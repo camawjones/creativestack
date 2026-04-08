@@ -80,7 +80,7 @@ competitive set before designing for it. Less about specific brands than about t
 landscape map (axis chart), pattern table, white space analysis, and 3–5 outlier
 case studies with what they're doing right.
 
-If the user has run `/creativestack:competitor-audit` already, build on it — don't
+If the user has run `/competitor-audit` already, build on it — don't
 duplicate the strategic analysis. This mode is the visual layer underneath.
 
 ---

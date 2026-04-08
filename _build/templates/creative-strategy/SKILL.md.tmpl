@@ -96,12 +96,12 @@ Scan the conversation for output from other CreativeStack skills:
 
 | Skill run earlier | What to pull in | Where it appears |
 |---|---|---|
-| `/creativestack:trend-report` | Trend names, velocity scores, counter-trends | Cultural context — don't re-research |
-| `/creativestack:competitor-audit` | Positioning map, visual / verbal codes, gaps | Competitor landscape — reference directly |
-| `/creativestack:design-research` | Cultural references, design movements | Cultural context + creative platform shape |
-| `/creativestack:source-scrape` | Scored sources, themes, evidence | Evidence base throughout — cite quality scores |
-| `/creativestack:brief-sharpener` | Sharpened brief, deal-breaker questions | Brief context — surfaces what's still vague |
-| `/creativestack:creative-brief` | Objectives, audience, success criteria | Brief context — drives strategy type choice |
+| `/trend-report` | Trend names, velocity scores, counter-trends | Cultural context — don't re-research |
+| `/competitor-audit` | Positioning map, visual / verbal codes, gaps | Competitor landscape — reference directly |
+| `/design-research` | Cultural references, design movements | Cultural context + creative platform shape |
+| `/source-scrape` | Scored sources, themes, evidence | Evidence base throughout — cite quality scores |
+| `/brief-sharpener` | Sharpened brief, deal-breaker questions | Brief context — surfaces what's still vague |
+| `/creative-brief` | Objectives, audience, success criteria | Brief context — drives strategy type choice |
 
 When upstream data is available, tell the user what you're pulling in.
 
@@ -152,7 +152,7 @@ it.
 
   Common cases where the answer is No:
   - "The brief is a craft problem dressed up as a strategy problem. Skip
-    strategy, run `/creativestack:design-research` instead."
+    strategy, run `/design-research` instead."
   - "The brief is a brand identity problem. Strategy can't fix what only a
     proper rebrand can."
   - "The brief is a distribution / pricing / product problem. No amount of
@@ -207,10 +207,10 @@ permission to occupy a territory die at the executive review.
 
 ### Step 8: Research
 
-**Call `/creativestack:source-scrape` in landscape mode** for category and
+**Call `/source-scrape` in landscape mode** for category and
 cultural context (session cache reuses if already run):
 
-> *"I'll call `/creativestack:source-scrape` with query='{category} {strategic
+> *"I'll call `/source-scrape` with query='{category} {strategic
 > angle from framework}', mode='landscape', output='data', target_sources=10,
 > max_per_source=2."*
 
@@ -219,7 +219,7 @@ Parse `## THEMES` to seed Cultural Context and the strategic territories. Parse
 
 **In parallel, call source-scrape in evidence mode** for hard data points:
 
-> *"I'll call `/creativestack:source-scrape` with query='{category} {audience
+> *"I'll call `/source-scrape` with query='{category} {audience
 > behaviour} statistics report', mode='evidence', output='data'."*
 
 Parse `## FINDINGS` for attributable stats and quotes — every strategic claim
@@ -402,26 +402,26 @@ helps and strategy that wastes everyone's afternoon.
 
 If these would have helped but weren't run, suggest 1-2:
 
-- No clear brief → "Run `/creativestack:brief-sharpener` first — strategy on a vague brief is theatre."
-- No category context → "Run `/creativestack:competitor-audit` before this — the competitor landscape will be richer."
-- No cultural signal → "Run `/creativestack:trend-report` first if you want to weight the strategy toward what's emerging."
-- No design / aesthetic context (and the strategy is a creative platform) → "Run `/creativestack:design-research` first — platform strategies need visual permission as much as verbal."
+- No clear brief → "Run `/brief-sharpener` first — strategy on a vague brief is theatre."
+- No category context → "Run `/competitor-audit` before this — the competitor landscape will be richer."
+- No cultural signal → "Run `/trend-report` first if you want to weight the strategy toward what's emerging."
+- No design / aesthetic context (and the strategy is a creative platform) → "Run `/design-research` first — platform strategies need visual permission as much as verbal."
 - No customer reality → "If you have customer reviews, sales call notes, or user research, paste it now. Strategy without audience reality is opinion."
 
 ### Downstream
 
 After generating, suggest 1-2:
 
-- Strategy lands → "Run `/creativestack:creative-brief` to translate this strategy into a brief the creative team can actually work from."
-- Strategy needs sense-checking → "Run `/creativestack:brief-sharpener` to pressure-test the chosen territory against the brief."
-- Strategy is for a pitch → "Run `/creativestack:pitch-research` to pull supporting case studies from the studio's archive for the pitch deck."
-- Multiple territories surfaced → "Once the team picks a territory, update `chosen_territory` in Skill Memory and re-run `/creativestack:creative-brief` against that territory specifically."
+- Strategy lands → "Run `/creative-brief` to translate this strategy into a brief the creative team can actually work from."
+- Strategy needs sense-checking → "Run `/brief-sharpener` to pressure-test the chosen territory against the brief."
+- Strategy is for a pitch → "Run `/pitch-research` to pull supporting case studies from the studio's archive for the pitch deck."
+- Multiple territories surfaced → "Once the team picks a territory, update `chosen_territory` in Skill Memory and re-run `/creative-brief` against that territory specifically."
 
 Pick the most relevant 1-2.
 
 ## Edge Cases
 
-- **Very vague brief** — push back via the pre-flight check, surface gaps loudly, offer `/creativestack:brief-sharpener`. Don't paper over a vague brief with fancy strategy language.
+- **Very vague brief** — push back via the pre-flight check, surface gaps loudly, offer `/brief-sharpener`. Don't paper over a vague brief with fancy strategy language.
 - **Highly regulated industry (pharma, finance, alcohol, gambling)** — flag compliance constraints alongside strategic opportunities. Strategy that can't legally be executed is worse than no strategy.
 - **Brief contradicts itself** — surface the contradiction, research both directions, and let the user resolve. Don't quietly pick one side.
 - **Niche category with thin public data** — be honest about thin evidence. Don't fabricate confidence. Say what you'd need to test before committing.

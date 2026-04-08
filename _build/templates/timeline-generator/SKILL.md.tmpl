@@ -15,10 +15,10 @@ description: Generate realistic project timelines with milestones, dependencies,
 - `profile.md` (for context)
 - `methodology.md` (to reference how you run projects)
 - `learnings.md` (to apply past project insights)
-- `learnings.md § Capacity` (planned-vs-actual deltas and recurring slip patterns; from `/creativestack:resource-conflict` Calibrate mode)
+- `learnings.md § Capacity` (planned-vs-actual deltas and recurring slip patterns; from `/resource-conflict` Calibrate mode)
 - `team.md` (for team capabilities and availability)
-- `freelance-bench.md` (trusted freelance roster with day rates and lead times — used to plan freelance backstops in slip scenarios; from `/creativestack:resource-conflict` Setup bench)
-- `projects/{slug}-brief.md` (the locked creative brief — pull deliverables, scope, and constraints directly instead of asking again; from `/creativestack:creative-brief`)
+- `freelance-bench.md` (trusted freelance roster with day rates and lead times — used to plan freelance backstops in slip scenarios; from `/resource-conflict` Setup bench)
+- `projects/{slug}-brief.md` (the locked creative brief — pull deliverables, scope, and constraints directly instead of asking again; from `/creative-brief`)
 - `projects/{slug}.md` (project state — current phase, stakeholders, recent activity)
 - `visual-style.md` (the agency's house visual style — applied to any Figma output)
 
@@ -108,7 +108,7 @@ these defaults. Only fall back to these templates when no methodology is defined
 
 4. "How big is the team on this? Any specific roles assigned?"
    If `team.md` exists in the brain, reference it: "I can see your team roster — who's on this one?"
-   If recent `/creativestack:resource-conflict` output exists in the session, cross-reference it: "Per the last resource-conflict run, {person} is at {N}% utilisation — flag any conflicts before locking the timeline."
+   If recent `/resource-conflict` output exists in the session, cross-reference it: "Per the last resource-conflict run, {person} is at {N}% utilisation — flag any conflicts before locking the timeline."
 
 5. "When does it need to be done? Any fixed dates (launch, event, board meeting)?" *(skip if brief Constraints section has launch date)*
 
@@ -379,7 +379,7 @@ with `mcp__claude_ai_Figma__` or `mcp__plugin_figma_figma__`).
      principles, and the universal anti-AI-slop checklist. Apply these rules to every
      visual element you generate. If this file does not exist, fall back to the
      defaults: Pairing A (Fraunces / Inter Tight / JetBrains Mono) and Palette 1
-     (Paper & Ink), and tell the user at the end: "Run `/creativestack:setup` to
+     (Paper & Ink), and tell the user at the end: "Run `/setup-cs` to
      configure your house visual style."
 
   2. **`references/figma-editorial-style.md`** (in this skill directory) — the

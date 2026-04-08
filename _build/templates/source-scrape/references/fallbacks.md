@@ -65,7 +65,7 @@ Everything else stays the same: scoring, deduplication, theme synthesis, coverag
 In the output header AND in coverage gaps, explicitly state:
 
 > **Method:** WebSearch fallback (browse daemon unavailable)
-> Visual evidence is text-described only. For annotated screenshots, run `/creativestack:browse` to set up the browse daemon and re-run this scrape.
+> Visual evidence is text-described only. For annotated screenshots, run `/browse` to set up the browse daemon and re-run this scrape.
 
 In `## Coverage Gaps`:
 > - No visual screenshots captured (browse daemon unavailable). Visual qualities are described from article text only and may be inaccurate or incomplete.
@@ -94,9 +94,9 @@ These limitations are why the browse daemon is preferred. The fallback works but
 
 This is the worst-case scenario for the fallback — visual mode without screenshots is significantly degraded. Tell the user/caller:
 
-> "Visual mode under WebSearch fallback returns text descriptions only — no annotated screenshots. For full visual evidence, run `/creativestack:browse` to enable the browse daemon and re-run. Continuing with text descriptions..."
+> "Visual mode under WebSearch fallback returns text descriptions only — no annotated screenshots. For full visual evidence, run `/browse` to enable the browse daemon and re-run. Continuing with text descriptions..."
 
-Then proceed. Caller skills like `/creativestack:design-research` and `/creativestack:competitor-audit` will know from the method header to warn the user that visual evidence is limited.
+Then proceed. Caller skills like `/design-research` and `/competitor-audit` will know from the method header to warn the user that visual evidence is limited.
 
 ## When `evidence` mode is requested under fallback
 

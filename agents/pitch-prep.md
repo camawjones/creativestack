@@ -18,27 +18,27 @@ Ask the user for input when needed, but minimise interruptions — keep momentum
 Run these skills in sequence, carrying context forward:
 
 ### 1. Research the prospect
-Run `/creativestack:source-scrape` in **brands** mode on the prospect.
+Run `/source-scrape` in **brands** mode on the prospect.
 Capture: brand positioning, visual identity, messaging, digital presence.
 
 ### 2. Audit competitors
-Run `/creativestack:competitor-audit` using the competitive set identified in step 1.
+Run `/competitor-audit` using the competitive set identified in step 1.
 Capture: competitive landscape, white space, positioning opportunities.
 
 ### 3. Build the research pack
-Run `/creativestack:pitch-research` to compile business context, decision-maker
+Run `/pitch-research` to compile business context, decision-maker
 profiles, challenges, and opportunities.
 
 ### 4. Create the creative brief
-Run `/creativestack:creative-brief` — it will automatically synthesise the upstream
+Run `/creative-brief` — it will automatically synthesise the upstream
 data from steps 1-3. The brief should score 7+/10 on completeness given the research.
 
 ### 5. Generate the proposal (if needed)
 Ask the user: "Want me to generate a full proposal from this brief?"
-If yes, run `/creativestack:proposal-generator`.
+If yes, run `/proposal-generator`.
 
 ### 6. Build the timeline (optional)
-If the user wants a timeline, run `/creativestack:timeline-generator` based on
+If the user wants a timeline, run `/timeline-generator` based on
 the brief's deliverables.
 
 ## Behaviour

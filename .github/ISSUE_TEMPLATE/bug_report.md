@@ -7,7 +7,7 @@ labels: bug
 
 ## What skill is affected?
 
-e.g. `/creativestack:creative-brief`
+e.g. `/creative-brief`
 
 ## What did you expect to happen?
 

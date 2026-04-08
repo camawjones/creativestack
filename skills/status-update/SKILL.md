@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:status-update
+# /status-update
 
 > Paste anything you've got from this week. I'll handle the rest.
 
@@ -352,9 +352,9 @@ once at the end that project state is available.
 - `tone-of-voice.md` (for client-facing language)
 - `clients.md` (for client relationship context)
 - `learnings.md` (for past project patterns that inform risk assessment)
-- `learnings.md § Client Patterns` (per-stakeholder communication patterns; from `/creativestack:meeting-notes`)
+- `learnings.md § Client Patterns` (per-stakeholder communication patterns; from `/meeting-notes`)
 - `projects/{slug}.md` (project state — primary spine, no need to re-ask context)
-- `projects/{slug}-meetings.md` (meeting log with sentiment scores per meeting — used to compute the engagement trajectory across the last 4 meetings; from `/creativestack:meeting-notes`)
+- `projects/{slug}-meetings.md` (meeting log with sentiment scores per meeting — used to compute the engagement trajectory across the last 4 meetings; from `/meeting-notes`)
 
 ## What This Skill Does
 
@@ -381,8 +381,8 @@ Read the full project state file. From it, derive:
 - Last status and trend (for week-over-week comparison — no need to ask)
 - Open decisions still pending (carry forward)
 - Engagement Health baseline + current signals
-- Budget & Pace (if present — written by `/creativestack:timesheet-summary` or `/creativestack:project-profitability`)
-- Timeline status (if present — written by `/creativestack:timeline-generator` or `/creativestack:project-kickoff`)
+- Budget & Pace (if present — written by `/timesheet-summary` or `/project-profitability`)
+- Timeline status (if present — written by `/timeline-generator` or `/project-kickoff`)
 - Risks (carried into Flags section unless resolved)
 
 **Sentiment trajectory from meetings:** if `projects/{slug}-meetings.md` exists with 2+ meetings logged, read the sentiment scores (engagement, trust, alignment) from each meeting and compute the trajectory. The trajectory is the most valuable input to the leadership version's risk assessment — a project at "On Track" status with engagement scores trending 4 → 4 → 3 → 2 over the last 4 meetings is actually in trouble. Surface this in the leadership version explicitly: "Status is On Track but sentiment is declining — engagement down 2 points across the last 4 meetings. Worth a check-in conversation outside the regular cadence."
@@ -469,11 +469,11 @@ communication rhythm, not filling space.
 
 After generating the update, suggest 1-2 next actions based on what's in the state:
 
-- Status moved to Off Track or Risks section grew → "Run `/creativestack:timeline-generator` to model the slip impact."
-- Capacity risks surfaced → "Run `/creativestack:resource-conflict` to check team availability."
-- Budget & Pace section is empty or stale (>14 days) → "Run `/creativestack:timesheet-summary` to refresh burn rate and projections."
-- Engagement Health is AMBER or RED → "Consider `/creativestack:meeting-notes` on this week's client calls to capture sentiment automatically."
-- Project is wrapping up → "Run `/creativestack:post-mortem` when this closes — it reads the full state history."
+- Status moved to Off Track or Risks section grew → "Run `/timeline-generator` to model the slip impact."
+- Capacity risks surfaced → "Run `/resource-conflict` to check team availability."
+- Budget & Pace section is empty or stale (>14 days) → "Run `/timesheet-summary` to refresh burn rate and projections."
+- Engagement Health is AMBER or RED → "Consider `/meeting-notes` on this week's client calls to capture sentiment automatically."
+- Project is wrapping up → "Run `/post-mortem` when this closes — it reads the full state history."
 
 Pick the most relevant 1-2. Don't list them all.
 

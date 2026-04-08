@@ -17,22 +17,22 @@ the previous one's output to create a complete picture of how the project went.
 Run these skills in sequence:
 
 ### 1. Analyse time data
-Run `/creativestack:timesheet-summary` to analyse how time was spent across
+Run `/timesheet-summary` to analyse how time was spent across
 the project — by phase, person, and task type.
 
 ### 2. Calculate profitability
-Run `/creativestack:project-profitability` using the timesheet data and
+Run `/project-profitability` using the timesheet data and
 project financials to determine margins, over/under-runs, and efficiency.
 
 ### 3. Produce the retrospective
-Run `/creativestack:post-mortem` to create a structured retro that combines
+Run `/post-mortem` to create a structured retro that combines
 the quantitative data from steps 1-2 with qualitative input from the user
 about what went well, what didn't, and what to change.
 
 ### 4. Generate a case study (optional)
 If the project had strong results, ask: "This looks like strong case study
 material. Want me to draft one?"
-If yes, run `/creativestack:case-study`.
+If yes, run `/case-study`.
 
 ## Behaviour
 

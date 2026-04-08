@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /creativestack:setup to set up)"
+  echo "BRAIN: not configured (run /setup-cs to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /creativestack:setup to add your context — skills produce better results with it."
+"Tip: Run /setup-cs to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -45,17 +45,17 @@ to refresh — lightly, not annoyingly.
 | File | Stale after | Refresh via |
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
-| `case-studies.md` | 90 days | `/creativestack:case-study` |
-| `clients.md` | 90 days | `/creativestack:setup` |
-| `team.md` | 90 days | `/creativestack:resource-conflict` Setup team mode |
-| `freelance-bench.md` | 120 days | `/creativestack:resource-conflict` Setup bench mode |
-| `rate-card.md` | 180 days | `/creativestack:project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/creativestack:setup` |
-| `tone-of-voice.md` | 180 days | `/creativestack:update-voice` |
-| `sow-style.md` | 180 days | `/creativestack:sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/creativestack:setup` |
+| `case-studies.md` | 90 days | `/case-study` |
+| `clients.md` | 90 days | `/setup-cs` |
+| `team.md` | 90 days | `/resource-conflict` Setup team mode |
+| `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
+| `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
+| `methodology.md` | 180 days | `/setup-cs` |
+| `tone-of-voice.md` | 180 days | `/update-voice` |
+| `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
+| `profile.md` | 365 days | `/setup-cs` |
 | `projects/*` | N/A | living documents — updated by their own skills |
-| `prospects/*` | 90 days | `/creativestack:pitch-research` Refresh mode |
+| `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
 3. Only check files this skill actually reads. Never warn about files the
    skill didn't use — irrelevant warnings train users to ignore them.
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/creativestack:setup` Refresh mode to bring everything current.
+session of `/setup-cs` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/creativestack:setup` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/creativestack:setup` nudge from the Brain
+   freshness check entirely. The `/setup-cs` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -174,7 +174,7 @@ Treat the project state file as the source of truth. Read it before asking quest
 
 If `~/.creativestack/projects/` doesn't exist, project state is not configured. The skill
 still works standalone — same fallback as the brain. Mention once at the end of output:
-"Tip: Project state is off. Pick 'Full kickoff' or run `/creativestack:project-kickoff`
+"Tip: Project state is off. Pick 'Full kickoff' or run `/project-kickoff`
 next time to start tracking this project across skills."
 
 ### Discovery (run before asking the user anything)
@@ -197,13 +197,13 @@ Use `AskUserQuestion` to present projects:
 When the user picks "+ New project" — or runs a project-aware skill with no projects at
 all — ask:
 
-> "Want to set this project up properly with `/creativestack:project-kickoff` (5–10 min,
+> "Want to set this project up properly with `/project-kickoff` (5–10 min,
 > full kickoff pack with RACI, risk register, workshop agenda), or just spin up a quick
 > state file so we can keep moving (30 sec)?"
 
 Use `AskUserQuestion` with options: `Full kickoff` / `Quick start`.
 
-- **Full kickoff** → tell the user to run `/creativestack:project-kickoff` first. That
+- **Full kickoff** → tell the user to run `/project-kickoff` first. That
   skill creates the state file as part of its normal output. Pause the current skill
   until they come back.
 - **Quick start** → ask for: project name, client name, one-paragraph brief, current
@@ -343,7 +343,7 @@ If `~/.creativestack/projects/` doesn't exist, skip discovery, skip the picker, 
 skill in standalone mode using only the inputs the user provides this session. Mention
 once at the end that project state is available.
 
-# /creativestack:post-mortem
+# /post-mortem
 
 > Honest retrospective in, institutional memory out — so you stop making the same mistakes twice.
 
@@ -353,9 +353,9 @@ once at the end that project state is available.
 - `learnings.md` (for past project patterns — also used for trend comparison)
 - `methodology.md` (current playbook — used to detect when this retro suggests a process change)
 - `projects/{slug}.md` (project state — full status, decision, risk, engagement history)
-- `projects/{slug}-brief.md` (the locked brief — for the definition-of-done check; from `/creativestack:creative-brief`)
-- `projects/{slug}-meetings.md` (meeting log with sentiment scores per meeting — the source for the engagement trajectory and "what was hard" moments; from `/creativestack:meeting-notes`)
-- `projects/{slug}-copy-deck-v*.md` (versioned copy decks — for the scope-vs-deliverable comparison; from `/creativestack:copy-deck`)
+- `projects/{slug}-brief.md` (the locked brief — for the definition-of-done check; from `/creative-brief`)
+- `projects/{slug}-meetings.md` (meeting log with sentiment scores per meeting — the source for the engagement trajectory and "what was hard" moments; from `/meeting-notes`)
+- `projects/{slug}-copy-deck-v*.md` (versioned copy decks — for the scope-vs-deliverable comparison; from `/copy-deck`)
 - **WRITES TO:** `learnings.md` (appends categorised learnings with anti-pattern tags for future search)
 - **WRITES TO:** `clients.md` (appends client working relationship notes)
 - **WRITES TO:** `methodology.md` (only when the retro surfaces a real process change worth canonising)
@@ -384,13 +384,13 @@ skills run earlier. If any are present, auto-populate the relevant data:
 
 | Skill run earlier | What to pull in | How it's used |
 |---|---|---|
-| `/creativestack:timeline-generator` | Planned phase durations, milestones, slip scenarios | Populates Scope vs Reality — planned dates and durations |
-| `/creativestack:timesheet-summary` | Actual hours, revision tax, burn rate, team efficiency, scope creep | Populates Scope vs Reality — actuals; feeds What Didn't Work with data |
-| `/creativestack:project-profitability` | Margin, phase profitability, over-servicing, scenario analysis | Populates commercial assessment; identifies where money was made/lost |
-| `/creativestack:project-kickoff` | Original definition of done, risks identified at start, kickoff readiness score | Drives the Definition of Done check and the "did predicted risks materialise" analysis |
+| `/timeline-generator` | Planned phase durations, milestones, slip scenarios | Populates Scope vs Reality — planned dates and durations |
+| `/timesheet-summary` | Actual hours, revision tax, burn rate, team efficiency, scope creep | Populates Scope vs Reality — actuals; feeds What Didn't Work with data |
+| `/project-profitability` | Margin, phase profitability, over-servicing, scenario analysis | Populates commercial assessment; identifies where money was made/lost |
+| `/project-kickoff` | Original definition of done, risks identified at start, kickoff readiness score | Drives the Definition of Done check and the "did predicted risks materialise" analysis |
 
 When upstream data is available, tell the user:
-"I can see you ran `/creativestack:timesheet-summary` and `/creativestack:project-profitability`
+"I can see you ran `/timesheet-summary` and `/project-profitability`
 earlier — I'll pull in the hours, revision tax, and margin data. The retro will include
 hard numbers, not just feelings."
 
@@ -456,7 +456,7 @@ Ask these one at a time, conversationally — don't batch them, the answers feed
 3. "Were there any moments where the project nearly went off the rails? What saved it — or didn't?"
 4. "Were there any mid-flight pivots — moments where the team changed direction, scope, or approach? What triggered them?"
 5. "How did the client relationship feel throughout — and did the *trajectory* change? Started strong and faded, started rocky and improved, steady all the way?"
-6. "Did we hit our internal definition of done? If `/creativestack:project-kickoff` ran, I have it loaded — otherwise, what did 'success' look like for the team going in?"
+6. "Did we hit our internal definition of done? If `/project-kickoff` ran, I have it loaded — otherwise, what did 'success' look like for the team going in?"
 
 ### Step 6: Team Sentiment
 
@@ -490,7 +490,7 @@ recovered by {date}, shipped on {date}."}
 
 ## Definition of Done — Did We Hit It?
 
-{Pull the original definition of done from `/creativestack:project-kickoff` output or
+{Pull the original definition of done from `/project-kickoff` output or
 the project state file. Score each criterion. If no kickoff ran, ask the user to
 reconstruct what "success" was meant to look like.}
 
@@ -598,7 +598,7 @@ Health from the project state file if available.}
 | Revisions | {planned rounds} | {actual rounds} | {+/- rounds} |
 | Revision Tax | — | {%} | {vs 15% benchmark} |
 
-{If upstream data from `/creativestack:timesheet-summary` and `/creativestack:timeline-generator` is available,
+{If upstream data from `/timesheet-summary` and `/timeline-generator` is available,
 populate automatically. Otherwise use what the user provides.}
 
 ## Team Sentiment Summary
@@ -725,17 +725,17 @@ Never require Notion — always produce the markdown retro first.
 If upstream skills weren't run but would have made the retro sharper, note them — but
 gently. The retro is happening now; these are for next time.
 
-- If no `/creativestack:timesheet-summary` → "Next time, run `/creativestack:timesheet-summary` before the retro — having actual hours and revision tax in front of you changes the conversation."
-- If no `/creativestack:project-profitability` → "Next time, run `/creativestack:project-profitability` before the retro — the commercial section is much sharper with margin data."
+- If no `/timesheet-summary` → "Next time, run `/timesheet-summary` before the retro — having actual hours and revision tax in front of you changes the conversation."
+- If no `/project-profitability` → "Next time, run `/project-profitability` before the retro — the commercial section is much sharper with margin data."
 
 ### Downstream (what post-mortem triggers)
 
 After generating the retro, suggest the most relevant next action:
 
-- **If the project had strong results** → "Run `/creativestack:case-study` to turn this into a portfolio piece — the project data, definition-of-done check, and results carry forward."
-- **If trend analysis flagged a recurring anti-pattern** → "Run `/creativestack:update-voice` or update `methodology.md` directly — this pattern has appeared {N} times now and it's worth a process change at the playbook level."
+- **If the project had strong results** → "Run `/case-study` to turn this into a portfolio piece — the project data, definition-of-done check, and results carry forward."
+- **If trend analysis flagged a recurring anti-pattern** → "Run `/update-voice` or update `methodology.md` directly — this pattern has appeared {N} times now and it's worth a process change at the playbook level."
 - **If client trajectory was negative** → "Update `clients.md` directly with the new working-relationship notes — and consider whether this client should be on the 'maybe / no' list for new work."
-- **If commercial learnings are significant** → "Reference this next time you run `/creativestack:proposal-generator` or `/creativestack:sow-generator` for a similar project type — the recommendations table is the bridge."
+- **If commercial learnings are significant** → "Reference this next time you run `/proposal-generator` or `/sow-generator` for a similar project type — the recommendations table is the bridge."
 
 Only suggest 1-2 chains — pick the most relevant for the retro's findings.
 
@@ -768,7 +768,7 @@ reference (e.g., next time the same client briefs you).
 
 ## Edge Cases
 - **Project went badly and team is defensive** → keep tone constructive, focus on systems not people, suggest anonymous mode in Step 4 to lower the temperature.
-- **No metrics or outcomes yet** (project just shipped) → note what to measure and when to revisit. Schedule a 30-day follow-up via `/creativestack:status-update`.
+- **No metrics or outcomes yet** (project just shipped) → note what to measure and when to revisit. Schedule a 30-day follow-up via `/status-update`.
 - **Client relationship ended poorly** → document honestly but professionally in `clients.md`. Focus on what was in your control. Mark "work with again: No" with explicit reason.
 - **Very short project (under 2 weeks)** → simplify structure, skip Mid-Flight Pivots and Scope vs Reality if not meaningful.
 - **Multiple teams or agencies involved** → clarify which learnings are about your team's contribution vs external factors. Keep the brain writes scoped to your team only.

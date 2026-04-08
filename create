@@ -1,0 +1,178 @@
+#!/usr/bin/env bash
+#
+# creativestack installer
+#
+# Symlinks each skill's SKILL.md into ~/.claude/skills/<name>/SKILL.md and each
+# agent .md into ~/.claude/agents/<name>.md, so Claude Code discovers them as
+# flat top-level entries. Safe to re-run after `git pull`.
+#
+# Usage:
+#   ./create              install (or re-install) all skills and agents
+#   ./create --uninstall  remove only the symlinks that point back into this repo
+#
+
+set -euo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILLS_SRC="$REPO_DIR/skills"
+AGENTS_SRC="$REPO_DIR/agents"
+SKILLS_DST="$HOME/.claude/skills"
+AGENTS_DST="$HOME/.claude/agents"
+
+# Colors
+if [ -t 1 ]; then
+  BOLD=$(tput bold); DIM=$(tput dim); GREEN=$(tput setaf 2); YELLOW=$(tput setaf 3); RED=$(tput setaf 1); RESET=$(tput sgr0)
+else
+  BOLD=""; DIM=""; GREEN=""; YELLOW=""; RED=""; RESET=""
+fi
+
+info()  { printf "%s%s%s\n" "$DIM" "$1" "$RESET"; }
+ok()    { printf "%s✓%s %s\n" "$GREEN" "$RESET" "$1"; }
+warn()  { printf "%s!%s %s\n" "$YELLOW" "$RESET" "$1"; }
+err()   { printf "%s✗%s %s\n" "$RED" "$RESET" "$1" >&2; }
+
+# Returns 0 if the symlink at $1 points into this repo, 1 otherwise.
+points_into_repo() {
+  local link="$1"
+  [ -L "$link" ] || return 1
+  local target
+  target="$(readlink "$link")"
+  case "$target" in
+    "$REPO_DIR"/*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+uninstall() {
+  info "Removing creativestack symlinks…"
+  local removed=0
+
+  # Skill dirs: ~/.claude/skills/<name>/SKILL.md -> repo/skills/<name>/SKILL.md
+  if [ -d "$SKILLS_DST" ]; then
+    for dir in "$SKILLS_DST"/*/; do
+      [ -d "$dir" ] || continue
+      local skill_md="$dir/SKILL.md"
+      if points_into_repo "$skill_md"; then
+        rm "$skill_md"
+        # Only remove the parent dir if now empty (don't clobber unrelated files)
+        rmdir "$dir" 2>/dev/null || true
+        ok "removed ${dir%/}"
+        removed=$((removed + 1))
+      fi
+    done
+  fi
+
+  # Agent files: ~/.claude/agents/<name>.md -> repo/agents/<name>.md
+  if [ -d "$AGENTS_DST" ]; then
+    for link in "$AGENTS_DST"/*.md; do
+      [ -e "$link" ] || continue
+      if points_into_repo "$link"; then
+        rm "$link"
+        ok "removed $link"
+        removed=$((removed + 1))
+      fi
+    done
+  fi
+
+  if [ "$removed" -eq 0 ]; then
+    warn "No creativestack symlinks found."
+  else
+    printf "\n%sRemoved %d symlink(s).%s\n" "$BOLD" "$removed" "$RESET"
+  fi
+}
+
+install() {
+  printf "%sInstalling creativestack…%s\n" "$BOLD" "$RESET"
+  info "Source: $REPO_DIR"
+  info "Skills → $SKILLS_DST"
+  info "Agents → $AGENTS_DST"
+  echo
+
+  mkdir -p "$SKILLS_DST" "$AGENTS_DST"
+
+  local skill_count=0
+  local agent_count=0
+  local skipped=0
+
+  # ---- skills ----
+  if [ ! -d "$SKILLS_SRC" ]; then
+    err "No skills directory at $SKILLS_SRC"
+    exit 1
+  fi
+
+  for src in "$SKILLS_SRC"/*/; do
+    [ -d "$src" ] || continue
+    local name
+    name="$(basename "$src")"
+    local src_skill_md="$src/SKILL.md"
+
+    if [ ! -f "$src_skill_md" ]; then
+      warn "skipping $name (no SKILL.md)"
+      continue
+    fi
+
+    local dst_dir="$SKILLS_DST/$name"
+    local dst_skill_md="$dst_dir/SKILL.md"
+
+    # If something is already there and it's NOT our symlink, leave it alone.
+    if [ -e "$dst_dir" ] && ! points_into_repo "$dst_skill_md"; then
+      if [ -e "$dst_skill_md" ] || [ -L "$dst_skill_md" ]; then
+        warn "skipping $name (exists and not managed by creativestack)"
+        skipped=$((skipped + 1))
+        continue
+      fi
+    fi
+
+    mkdir -p "$dst_dir"
+    ln -snf "$src_skill_md" "$dst_skill_md"
+    ok "skill: $name"
+    skill_count=$((skill_count + 1))
+  done
+
+  # ---- agents ----
+  if [ -d "$AGENTS_SRC" ]; then
+    for src in "$AGENTS_SRC"/*.md; do
+      [ -f "$src" ] || continue
+      local name
+      name="$(basename "$src")"
+      local dst="$AGENTS_DST/$name"
+
+      if [ -e "$dst" ] && ! points_into_repo "$dst"; then
+        warn "skipping agent $name (exists and not managed by creativestack)"
+        skipped=$((skipped + 1))
+        continue
+      fi
+
+      ln -snf "$src" "$dst"
+      ok "agent: ${name%.md}"
+      agent_count=$((agent_count + 1))
+    done
+  fi
+
+  echo
+  printf "%sInstalled %d skill(s), %d agent(s).%s" "$BOLD" "$skill_count" "$agent_count" "$RESET"
+  if [ "$skipped" -gt 0 ]; then
+    printf " %s(%d skipped — see warnings above)%s" "$YELLOW" "$skipped" "$RESET"
+  fi
+  echo
+  echo
+  info "Restart Claude Code to pick up the new skills."
+  info "Then run /setup-cs to create your Context Vault."
+}
+
+case "${1:-}" in
+  --uninstall|-u|uninstall)
+    uninstall
+    ;;
+  -h|--help|help)
+    sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'
+    ;;
+  "")
+    install
+    ;;
+  *)
+    err "Unknown option: $1"
+    echo "Usage: ./create [--uninstall]"
+    exit 1
+    ;;
+esac

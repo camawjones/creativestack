@@ -1,0 +1,29 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-sync-check:
+    name: skills in sync with templates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run build-skills.sh
+        run: bash _build/build-skills.sh
+
+      - name: Verify generated skills match committed skills
+        run: |
+          if ! git diff --exit-code -- skills/; then
+            echo ""
+            echo "::error::Generated skills/ differ from committed files."
+            echo "::error::Someone edited a .tmpl or shared file without running bash _build/build-skills.sh"
+            echo "::error::Run the build locally and commit the regenerated skills/*/SKILL.md files."
+            exit 1
+          fi
+          echo "skills/ are in sync with _build/templates/"

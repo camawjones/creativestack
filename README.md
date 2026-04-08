@@ -36,17 +36,29 @@ The skills adapt their language and flow based on what you are. A freelancer doe
 
 ```bash
 git clone https://github.com/camawjones/creativestack.git ~/.claude/skills/creativestack
+cd ~/.claude/skills/creativestack
+./create
 ```
 
-That's the whole install. Restart Claude Code and all 29 skills are discovered automatically under the `~/.claude/skills/` directory — invoked flat as `/creative-brief`, `/meeting-notes`, `/competitor-audit`, and so on. Nothing to compile, no manifest, no setup script.
+`./create` symlinks each skill's `SKILL.md` into `~/.claude/skills/<name>/SKILL.md` and each workflow agent into `~/.claude/agents/<name>.md`, so Claude Code discovers them as flat top-level entries. Restart Claude Code and all 29 skills and 4 agents are available — invoked flat as `/creative-brief`, `/meeting-notes`, `/competitor-audit`, and so on.
 
 The one skill with a non-obvious name is `/setup-cs` (renamed from `/setup` to avoid colliding with other skill stacks). Everything else matches its directory name.
 
 ### Updates
 
 ```bash
-cd ~/.claude/skills/creativestack && git pull
+cd ~/.claude/skills/creativestack && git pull && ./create
 ```
+
+Re-running `./create` after a `git pull` is safe and idempotent — it refreshes existing symlinks and adds any new skills.
+
+### Uninstall
+
+```bash
+cd ~/.claude/skills/creativestack && ./create --uninstall
+```
+
+Only removes symlinks that point back into the creativestack repo — anything else in `~/.claude/skills/` or `~/.claude/agents/` is left alone.
 
 ### Optional: SessionStart hook
 
@@ -181,6 +193,7 @@ If you want to change skill **behaviour** - rename sections, add custom modes, r
 ```bash
 git clone https://github.com/your-fork/creativestack.git ~/.claude/skills/creativestack
 cd ~/.claude/skills/creativestack
+./create
 # Edit _build/templates/{skill}/SKILL.md.tmpl or _build/shared/preamble.md
 bash _build/build-skills.sh
 ```

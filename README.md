@@ -42,7 +42,7 @@ cd ~/.claude/skills/creativestack
 
 `./create` symlinks each skill's `SKILL.md` into `~/.claude/skills/<name>/SKILL.md` and each workflow agent into `~/.claude/agents/<name>.md`, so Claude Code discovers them as flat top-level entries. Restart Claude Code and all 29 skills and 4 agents are available — invoked flat as `/creative-brief`, `/meeting-notes`, `/competitor-audit`, and so on.
 
-The one skill with a non-obvious name is `/setup-cs` (renamed from `/setup` to avoid colliding with other skill stacks). Everything else matches its directory name.
+The one skill with a non-obvious name is `/setup-brain` (renamed from `/setup` to avoid colliding with other skill stacks). Everything else matches its directory name.
 
 ### Updates
 
@@ -83,10 +83,10 @@ Skip this and everything still works — each skill does its own brain-freshness
 **1. Set up your brain (5 minutes - optional but transformative)**
 
 ```
-/setup-cs
+/setup-brain
 ```
 
-This is an onboarding flow, not an installer — the skills are already installed by the `git clone`. `/setup-cs` walks you through who you are, your team, your tone of voice, and your standard methodology, and creates your Context Vault at `~/.creativestack/`. Every other skill reads from this vault and gets sharper because of it.
+This is an onboarding flow, not an installer — the skills are already installed by the `git clone`. `/setup-brain` walks you through who you are, your team, your tone of voice, and your standard methodology, and creates your Context Vault at `~/.creativestack/`. Every other skill reads from this vault and gets sharper because of it.
 
 You can skip this entirely and use any skill immediately — they'll work, just generically.
 
@@ -123,7 +123,7 @@ Every CreativeStack skill reads from and (with permission) writes to `~/.creativ
 
 ### Foundation files
 
-Created by `/setup-cs` - the baseline:
+Created by `/setup-brain` - the baseline:
 
 | File | What it holds |
 |---|---|
@@ -225,7 +225,7 @@ These all live in the brain precisely so you don't have to touch the skill templ
 
 | Skill | What it does |
 |---|---|
-| `/setup-cs` | Initialise or refresh your brain - profile, tone of voice, team, clients, methodology |
+| `/setup-brain` | Initialise or refresh your brain - profile, tone of voice, team, clients, methodology |
 | `/update-voice` | Refine your tone-of-voice guidelines with examples and do/don't rules |
 
 ### Daily operations

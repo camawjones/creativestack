@@ -157,7 +157,7 @@ install() {
   echo
   echo
   info "Restart Claude Code to pick up the new skills."
-  info "Then run /setup-cs to create your Context Vault."
+  info "Then run /setup-brain to create your Context Vault."
 }
 
 case "${1:-}" in

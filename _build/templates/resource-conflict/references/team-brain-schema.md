@@ -14,7 +14,7 @@ field that's filled in.
 
 ## team.md — Extended schema
 
-The base `team.md` from `/setup-cs` looks like this:
+The base `team.md` from `/setup-brain` looks like this:
 
 ```markdown
 ---
@@ -78,7 +78,7 @@ default_target_utilisation: 75
 | Field | What it does |
 |---|---|
 | `default_target_utilisation` | Skips the [SELECT] question on every run |
-| `type` | Already set by `/setup-cs`; used for language adaptation |
+| `type` | Already set by `/setup-brain`; used for language adaptation |
 
 ### Upgrade flow (when team.md exists but is minimal)
 
@@ -171,7 +171,7 @@ suggestions, offer **Setup bench**:
 
 ## learnings.md — Capacity section
 
-This skill **appends** to the existing `learnings.md` (created by `/setup-cs`)
+This skill **appends** to the existing `learnings.md` (created by `/setup-brain`)
 under a `## Capacity` heading. It does not create a separate file.
 
 ```markdown

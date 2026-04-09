@@ -133,7 +133,7 @@ meetings file on first run.
 
 ## 2. learnings.md § Client Patterns
 
-Appended to the existing `learnings.md` (created by `/setup-cs`)
+Appended to the existing `learnings.md` (created by `/setup-brain`)
 under a `## Client Patterns` heading. Never overwrite existing entries.
 
 ```markdown

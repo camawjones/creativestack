@@ -34,6 +34,8 @@ The skills adapt their language and flow based on what you are. A freelancer doe
 
 ## Installation
 
+Open your terminal app (Terminal on macOS, Windows Terminal or PowerShell on Windows, your usual terminal on Linux), paste the three lines below, and hit enter. They download CreativeStack into Claude Code's skills folder and run the installer that wires everything up. Takes about 30 seconds.
+
 ```bash
 git clone https://github.com/camawjones/creativestack.git ~/.claude/skills/creativestack
 cd ~/.claude/skills/creativestack
@@ -41,8 +43,6 @@ cd ~/.claude/skills/creativestack
 ```
 
 `./create` symlinks each skill's `SKILL.md` into `~/.claude/skills/<name>/SKILL.md` and each workflow agent into `~/.claude/agents/<name>.md`, so Claude Code discovers them as flat top-level entries. Restart Claude Code and all 29 skills and 4 agents are available — invoked flat as `/creative-brief`, `/meeting-notes`, `/competitor-audit`, and so on.
-
-The one skill with a non-obvious name is `/setup-brain` (renamed from `/setup` to avoid colliding with other skill stacks). Everything else matches its directory name.
 
 ### Updates
 

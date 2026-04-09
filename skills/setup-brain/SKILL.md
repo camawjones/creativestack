@@ -193,25 +193,20 @@ to Step 2 (skip Step 1b, since there's nothing to update).
 
 Welcome to CreativeStack.
 
-A small philosophy before we start: creativity doesn't appear because we work harder.
-It appears in the room we leave for it — the quiet space where the rest of the noise
-stops. Most creative work is lost not to lack of talent, but to lack of space.
+CreativeStack handles the *input* side of creative work — research, briefs,
+structure, strategy, operations, the admin — so the creative act itself stays
+where it belongs: with you, on a blank page, in silence.
 
-CreativeStack is an attempt to make some of that space. The 29 skills in this suite
-handle the *input* side of creative work — research, briefs, structure, strategy,
-operations, the admin — so the creative act itself stays where it belongs: with you,
-on a blank page, in silence.
-
-I'm going to ask you a few questions and build your **Brain** — a small set of files
-at `~/.creativestack/` that every other skill will read. About five minutes. After
-this, every CreativeStack skill will know who you are, how you sound, who you work
-with, and what you're building.
+I'm going to ask you a few questions and build your **Brain** — a small set of
+files at `~/.creativestack/` that every other skill will read. About five
+minutes. After this, every CreativeStack skill will know who you are, how you
+sound, who you work with, and what you're building.
 
 Let's begin.
 ```
 
 After showing the welcome, do **not** ask "ready?" or pause for confirmation. Just
-continue straight into Step 2. The momentum matters.
+continue straight into Step 1c (the autofill offer). The momentum matters.
 
 **If a brain already exists**, skip Step 0 entirely and go to Step 1.
 
@@ -226,8 +221,8 @@ else
 fi
 ```
 
-If an existing brain is found, present the mode selection.
-If no brain exists, proceed to Step 2.
+If an existing brain is found, proceed to Step 1b (update mode).
+If no brain exists, proceed to Step 1c (offer autofill).
 
 ### Step 1b: Update Mode (existing brain only)
 
@@ -260,7 +255,492 @@ Skip to Step 5b: Team Roster Import.
 **If "Refresh all":**
 Proceed through all steps, showing current values as defaults.
 
+### Step 1c: Offer autofill from a URL (first run only)
+
+**Skip this step entirely in update mode.** Autofill is only offered to first-run
+users who have no existing brain. If you're here from Step 1b, you should never
+have reached this step.
+
+Before launching into the interview, offer to prefill what we can from a URL:
+
+```
+Before we begin — do you have a website, portfolio, or LinkedIn I can read?
+
+I'll read it and propose a first draft of your brain. You'll review every section
+before anything saves. It usually takes about 30 seconds and saves 5 minutes of
+typing — and it's much better at capturing your tone of voice than asking you to
+describe it.
+
+(You can also skip this and answer everything manually. Either way works.)
+```
+
+[SELECT]
+- Yes — I have a URL
+- No — let's do it manually
+- What would you read? — explain first
+
+**If "What would you read?":** Explain briefly, then re-present the [SELECT]:
+
+> I'll fetch your homepage, about page, work/projects page, team page, and
+> process page if you have one. I'll extract your name, location, services,
+> team, clients, and — most importantly — your tone of voice from your own
+> writing. Nothing saves until you review each section and confirm.
+
+**If "No":** Initialise `proposal` as empty and proceed directly to Step 2. The
+flow continues as today, with no autofill state.
+
+**If "Yes":** Proceed to Step 1d.
+
+### Step 1d: Fetch and extract
+
+Ask:
+
+> Paste your main URL. One is enough — I'll find the sub-pages from your
+> navigation.
+
+Normalise the URL: add `https://` if missing, strip trailing whitespace and
+trailing slashes.
+
+**Discovery pass.** Use the `WebFetch` tool on the normalised homepage URL with
+this prompt:
+
+```
+You are reading an agency or creative practice homepage. Return a JSON object
+with these keys — and nothing else. Do not summarise. Verbatim excerpts only
+where requested.
+
+{
+  "title": "contents of <title> or main H1",
+  "tagline": "hero subtitle or one-line positioning, verbatim",
+  "hero_copy": "first 200-400 words of body copy, verbatim",
+  "footer_text": "verbatim text content of the footer",
+  "nav_links": [
+    "absolute URLs for internal navigation pages — filter to paths like /about, /studio, /team, /people, /work, /projects, /clients, /case-studies, /process, /approach, /how-we-work, /methodology, /services, /capabilities, /what-we-do, /contact. Exclude /blog, /news, /careers, /privacy, /terms, /press, /shop, language switchers, and any external or social links."
+  ],
+  "social_links": {
+    "instagram": "url or null",
+    "linkedin": "url or null",
+    "behance": "url or null",
+    "arena": "url or null",
+    "twitter": "url or null"
+  },
+  "colors": [
+    "brand colors from CSS custom properties (--color-*) or prominent inline styles. Exclude pure white, pure black, and neutral greys. Return hex values."
+  ],
+  "fonts": {
+    "body": "computed font-family of body text, if detectable",
+    "heading": "computed font-family of h1, if detectable"
+  }
+}
+
+If a field is not confidently present, return null. Do not guess. Do not infer.
+```
+
+Store the returned object as `discovery`.
+
+**If the fetch fails, times out, or returns an error**, fall through to the
+**manual paste fallback** at the end of this step.
+
+**If `discovery` returned successfully but `nav_links` is empty**, treat the
+homepage as both the discovery page and the about page. Proceed with
+enrichment using only the homepage content.
+
+**Enrichment pass.** For each sub-page URL in `discovery.nav_links`, classify
+by URL path:
+
+- `/about`, `/studio`, `/who-we-are` → **about page**
+- `/team`, `/people` → **team page** (if `/studio` is also an about page, disambiguate by whichever reads more team-like)
+- `/work`, `/projects`, `/clients`, `/case-studies` → **work page**
+- `/process`, `/approach`, `/how-we-work`, `/methodology` → **process page**
+- `/services`, `/capabilities`, `/what-we-do` → **services page**
+
+Run the page-type-specific `WebFetch` calls in parallel where possible — make
+multiple tool calls in a single response rather than sequentially.
+
+**About page extraction prompt:**
+
+```
+You are reading an agency's About page. Return a JSON object:
+
+{
+  "positioning": "one-sentence description of the practice, verbatim if possible",
+  "location": "city or cities mentioned",
+  "size": "team size if stated — e.g., 'team of 12'",
+  "founding_year": "year founded if stated, else null",
+  "values_or_beliefs": ["short verbatim phrases capturing stated values or principles"],
+  "voice_sample": "first 300-500 words of about page body, verbatim, for voice analysis",
+  "studio_type_signal": "whichever word they use for themselves — studio | agency | practice | collective | freelancer | company — or null if unclear"
+}
+
+Return null for any field not confidently present. Do not infer. Do not
+paraphrase. voice_sample must be verbatim.
+```
+
+**Team page extraction prompt:**
+
+```
+You are reading an agency's Team or People page. Return a JSON object:
+
+{
+  "members": [
+    {"name": "verbatim name", "role": "verbatim role"}
+  ],
+  "count": "total headcount if stated, else null"
+}
+
+Rules:
+- Names and roles must be verbatim. Never invent or complete partial names.
+- If a person has no clear role, omit them.
+- If fewer than 2 members are identifiable, return an empty members array.
+```
+
+**Work page extraction prompt:**
+
+```
+You are reading an agency's Work or Projects page. Return a JSON object:
+
+{
+  "clients": [
+    {"name": "verbatim client name", "project_type": "project type if stated, else null"}
+  ],
+  "industries": ["industries inferred only from explicit mentions on the page"],
+  "case_study_intros": ["up to 3 verbatim opening paragraphs from case studies"]
+}
+
+Rules:
+- Only include clients whose name is written as text on the page.
+- Never infer a client name from a logo image file path or filename.
+- If fewer than 2 text-named clients are identifiable, return an empty clients array.
+- case_study_intros must be verbatim — used only for voice analysis.
+```
+
+**Process page extraction prompt:**
+
+```
+You are reading an agency's Process or Approach page. Return a JSON object:
+
+{
+  "phases": [
+    {"name": "phase name, verbatim", "description": "one-sentence description, verbatim"}
+  ],
+  "framework_name": "if the methodology is explicitly named (e.g., 'The DB Method'), else null"
+}
+
+Rules:
+- Only include phases that are explicitly labelled on the page.
+- Do not reconstruct a process from prose.
+- If no labelled phases exist, return an empty phases array.
+```
+
+**Services page extraction prompt:**
+
+```
+You are reading an agency's Services or Capabilities page. Return a JSON object:
+
+{
+  "specialisms": ["service names, verbatim"]
+}
+```
+
+**Assemble the proposal object.** Merge all extraction results into a single
+working structure held in conversation memory (do not write to disk yet):
+
+```
+proposal = {
+  profile: {
+    name: discovery.title,
+    type: inferred from about.studio_type_signal + about.size,
+    location: about.location || parsed from discovery.footer_text,
+    size: about.size,
+    specialisms: services.specialisms,
+    industries: work.industries,
+    positioning: about.positioning || discovery.tagline,
+    founding_year: about.founding_year,
+    values: about.values_or_beliefs
+  },
+  voice: {
+    corpus_text: discovery.hero_copy + about.voice_sample + (up to 3 work.case_study_intros)
+  },
+  team: team.members,
+  clients: work.clients,
+  visual_style: { colors: discovery.colors, fonts: discovery.fonts },
+  methodology: { phases: process.phases, framework_name: process.framework_name },
+  sources: {
+    homepage_url: ...,
+    about_url: ...,
+    team_url: ...,
+    work_url: ...,
+    process_url: ...,
+    services_url: ...
+  },
+  confidence: {
+    profile: "high | medium | none",
+    voice: "high | medium | none (assigned in Step 1e)",
+    team: "high | medium | none",
+    clients: "high | medium | none",
+    visual_style: "high | medium | none",
+    methodology: "high | medium | none"
+  }
+}
+```
+
+Confidence rules per section:
+- **high** — relevant page fetched and returned non-empty structured data
+- **medium** — partial data (e.g., name + location only, no services)
+- **none** — field unfilled, will fall through to manual interview
+
+**Content quality floor.** Count total words across
+`discovery.hero_copy + about.voice_sample + work.case_study_intros`. If the total
+is less than 200 words, the site is likely JavaScript-heavy or sparse. Warn the
+user:
+
+```
+I could only read about {N} words from your site — it's probably a JavaScript-heavy
+site I can't fully render. Want to paste your About page and team page directly,
+or skip autofill and do it manually?
+```
+
+[SELECT]
+- Paste pages directly
+- Skip to manual interview
+
+**Manual paste fallback** (triggered by fetch failure, content quality floor,
+or the [SELECT] above):
+
+```
+No problem. Paste your About page copy below — I'll read it directly. You can
+also paste your team page after, if you have one.
+```
+
+[INPUT] free-form text. Treat pasted text as `about.voice_sample` and run the
+about-page extraction prompt against the pasted content. Optionally ask for
+a team-page paste as well and run the team extraction against that.
+
+After successful discovery + enrichment (fetched or pasted), proceed to Step 1e.
+
+### Step 1e: Voice inference and verification gate
+
+This step is **non-negotiable for autofill mode**. Voice is the highest-value
+and highest-risk autofilled field — a wrong voice propagates into 9+ downstream
+skills. The verification gate must run before any voice writes.
+
+**Build the voice corpus.** Concatenate, in this order:
+1. `discovery.hero_copy`
+2. `about.voice_sample`
+3. Up to 3 entries from `work.case_study_intros`
+
+Cap at ~2000 words total. Call this `voice_corpus`.
+
+**Voice extraction.** Analyse the corpus directly (no tool call — this is your
+own reasoning) against these exact requirements:
+
+```
+Analyse this text corpus written by an agency about themselves. Return a
+structured voice profile.
+
+CORPUS:
+{voice_corpus}
+
+Return:
+
+{
+  "formality": "casual | casual-professional | professional | formal",
+  "personality": [
+    {
+      "trait": "one-word trait",
+      "rationale": "one-sentence justification",
+      "evidence_quote": "verbatim excerpt from corpus supporting this trait"
+    },
+    ... exactly 3 traits ...
+  ],
+  "we_sound_like": [
+    "3-5 bullet points describing register, sentence rhythm, distinctive rhetorical moves"
+  ],
+  "we_dont_sound_like": [
+    "3 anti-patterns the corpus actively avoids"
+  ],
+  "vocabulary": {
+    "preferred": [
+      "distinctive domain-specific words the corpus actually uses — not generic adjectives like 'bold', 'creative', 'innovative' unless they genuinely repeat across passages"
+    ],
+    "avoided": [
+      "words similar agencies typically use that this corpus notably does not"
+    ]
+  },
+  "examples": [
+    "2-3 verbatim passages from the corpus that best demonstrate the voice"
+  ],
+  "confidence": "high | medium | low"
+}
+
+Rules:
+- Every personality trait MUST have an evidence_quote drawn verbatim from the corpus.
+- Preferred vocabulary words must appear verbatim in the corpus.
+- If the corpus is generic agency-speak with no distinctive voice, return
+  confidence: "low" — we'll fall through to manual.
+- Do not invent vocabulary, traits, or examples.
+```
+
+**If returned confidence is `low`**: mark `proposal.voice` as rejected (not
+unused — the autofill attempt itself is what failed). Skip the verification
+gate entirely and note in conversation memory that the voice interview (Step 4)
+should run unmodified. Then proceed to Step 1f to review the other proposals.
+
+**Generate the verification set.** Write 3 short paragraphs (50-80 words each)
+in the inferred voice, covering these exact mundane topics in order:
+
+1. **A client project update** — subject "quick update on the brand refresh".
+   Must include one small piece of good news and one thing that slipped.
+2. **A short social post** announcing a just-completed project.
+3. **An out-of-office email** for a week-long trip.
+
+Use the personality, vocabulary, and distinctive moves from the extraction. Do
+**not** copy any of the verbatim `examples` directly into the verification set —
+these must be new writing in the inferred style, not extracts from the corpus.
+
+**Present the verification gate:**
+
+```
+I read your site and here's how I'd write in your voice:
+
+### 1. Client project update
+{generated paragraph 1}
+
+### 2. Social post
+{generated paragraph 2}
+
+### 3. Out-of-office email
+{generated paragraph 3}
+
+Does this sound like you?
+```
+
+[SELECT]
+- Yes — that's me
+- Close, but needs tweaking
+- No — that's not me at all
+
+**If "Yes":** Mark `proposal.voice` as verified. The inferred voice will save
+as-is during review.
+
+**If "Close":** Mark `proposal.voice` as verified-with-caveat. The inferred
+voice will save, but Step 9 confirmation must recommend `/update-voice` as the
+next action to sharpen it.
+
+**If "No":** Discard the inferred voice entirely. Mark `proposal.voice` as
+rejected. Fall through to the manual voice interview (Step 4) later. The rest
+of the autofill proposals stay intact.
+
+This gate is the primary defence against wrong-voice contamination of 9+
+downstream skills. Never skip it. Never auto-save without the Yes or Close path.
+
+### Step 1f: Review the proposed brain
+
+Walk the user through each section of `proposal`, one at a time, using this
+three-panel pattern:
+
+```
+─── {filename} ───
+
+Proposed:
+  {extracted values, formatted for reading}
+
+Evidence:
+  {field} ← {source page URL} {optional short quote or location}
+
+Confidence: {high | medium}
+
+[SELECT]
+- Accept
+- Edit — I'll show you the markdown to correct
+- Discard — we'll ask manually instead
+```
+
+Review order (skip any section where the proposal is empty or confidence is
+none):
+
+1. **profile.md**
+2. **tone-of-voice.md** — only if Step 1e returned Yes or Close
+3. **team.md** — with the team confirmation prompt below
+4. **clients.md** — **with the NDA gate** below
+5. **visual-style.md** — only if colour/typography confidence is high. If not,
+   drop through to the preset picker in Step 7b as today.
+6. **methodology.md** — only if the process page returned non-empty phases
+
+**Team confirmation prompt** (when showing `team.md` proposal):
+
+```
+These {N} people were extracted from your public team page. Before I save:
+- Is anyone missing?
+- Has anyone left?
+- Any titles wrong?
+```
+
+Apply any corrections the user gives before saving.
+
+**NDA gate** (when showing `clients.md` proposal):
+
+```
+These {N} clients came from your public work page. Before I save them to your
+brain, confirm they're safe to store:
+
+{numbered list of clients}
+
+Any of these under current NDA or not safe to reference in pitches? I can drop
+any you name. Type numbers to drop, or "all safe" to keep everything.
+```
+
+[INPUT] free text. Parse the user's response and remove any named or numbered
+clients from the proposal. Never write a client the user hasn't explicitly
+confirmed. If the user says anything ambiguous, re-ask.
+
+**Edit flow.** If the user picks "Edit" for any section, show them the proposed
+markdown for that file and ask for free-text corrections. Apply the corrections
+and show the final result before moving on.
+
+**Discard flow.** Mark `proposal.{section}` as discarded. That file will fall
+through to the manual interview step as today.
+
+**Saving.** For each accepted section, use the `Write` tool with the same file
+structure as the manual flow (Steps 3-7b) — but add provenance to the
+frontmatter:
+
+```yaml
+---
+... existing fields ...
+source: autofilled
+source_url: {homepage_url}
+last_updated: {today's date}
+---
+```
+
+For `tone-of-voice.md` specifically, also add a confidence marker:
+
+```yaml
+---
+formality: casual-professional
+personality: [warm, precise, quietly confident]
+source: autofilled
+source_url: https://example.com
+confidence: autofilled-v1
+last_updated: 2026-04-09
+---
+```
+
+After the review pass, carry the `proposal` state forward into Steps 2-7b. Each
+of those steps will check whether its section was already saved from autofill
+and either confirm quickly or fall through to the full manual flow.
+
 ### Step 2: Who are you?
+
+**Autofill-aware:** If `proposal.profile.type` was inferred and the profile
+section was accepted in Step 1f, show the inferred type as a prefilled default
+and ask for confirmation rather than asking from scratch:
+
+> Based on your site I've got you as a **{inferred type}**. Press enter to
+> accept, or pick a different one.
+
+Otherwise (no autofill, or profile was discarded), ask from scratch:
 
 [SELECT] "First — what best describes you?"
 - Freelancer — solo creative professional
@@ -276,6 +756,29 @@ Store the selection. This `type` field determines how all subsequent steps and
 all other skills adapt their language and flow.
 
 ### Step 3: Profile basics
+
+**Autofill-aware:** If `proposal.profile` was accepted in Step 1f, most of the
+basics are already filled in. Confirm each prefilled value with a one-line
+check rather than asking full questions:
+
+> Name: **{autofilled name}** — right? (press enter to accept, or type a correction)
+>
+> Based in: **{autofilled location}** — right?
+>
+> One-sentence description: **"{autofilled positioning}"** — happy with this, or
+> want to rewrite it?
+>
+> Specialisms: **{comma-separated list}** — accurate, or want to edit?
+>
+> Industries: **{comma-separated list}** — accurate?
+
+Only ask from scratch for fields the proposal left empty. The
+`growth_areas` question ("What kind of work do you want to win more of?") is
+almost never answerable from a website — always ask this one manually, even
+in autofill mode.
+
+If `proposal.profile` was discarded or not offered at all, ask the full question
+flow for this type below.
 
 Ask the user (one question at a time, conversational). Adapt language based on type:
 
@@ -366,6 +869,16 @@ For in-house teams, add:
 
 ### Step 4: Tone of voice
 
+**Autofill-aware:** If `proposal.voice` was verified (Yes or Close) in Step 1e
+and accepted in Step 1f, **skip this entire step** — the voice file was already
+written from the inferred profile. Do not re-interview.
+
+If `proposal.voice` was rejected ("No" at the verification gate) or the voice
+verification returned low confidence, fall through to the full manual interview
+below.
+
+If no autofill ran at all, ask the full manual flow below.
+
 Adapt questions based on type:
 
 **For freelancer:**
@@ -412,6 +925,17 @@ last_updated: {today's date}
 ### Step 5: Team
 
 **Skip this step entirely for freelancers.** Proceed to Step 6.
+
+**Autofill-aware:** If `proposal.team` was accepted in Step 1f, the team file
+was already written. Skip this step entirely. Proceed to Step 6.
+
+If `proposal.team` was partial (e.g., only 2 people extracted but the user
+mentioned more during review), ask for additions only:
+
+> I've got {N} people from your team page. Anyone else to add, including
+> collaborators or contractors?
+
+If the proposal was discarded or not offered, ask the full manual flow below.
 
 **For studio:**
 Ask:
@@ -514,6 +1038,18 @@ If the brain already has a `team.md`, ask:
 
 ### Step 6: Clients / Stakeholders
 
+**Autofill-aware:** If `proposal.clients` was accepted in Step 1f (with the NDA
+gate passed), the clients file was already written. Skip this step entirely.
+Proceed to Step 7.
+
+If the autofill proposal was partial or the user dropped several clients at the
+NDA gate, ask for additions only:
+
+> I've got {N} clients saved. Anyone you work with regularly that wasn't on your
+> public site?
+
+If the proposal was discarded or not offered, ask the full manual flow below.
+
 **For freelancer (simplified):**
 Ask:
 1. "Who do you work with regularly? Just names or companies is fine."
@@ -576,6 +1112,9 @@ last_updated: {today's date}
 
 ### Step 7: Tools
 
+**Autofill-aware:** Tools are almost never listed on agency websites, so autofill
+does not attempt to extract them. Always ask manually.
+
 Ask (adapt based on type):
 
 **For freelancer:**
@@ -614,6 +1153,21 @@ applies it.
 
 This is **not** the same as brand guidelines for a client. This is the agency's own
 style for its own deliverables.
+
+**Autofill-aware:** If `proposal.visual_style` was accepted in Step 1f (colours
+and typography were extracted with high confidence and the user approved), the
+visual-style file was already written as a custom inline style rather than one
+of the three presets. Skip this step entirely.
+
+If `proposal.visual_style` was partial (e.g., one or two brand colours detected
+but no fonts), offer the preset picker below with a note:
+
+> I picked up these colours from your site: {hex list}. You can use them as a
+> starting point, or pick a preset and edit later.
+
+Then present the preset picker as normal.
+
+If no autofill ran or visual_style was discarded, present the preset picker:
 
 Explain that briefly, then offer the presets:
 
@@ -928,25 +1482,40 @@ and functional.
 
 **First-run confirmation** (use this when the brain was just created from scratch):
 
+Tag each file with its provenance so the user knows what was autofilled vs
+answered manually. Use these tags:
+- `(autofilled, reviewed)` — section was autofilled and the user accepted it
+- `(autofilled, reviewed ✓ voice gate)` — specifically for tone-of-voice.md when
+  the verification gate returned Yes or Close
+- `(manual)` — section was answered through the interview
+
 ```
 Done. Your Brain is alive at `~/.creativestack/`.
 
 Here's what's in it:
 
-- **profile.md** — {name}, {type}, {location}, {size} {people/person}
-- **tone-of-voice.md** — {personality summary}
-- **visual-style.md** — {chosen preset, e.g., "Editorial Modern"}
-- **team.md** — {number} team members {or "skipped (solo)" for freelancers}
-- **clients.md** — {number} {clients/stakeholders}
-- **tools.md** — {tool count} tools
+- **profile.md** — {name}, {type}, {location}, {size} {people/person} {provenance tag}
+- **tone-of-voice.md** — {personality summary} {provenance tag}
+- **visual-style.md** — {chosen preset or "custom inline style"} {provenance tag}
+- **team.md** — {number} team members {or "skipped (solo)" for freelancers} {provenance tag}
+- **clients.md** — {number} {clients/stakeholders} {provenance tag}
+- **tools.md** — {tool count} tools (manual)
 - **case-studies.md** — empty (populate with /case-study)
-- **methodology.md** — empty (populate with /post-mortem)
+- **methodology.md** — {either "empty (populate with /post-mortem)" or the autofilled phases list} {provenance tag}
 - **learnings.md** — empty (populate with /post-mortem)
 - **projects/** — ready for per-project state, created on demand when you start work
 
 Every CreativeStack skill will now read this context automatically. You can edit any
 of these files directly in a text editor, or re-run `/setup-brain` to update
 sections.
+
+{If `proposal.voice` was verified with "Close" rather than "Yes", append this
+paragraph:}
+
+Your tone of voice is a first draft extracted from your website. It's a good
+starting point, but running `/update-voice` next will sharpen it — every
+downstream skill that writes in your voice (copy-deck, proposal-generator,
+status-update, case-study, pitch-research) will benefit.
 
 **Making CreativeStack yours:** your brain is the primary way you customise
 CreativeStack - every skill reads these files and adapts to your agency. Populate
@@ -1019,6 +1588,7 @@ Only suggest 1-2 chains — pick the most relevant for their type.
 
 ## Edge Cases
 
+**Interview mode:**
 - User gives very brief answers → work with what you have, don't push for more
 - User wants to skip a section → create the file with a placeholder note
 - User pastes a large document for tone of voice → extract the key patterns, don't store the whole doc
@@ -1027,6 +1597,25 @@ Only suggest 1-2 chains — pick the most relevant for their type.
 - Team roster has people who've left → ask if the roster is current or needs cleanup
 - User picks "Other" type → ask for their custom descriptor and use it consistently throughout
 - Freelancer tries to set up team → let them, but note it'll be stored as collaborators/contractors
+
+**Autofill mode:**
+- URL without protocol → normalise by prepending `https://`
+- URL returns 403 / 404 / times out → one friendly error, fall through to manual paste fallback. Do not retry in a loop.
+- Password-gated or login-required page → fetch fails, fall through to manual paste. Explain: "I can only read public pages."
+- JavaScript-heavy SPA returns thin content (<200 words total) → trigger content quality floor warning, offer manual paste
+- Site is in a non-English primary language → extract verbatim in the source language, do not translate
+- Single-page portfolio (Cargo, Framer, etc.) with no sub-page nav → treat the homepage as both discovery and about page; run the about extraction prompt against the homepage content
+- Multi-brand umbrella agency → ask "which brand should I use as the primary?" before fetching
+- Rebrand in progress / stale website → during review, ask "does this still reflect how you work?" and let the user correct
+- Voice verification returns "No" → discard only the voice proposal; keep profile, team, clients, visual-style proposals intact for review
+- Voice extraction returns `confidence: low` → skip the verification gate entirely and mark voice as rejected (fall through to manual Step 4)
+- Team page returns <2 identifiable members → don't create a team proposal; fall through to manual
+- Work page has only logo images with no text alt → clients extraction returns empty; fall through to manual
+- LinkedIn URL → attempt fetch but warn upfront that LinkedIn often blocks automated reading; offer manual paste fallback immediately as a parallel option
+- Are.na / Behance / Dribbble portfolio → v1 treats these as best-effort discovery pages; if the fetch returns useful content, extract from it. If not, fall through to manual paste.
+- Personal-name freelancer (e.g. the site is literally someone's name) → infer type as "freelancer" and treat the name as the practice name
+- Autofilled client the user then drops at the NDA gate → remove it from the proposal before writing; never keep it "just in case"
+- User accepts autofilled profile but edits the type during Step 2 confirmation → respect the edit; don't persist the autofilled type silently
 
 ---
 *CreativeStack by Cameron Jones — jones.cam*

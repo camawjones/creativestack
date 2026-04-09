@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.jpg" alt="CreativeStack" width="100%" />
+  <img src="assets/banner-mono.jpg" alt="CreativeStack" width="100%" />
 </p>
 
 # CreativeStack

@@ -4,7 +4,7 @@ AI skill suite for creative professionals. 29 skills across 10 categories, plus 
 
 ## Project structure
 
-This is a flat Claude Code skill stack installed at `~/.claude/skills/creativestack`. Skills are invoked flat as `/skill-name` (the parent directory is just a grouping — it does not create a namespace). The `setup` skill is named `setup-brain` to avoid collision with other stacks.
+This is a flat Claude Code skill stack installed at `~/.claude/skills/creativestack`. Skills are invoked flat as `/skill-name` (the parent directory is just a grouping — it does not create a namespace).
 
 - Skills live in `skills/*/SKILL.md` (generated — do not edit directly)
 - Source templates live in `_build/templates/*/SKILL.md.tmpl`

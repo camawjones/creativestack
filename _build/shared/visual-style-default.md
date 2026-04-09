@@ -180,4 +180,4 @@ still looks good in three months. A rainbow deliverable looks dated by Friday.
 ---
 
 *This file is read by CreativeStack skills that produce visual output. Edit it to match
-your house style. Run `/setup-cs` to regenerate it from a preset.*
+your house style. Run `/setup-brain` to regenerate it from a preset.*

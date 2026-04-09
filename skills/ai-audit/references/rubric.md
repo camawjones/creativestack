@@ -115,7 +115,7 @@ fed back into briefs, pitches, and proposals automatically.
   curate)
 - Personal craft rituals
 
-**Maps to skills:** `/case-study`, `/post-mortem`, `/update-voice`, `/setup-cs`, `/brand-guidelines`
+**Maps to skills:** `/case-study`, `/post-mortem`, `/update-voice`, `/setup-brain`, `/brand-guidelines`
 
 ---
 
@@ -325,7 +325,7 @@ answers or the brain has no context), the scoring is directional
 only. Flag with:
 
 > **Confidence:** Low — based on brief answers without brain
-> context. Treat scores as directional. Running `/setup-cs`
+> context. Treat scores as directional. Running `/setup-brain`
 > first would sharpen the next audit significantly.
 
 Never score confidently off thin evidence.

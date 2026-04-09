@@ -260,7 +260,7 @@ Each win has this schema:
 - **What it looks like:** Configure your CreativeStack Brain — profile, team, tone of voice, clients, and tools — so every skill produces personalised output
 - **Time to value:** First value this week
 - **Effort:** L
-- **Skill:** `/setup-cs`
+- **Skill:** `/setup-brain`
 - **User types:** all
 - **Disciplines:** all
 - **Tier:** beginner-only

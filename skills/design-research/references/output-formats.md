@@ -391,7 +391,7 @@ If Figma MCP is available, offer the FigJam board.
 exists. Apply its typography, colour palette, spacing rules, and anti-slop
 checklist to every frame. If it doesn't exist, fall back to the Editorial Modern
 defaults and tell the user at the end:
-> "Run `/setup-cs` to configure your house visual style for sharper
+> "Run `/setup-brain` to configure your house visual style for sharper
 > research board layouts."
 
 ### Layout per mode

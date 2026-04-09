@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /setup-cs to set up)"
+  echo "BRAIN: not configured (run /setup-brain to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /setup-cs to add your context — skills produce better results with it."
+"Tip: Run /setup-brain to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -46,14 +46,14 @@ to refresh — lightly, not annoyingly.
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
 | `case-studies.md` | 90 days | `/case-study` |
-| `clients.md` | 90 days | `/setup-cs` |
+| `clients.md` | 90 days | `/setup-brain` |
 | `team.md` | 90 days | `/resource-conflict` Setup team mode |
 | `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
 | `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/setup-cs` |
+| `methodology.md` | 180 days | `/setup-brain` |
 | `tone-of-voice.md` | 180 days | `/update-voice` |
 | `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/setup-cs` |
+| `profile.md` | 365 days | `/setup-brain` |
 | `projects/*` | N/A | living documents — updated by their own skills |
 | `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/setup-cs` Refresh mode to bring everything current.
+session of `/setup-brain` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/setup-cs` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/setup-cs` nudge from the Brain
+   freshness check entirely. The `/setup-brain` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -577,7 +577,7 @@ If yes, **before building anything**, read `~/.creativestack/visual-style.md` �
 the agency's house visual style. Apply its typography, colour palette, spacing
 rules, and anti-slop checklist to every frame. If `visual-style.md` doesn't
 exist, fall back to the Editorial Modern defaults and tell the user at the end:
-*"Run `/setup-cs` to configure your house visual style for sharper
+*"Run `/setup-brain` to configure your house visual style for sharper
 research board layouts."*
 
 Use the per-mode FigJam layout in `references/output-formats.md`. After

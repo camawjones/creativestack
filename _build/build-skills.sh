@@ -33,7 +33,7 @@ for tmpl in "$SCRIPT_DIR"/templates/*/SKILL.md.tmpl; do
   # Replace {{PROJECT_STATE}} placeholder (only present in project-aware skills)
   content="${content//\{\{PROJECT_STATE\}\}/$PROJECT_STATE}"
 
-  # Replace {{VISUAL_STYLE_DEFAULT}} placeholder (used by setup-cs skill to seed brain)
+  # Replace {{VISUAL_STYLE_DEFAULT}} placeholder (used by setup-brain skill to seed brain)
   content="${content//\{\{VISUAL_STYLE_DEFAULT\}\}/$VISUAL_STYLE_DEFAULT}"
 
   # Write generated SKILL.md to skills/ directory

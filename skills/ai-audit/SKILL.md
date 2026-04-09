@@ -1,6 +1,6 @@
 ---
 name: ai-audit
-description: AI readiness audit for creative professionals — four modes. Snapshot (the default — 10-minute self-assessment producing maturity scores across 5 sharpened categories, top 3 opportunities, 3-5 curated quick wins mapped to real CreativeStack skills, protected zone scoring, ROI framing in saved hours/revenue, Slack summary, discipline-aware questions, AI-advanced user branching). Leadership Pack (restructures the same data for a CEO/board audience with benchmark comparison, executive one-pager, and risk/opportunity framing so the user can take it to leadership to justify budget or hiring). Team Workshop (longer intake from multiple team member perspectives, surfaces disagreements as a distinct output, produces a workshop-ready slide outline plus the bringing-your-team-along change management plan with team anxieties, verbatim framings, protected-zone statement, 30-60-90 day plan, and handling-the-skeptic guidance). Deep Audit (includes prior-audit delta tracking, workflow walkthrough, tool stack review against tools.md). Uses practitioner-view industry benchmarks segmented by discipline and team size so users can answer "3/5 — is that good?". Writes audits to the brain as dated artefacts so repeat runs show measurable progress. Opt-in writes to learnings.md § AI maturity and tools.md. Every opportunity is mapped to a specific CreativeStack skill from a curated library, never invented. Use when a creative reaches for "where does AI fit in my practice", "I need to present AI strategy to my CEO", "I'm losing pitches to AI-native competitors", "which CreativeStack skills matter most for me", or "our team is nervous about AI and I need to lead on this". Also use as the natural second skill after /setup-cs.
+description: AI readiness audit for creative professionals — four modes. Snapshot (the default — 10-minute self-assessment producing maturity scores across 5 sharpened categories, top 3 opportunities, 3-5 curated quick wins mapped to real CreativeStack skills, protected zone scoring, ROI framing in saved hours/revenue, Slack summary, discipline-aware questions, AI-advanced user branching). Leadership Pack (restructures the same data for a CEO/board audience with benchmark comparison, executive one-pager, and risk/opportunity framing so the user can take it to leadership to justify budget or hiring). Team Workshop (longer intake from multiple team member perspectives, surfaces disagreements as a distinct output, produces a workshop-ready slide outline plus the bringing-your-team-along change management plan with team anxieties, verbatim framings, protected-zone statement, 30-60-90 day plan, and handling-the-skeptic guidance). Deep Audit (includes prior-audit delta tracking, workflow walkthrough, tool stack review against tools.md). Uses practitioner-view industry benchmarks segmented by discipline and team size so users can answer "3/5 — is that good?". Writes audits to the brain as dated artefacts so repeat runs show measurable progress. Opt-in writes to learnings.md § AI maturity and tools.md. Every opportunity is mapped to a specific CreativeStack skill from a curated library, never invented. Use when a creative reaches for "where does AI fit in my practice", "I need to present AI strategy to my CEO", "I'm losing pitches to AI-native competitors", "which CreativeStack skills matter most for me", or "our team is nervous about AI and I need to lead on this". Also use as the natural second skill after /setup-brain.
 ---
 
 ## CreativeStack Preamble
@@ -16,7 +16,7 @@ if [ -n "$BRAIN_DIR" ]; then
   echo "BRAIN: $BRAIN_DIR"
   ls "$BRAIN_DIR"/*.md 2>/dev/null | while read f; do echo "  $(basename "$f")"; done
 else
-  echo "BRAIN: not configured (run /setup-cs to set up)"
+  echo "BRAIN: not configured (run /setup-brain to set up)"
 fi
 ```
 
@@ -25,7 +25,7 @@ Use the content to inform and contextualize all outputs. If the brain doesn't ex
 proceed generically — the skill still works, just without your specific context.
 
 When the brain is not configured, mention once at the end of output:
-"Tip: Run /setup-cs to add your context — skills produce better results with it."
+"Tip: Run /setup-brain to add your context — skills produce better results with it."
 
 ### Brain Freshness Check
 
@@ -46,14 +46,14 @@ to refresh — lightly, not annoyingly.
 |---|---|---|
 | `learnings.md` | 60 days | continuous skill use — skills append as they run |
 | `case-studies.md` | 90 days | `/case-study` |
-| `clients.md` | 90 days | `/setup-cs` |
+| `clients.md` | 90 days | `/setup-brain` |
 | `team.md` | 90 days | `/resource-conflict` Setup team mode |
 | `freelance-bench.md` | 120 days | `/resource-conflict` Setup bench mode |
 | `rate-card.md` | 180 days | `/project-profitability` Setup rates mode |
-| `methodology.md` | 180 days | `/setup-cs` |
+| `methodology.md` | 180 days | `/setup-brain` |
 | `tone-of-voice.md` | 180 days | `/update-voice` |
 | `sow-style.md` | 180 days | `/sow-generator` Edit style mode |
-| `profile.md` | 365 days | `/setup-cs` |
+| `profile.md` | 365 days | `/setup-brain` |
 | `projects/*` | N/A | living documents — updated by their own skills |
 | `prospects/*` | 90 days | `/pitch-research` Refresh mode |
 
@@ -75,7 +75,7 @@ Keep it to 2-3 lines maximum. If more than 3 files are stale, summarise:
 ```
 ---
 📅 **Brain freshness:** {N} brain files are stale ({list names briefly}). Consider a
-session of `/setup-cs` Refresh mode to bring everything current.
+session of `/setup-brain` Refresh mode to bring everything current.
 ```
 
 5. **Severity gating:** only surface the check if at least one file is
@@ -90,7 +90,7 @@ session of `/setup-cs` Refresh mode to bring everything current.
    because brain data is stale. Surface, then proceed.
 
 8. **No brain, no check:** if the brain isn't configured at all, skip the
-   freshness check entirely. The `/setup-cs` nudge from the Brain
+   freshness check entirely. The `/setup-brain` nudge from the Brain
    Discovery step is enough.
 
 This check is lightweight by design. The goal is a gentle reminder, not an
@@ -295,7 +295,7 @@ point. But if any of these ran earlier, pull in:
 
 | Skill run earlier | What to use |
 |---|---|
-| `/setup-cs` | Skip the type/discipline/size questions |
+| `/setup-brain` | Skip the type/discipline/size questions |
 | `/project-profitability` | Skip commercials intake; use the data |
 | `/timesheet-summary` | Skip bottleneck question; use the findings |
 | `/resource-conflict` | Skip team capacity questions |
@@ -322,7 +322,7 @@ Report brain depth:
 Or thin:
 
 > "Brain depth: Minimal — no brain configured. I'll run the audit
-> with neutral language and recommend `/setup-cs` at
+> with neutral language and recommend `/setup-brain` at
 > the end so the next audit compounds."
 
 ### Step 4: Intake
@@ -532,7 +532,7 @@ Offer **at most one** brain enrichment or next step. Pick the most
 valuable:
 
 - **No brain configured** → "The biggest lift you can give this
-  skill is configuring `/setup-cs` first. Takes 5
+  skill is configuring `/setup-brain` first. Takes 5
   minutes and every future audit will be dramatically sharper."
 - **Prior audit exists and delta is positive** → "You moved from
   {X} to {Y} overall — measurable progress. This is exactly the
@@ -857,7 +857,7 @@ time.
 
 - **No brain at all** → use neutral language ("your work", "your
   clients"), skip type-specific adaptations, end with a strong
-  nudge to `/setup-cs` for next time.
+  nudge to `/setup-brain` for next time.
 - **Brain exists but very thin** (profile only) → run the audit
   but note reduced depth in the output header.
 - **User is AI-advanced** → branch per Step 5. Never patronise.
@@ -889,7 +889,7 @@ time.
 
 ### Upstream (what feeds ai-audit)
 
-- **No brain** → "`/setup-cs` first — takes 5 minutes and every future audit will be sharper."
+- **No brain** → "`/setup-brain` first — takes 5 minutes and every future audit will be sharper."
 - **No tone of voice** → "Consider `/update-voice` before the next audit so the output matches your voice."
 - **Running as a follow-up to setup** → natural flow, no nudge needed.
 
@@ -897,7 +897,7 @@ time.
 
 Based on the audit's findings, suggest 1-2 of:
 
-- **Lowest category = Knowledge & IP** → "Start with `/case-study` and `/setup-cs` — institutional memory is the single highest-leverage move."
+- **Lowest category = Knowledge & IP** → "Start with `/case-study` and `/setup-brain` — institutional memory is the single highest-leverage move."
 - **Lowest category = Ops & Admin** → "Run `/sow-generator` or `/timesheet-summary` this week — fastest wins, lowest risk."
 - **Lowest category = Creative Workflow** → "Run `/brief-sharpener` on your next incoming brief to feel the difference immediately."
 - **Lowest category = Client Comms** → "Run `/status-update` this week — 5-minute drafts your clients will notice."

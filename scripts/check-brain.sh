@@ -8,7 +8,7 @@ if [ -d "$BRAIN_DIR" ]; then
   count=$(ls "$BRAIN_DIR"/*.md 2>/dev/null | wc -l | tr -d ' ')
   echo "CREATIVESTACK BRAIN: $BRAIN_DIR ($count files)"
 else
-  echo "CREATIVESTACK BRAIN: not configured (run /setup-cs to set up)"
+  echo "CREATIVESTACK BRAIN: not configured (run /setup-brain to set up)"
 fi
 
 # Self-locate the CreativeStack repo (the parent of scripts/)
